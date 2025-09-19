@@ -1,3 +1,5 @@
+package src.main.java.project.models;
+
 import java.util.Random;
 
 class DigiCam extends Product {
@@ -64,7 +66,7 @@ class DigiCam extends Product {
         return isOn;
     }
 
-    public void setOn (boolean isOn) {
+    public void setOn(boolean isOn) {
         this.isOn = isOn;
     }
 
