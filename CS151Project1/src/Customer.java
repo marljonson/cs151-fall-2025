@@ -41,6 +41,10 @@ public class Customer {
 		return balance;
 	}
 	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	public String getEmail() {
 	    return this.email;
 	}
