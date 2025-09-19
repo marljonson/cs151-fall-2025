@@ -1,3 +1,5 @@
+package src.main.java.project.interfaces;
+
 public interface Rentable {
     boolean isRentable();
 
