@@ -1,7 +1,5 @@
 package src.main.java.project.models;
 
-import java.util.Random;
-
 class DigiCam extends Product {
     private String model;
     private int batteryLife;
