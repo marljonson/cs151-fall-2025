@@ -25,6 +25,10 @@ public class Customer {
 		return firstName + " " + lastName;
 	}
 	
+	public void setUserId(int id) {
+		this.userId = id;
+	}
+	
 	public int getUserId() {
 		return userId;
 	}
