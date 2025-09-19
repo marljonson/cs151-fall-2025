@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ~*
 ._*
 .TemporaryItems
@@ -26,3 +27,6 @@ hs_error_pid*
 *.exe
 *.app
 /bin1/
+=======
+/bin/
+>>>>>>> refs/remotes/origin/myo-branch
