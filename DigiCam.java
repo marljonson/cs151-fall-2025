@@ -4,20 +4,25 @@ class DigiCam extends Product {
     private String model;
     private int batteryLife;
     private boolean isRented;
-    private int reserevedBy;
+    private int reservedBy;
 
     public DigiCam() {
+        super();
+        this.model = "";
+        this.isRented = false;
+        this.reservedBy = -1;
 
+        // Randomly set the battery between 0 to 100%
+        this.batteryLife = (int) (Math.random() * 101);
     }
 
     public DigiCam(int ID, String type, double price, int stock, String model, boolean isRented,
             int reserevedBy) {
         super(ID, type, price, stock);
         this.model = model;
-        // Randomly set the battery between 0 to 100%
-        this.batteryLife = (int) (Math.random() * 101);
         this.isRented = isRented;
-        this.reserevedBy = reserevedBy;
+        this.reservedBy = reserevedBy;
+        this.batteryLife = (int) (Math.random() * 101);
     }
 
     @Override
