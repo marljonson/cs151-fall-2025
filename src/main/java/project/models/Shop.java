@@ -3,11 +3,11 @@ public package main.java.project.models;
 import java.util.ArrayList;
 
 class Shop {
-    ArrayList<Customer> customers = new ArrayList<>();
-    ArrayList<Vendor> vendors = new arrayList<>();
-    int ID;
-    String address;
-    String timeToOpen;
+    private ArrayList<Customer> customers = new ArrayList<>();
+    private ArrayList<Vendor> vendors = new arrayList<>();
+    private int ID;
+    private String address;
+    private String timeToOpen;
 
     void addCustomer() {
 
