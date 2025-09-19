@@ -2,13 +2,13 @@
 public class Customers {
 	private String firstName;
 	private String lastName;
-	private int userId = 0;;
+	private int userId = 0;
 	private String email;
 	private String password;
 	private String membershipType; //Silver, Gold, Platinum, Diamond
 	private double cash;
 	private double amountPurchased;
-	private static int numOfUsers = 0;
+	private static int numOfCustomers = 0;
 	
 	public Customers(String firstName, String lastName, String email, double cash) {
 		this.firstName = firstName;
@@ -18,8 +18,8 @@ public class Customers {
 		this.cash = cash;
 		this.amountPurchased = 0; 
 		this.membershipType = "Silver";   //default type which can later be updated according to amount spent with us
-		numOfUsers++;
-		this.userId = numOfUsers;
+		numOfCustomers++;
+		this.userId = numOfCustomers;
 	}
 	
 	public String getFullName() {
@@ -47,6 +47,10 @@ public class Customers {
 	
 	public double getBalance() {
 		return cash;
+	}
+	
+	public String getEmail() {
+	    return this.email;
 	}
 	
 	public double getTotalSpent() {
@@ -93,5 +97,20 @@ public class Customers {
 	
 	public String getMembershipType() {
 		return this.membershipType;
+	}
+	
+	public void MembershipType() {
+		if (amountPurchased > 2000) {
+			this.membershipType = "Diamond";
+		}
+		else if (amountPurchased > 1000) {
+			this.membershipType = "Platinum";
+		}
+		else if (amountPurchased > 500) {
+			this.membershipType = "Gold";
+		}
+		else {
+			this.membershipType = "Silver";
+		}
 	}
 }
