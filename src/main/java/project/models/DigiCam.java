@@ -1,14 +1,9 @@
 package src.main.java.project.models;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import src.main.java.project.abstractclasses.Product;
-import src.main.java.project.interfaces.*;
+import src.main.java.project.interfaces.Rentable;
 
-class DigiCam extends Product implements Rentable, Buyable {
+class DigiCam extends Product implements Rentable {
     private static int nextId = 1;
     private String model;
     private int batteryLife;
@@ -97,7 +92,7 @@ class DigiCam extends Product implements Rentable, Buyable {
         batteryLife = 100;
     }
 
-    // Interfaces
+    // Rentable interface methods
     @Override
     public boolean isRentable() {
         return super.getStock() > 0;
@@ -121,4 +116,5 @@ class DigiCam extends Product implements Rentable, Buyable {
         super.setStock(super.getStock() - 1);
         customer.rentProduct(this);
     }
+
 }
