@@ -1,23 +1,34 @@
 package src.main.java.project.models;
 
-class DigiCam extends Product {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import src.main.java.project.abstractclasses.Product;
+import src.main.java.project.interfaces.*;
+
+class DigiCam extends Product implements Rentable, Buyable {
+    private static int nextId = 1;
     private String model;
     private int batteryLife;
     private boolean isRented;
     private boolean isOn;
 
+    // No argument constructor
     public DigiCam() {
-        super();
+        super(nextId++, "Unknown", 0.0, 0);
         this.model = "";
         this.isRented = false;
-        this.reservedBy = -1;
 
         // Randomly set the battery between 0 to 100%
         this.batteryLife = (int) (Math.random() * 101);
     }
 
-    public DigiCam(int ID, String type, double price, int stock, String model, boolean isRented) {
-        super(ID, type, price, stock);
+    // Product with type, price, stock, model, and isRented
+    // id and batteryLife is assigned automatically
+    public DigiCam(String type, double price, int stock, String model, boolean isRented) {
+        super(nextId++, type, price, stock);
         this.model = model;
         this.isRented = isRented;
         this.batteryLife = (int) (Math.random() * 101);
@@ -29,13 +40,13 @@ class DigiCam extends Product {
     }
 
     @Override
-    public void usuageInstruction() {
+    public void usageInstruction() {
         // More detailed instruction to be implemented
         System.out.println("1. Press the power on button.");
         System.out.println("2. Take a photo!");
     }
 
-    // Getters and Setters
+    // Getters and setters
     public String getModel() {
         return model;
     }
@@ -68,6 +79,7 @@ class DigiCam extends Product {
         this.isOn = isOn;
     }
 
+    // Unique methods for DigiCam class
     public void powerOn() {
         if (batteryLife >= 10) {
             batteryLife -= 10;
@@ -78,7 +90,35 @@ class DigiCam extends Product {
     }
 
     public void powerOff() {
-
+        isOn = false;
     }
 
+    public void replaceBattery() {
+        batteryLife = 100;
+    }
+
+    // Interfaces
+    @Override
+    public boolean isRentable() {
+        return super.getStock() > 0;
+    }
+
+    @Override
+    public double getRentalPrice() {
+        return super.getPrice();
+    }
+
+    @Override
+    public void rentalReturn(Customer customer) {
+        if (isRentable()) {
+            super.setStock(super.getStock() + 1);
+            customer.returnProduct(this);
+        }
+    }
+
+    @Override
+    public void rent(Customer customer) {
+        super.setStock(super.getStock() - 1);
+        customer.rentProduct(this);
+    }
 }
