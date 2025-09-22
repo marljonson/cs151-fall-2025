@@ -78,10 +78,23 @@ public class Customer {
 	}
 	
 	//needs to be updated after creating other class
-	public void makePurchase(Product product, int quantity) {
+	public void makePurchase(Product product, int quantity, Vendor vendor) {
 		if (quantity <= 0) {
 	        throw new IllegalArgumentException("Quantity must be positive");
 	    }
+		
+		//Check if the vendor has the product you want to buy
+		if (!vendor.getProductList().containsKey(product.getId())) {
+			System.out.println(product.getType() + " is not available at the vendor " + vendor.getName());
+			return;
+		}
+		
+		//Check if vendor has enough stock
+		int availableStock = vendor.getVendorStock().getOrDefault(product.getId(), 0);
+		if (quantity > availableStock) {
+			System.out.println(vendor.getName() + " has only " + availableStock + " left for " + product.getType());
+			return;
+		}
 		
 		double cost = product.getPrice() * quantity;
 		
@@ -98,6 +111,7 @@ public class Customer {
 			product.usageInstruction();
 			customerCheckOut(cost);
 			boughtProducts.put(product.getId(), boughtProducts.getOrDefault(product.getId(), 0) + quantity);
+			vendor.makeSale(product.getId(), quantity, cost);
 		}
 		else if (product instanceof Rentable rentable) {
 			cost = applyMembershipBenefit(cost);
@@ -110,6 +124,8 @@ public class Customer {
 			product.usageInstruction();
 			customerCheckOut(cost);
 			rentedProducts.put(product.getId(), rentedProducts.getOrDefault(product.getId(), 0) + quantity);
+			vendor.makeSale(product.getId(), quantity, cost);
+			
 		}
 		else {
 			System.out.println("This product cannot be bought or rented. Please choose other product");
@@ -200,11 +216,11 @@ public class Customer {
 	    }
 	}
 	
-	public void displayOwnedItems(Map<Integer, Product> productCatalog) {
+	public void getOwnedItems(Map<Integer, Product> productCatalog) {
 	    System.out.println("=== Items owned by " + getFullName());
 
 	    if (boughtProducts.isEmpty() && rentedProducts.isEmpty()) {
-	        System.out.println("No items bought or rented yet.");
+	        System.out.println("No items bought or rented yet.\n");
 	        return;
 	    }
 	    
@@ -231,5 +247,58 @@ public class Customer {
 	            }
 	        }
 	    }
+	}
+	
+	public void reserveProduct(Product product, int quantity, Vendor vendor) {
+		if (quantity <= 0) {
+	        throw new IllegalArgumentException("Quantity must be positive");
+	    }
+		
+		//Check if the vendor has the product you want to buy
+		if (!vendor.getProductList().containsKey(product.getId())) {
+			System.out.println(product.getType() + " is not available at the vendor " + vendor.getName());
+			return;
+		}
+		
+		//Check if vendor has enough stock
+		int availableStock = vendor.getVendorStock().getOrDefault(product.getId(), 0);
+		if (quantity > availableStock) {
+			System.out.println(vendor.getName() + " has only " + availableStock + " left for " + product.getType());
+			return;
+		}
+		
+		if (product instanceof Rentable rentable) {
+			if (membershipType.equals("Gold") || membershipType.equals("Diamond")) {
+				rentable.reserve(quantity);
+				System.out.println(this.getFullName() + " reserved " + quantity + " " + product.getType());
+			}
+			else {
+				System.out.println("Your need to be diamond or gold member to be able to reserve");
+			}
+		}
+		else {
+			System.out.println("This item cannot be reserved.");
+		}
+	}
+	
+	public void getMemberShipDetail() {
+		System.out.println("The cost for Diamond member is $100 and Diamond type member are eligible for 20% discount for every"
+				+ "purchase and they will be able to reserve the product they want to buy or reserve.");
+		System.out.println("The cost for Platinum member is $80 and Platinum type member are eligible for 10% discount for every"
+				+ "purchase and they will be able to reserve the product they want to buy or reserve.");
+		System.out.println("The cost for Gold member is $50 and Gold type member are eligible for 5% discount for every"
+				+ "purchase");
+		System.out.println("The cost for Silver member is $0 and there is no benefits for Silver type member.");
+	}
+	
+	public void getCustomerDetail() {
+		System.out.println("C u s t o m e r   D e t a i l ");
+	    System.out.println("ID          : " + userId);
+	    System.out.println("Name        : " + getFullName());
+	    System.out.println("Email       : " + email);
+	    System.out.println("Balance     : $" + balance);
+	    System.out.println("Total Spent : $" + amountSpent);
+	    System.out.println("Membership  : " + membershipType);
+	    System.out.println();
 	}
 }
