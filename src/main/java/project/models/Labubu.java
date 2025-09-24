@@ -8,7 +8,7 @@ public class Labubu extends Product implements Rentable {
     private String color;
     private boolean isRented;
     private boolean isRare;
-    private boolean isReserved;
+    //private boolean isReserved;
 
     // Custom no-args constructor
     public Labubu() {
@@ -18,11 +18,14 @@ public class Labubu extends Product implements Rentable {
         this.isRare = false;
     }
 
-    // Constructor
+     //what is this?
+    /* 
     public Labubu(String color, double price) {
         this.color = color;
     }
+    */
 
+    // Constructor
     public Labubu(int id, String type, double price, int stock, String color, boolean isRented, boolean isRare){
         super(id, type, price, stock);
         this.color = color;
@@ -54,12 +57,20 @@ public class Labubu extends Product implements Rentable {
 
     @Override
     public void rentalReturn(Customer customer){
+
+        setStock(getStock() + 1);
+
         //continue after importing Customer to the correct package
+        // customer.returnProduct(aLabubuObject, 1); //check Customer class's returnProduct 
+        
 
     }
 
     @Override
     public void rent(Customer customer){
+
+        setStock(getStock() - 1);
+
          //continue after importing Customer to the correct package
 
     }
