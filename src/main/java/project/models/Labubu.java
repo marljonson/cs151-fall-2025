@@ -1,7 +1,7 @@
-package main.java.project.models;
+package models;
 
-import main.java.project.abstractclasses.Product;
-import main.java.project.interfaces.Rentable;
+import abstractclasses.Product;
+import interfaces.Rentable;
 
 public class Labubu extends Product implements Rentable {
     private static int nextId = 1;
@@ -62,7 +62,7 @@ public class Labubu extends Product implements Rentable {
 
         //continue after importing Customer to the correct package
         // customer.returnProduct(aLabubuObject, 1); //check Customer class's returnProduct 
-        
+
 
     }
 
