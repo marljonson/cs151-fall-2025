@@ -1,9 +1,5 @@
-package models;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import abstractclasses.Product;
 
 public class Vendor {
 	private Map<Integer, Product> productList; //product list for the vendor
@@ -130,12 +126,18 @@ public class Vendor {
 		}
 	}
 	
-	public void displayitem() {
+	public void displayItem() {
 		System.out.println("Products offered by the vendor " + name);
 		for (Product product : productList.values()) {
 			int stock = vendorStock.getOrDefault(product.getId(), 0);
-			System.out.println(product.getId() + " | " + product.getType() + " | $" + product.getPrice() +
+			if (product instanceof Labubu labubu) {
+				System.out.println("ID : " + labubu.getId() + " | " + labubu.getType() + " " + labubu.getColor() + " | $" + labubu.getPrice() +
 					" | " + stock + "left ");
+			}
+			else if (product instanceof DigiCam digiCam) {
+				System.out.println("ID : " + digiCam.getId() + " | " + digiCam.getType() + " " + digiCam.getModel() + " | $" + digiCam.getPrice() +
+						" | " + stock + "left ");
+			}
 		}
 	}
 	
