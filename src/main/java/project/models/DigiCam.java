@@ -3,8 +3,10 @@ package src.main.java.project.models;
 import abstractclasses.Product;
 import interfaces.Rentable;
 
-class DigiCam extends Product implements Rentable {
+public class DigiCam extends Product implements Rentable {
     private static int nextId = 1;
+    private static int stock = 0;
+    private static final String TYPE = "DigiCam";
     private String model;
     private int batteryLife;
     private boolean isRented;
@@ -12,7 +14,7 @@ class DigiCam extends Product implements Rentable {
 
     // No-argument constructor
     public DigiCam() {
-        super(nextId++, "Unknown", 0.0, 0);
+        super(nextId++, TYPE, 0.0, stock++);
         this.model = "";
         this.isRented = false;
 
@@ -22,21 +24,21 @@ class DigiCam extends Product implements Rentable {
 
     // Product with type, price, stock, model, and isRented
     // id and batteryLife is assigned automatically
-    public DigiCam(String type, double price, int stock, String model, boolean isRented) {
-        super(nextId++, type, price, stock);
+    public DigiCam(double price, String model, boolean isRented) {
+        super(nextId++, TYPE, price, stock++);
         this.model = model;
         this.isRented = isRented;
         this.batteryLife = (int) (Math.random() * 101);
     }
 
+    // Override methods from the Product class
     @Override
     public void describe() {
-        System.out.println("This is the ultimate DigiCam that will change your photo expereince!");
+        System.out.println("This is the ultimate DigiCam that will change your photo experience!");
     }
 
     @Override
     public void usageInstruction() {
-        // More detailed instruction to be implemented
         System.out.println("1. Press the power on button.");
         System.out.println("2. Take a photo!");
     }
@@ -76,8 +78,13 @@ class DigiCam extends Product implements Rentable {
 
     // Unique methods for DigiCam class
     public void powerOn() {
+        if (isOn) {
+            System.out.println("Camera is already on!");
+            return;
+        }
         if (batteryLife >= 10) {
             batteryLife -= 10;
+            isOn = true;
         } else {
             batteryLife = 0;
             System.out.println("Battery is 0%. Please replace your battery.");
@@ -109,17 +116,37 @@ class DigiCam extends Product implements Rentable {
 
     @Override
     public void rentalReturn() {
-        super.setStock(super.getStock() + 1);
-        isRented = false;
+        if (!isRented) {
+            System.out.println("This camera was not rented yet.");
+        } else {
+            super.setStock(super.getStock() + 1);
+            isRented = false;
+        }
+        
     }
 
     @Override
     public void rent() {
-        if (super.getStock() > 0) {      
+        if (isRented) {
+            System.out.println("This camera is already rented!");
+        } else if (super.getStock() > 0) {
             super.setStock(super.getStock() - 1);
-            isRented = true;              
+            isRented = true;    
         } else {
             System.out.println("No stock available!");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "DigiCam {" +
+                "id=" + getId() +
+                ", model='" + model + 
+                ", batteryLife=" + batteryLife +
+                ", stock=" + getStock() +
+                ", price=" + getPrice() +
+                ", isRented=" + isRented +
+                ", isOn=" + isOn +
+                '}';
     }
 }
