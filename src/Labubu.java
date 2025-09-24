@@ -1,3 +1,4 @@
+package main.java.project.models;
 
 public class Labubu extends Product{
 
@@ -8,12 +9,15 @@ public class Labubu extends Product{
 
     //Constructors (will provide 2 constructors)
     public Labubu(){
+
+        super();
         this.color = "default";
         this.isRented = false;
         this.isRare = false;
     }
 
     public Labubu(int id, String type, double price, int stock, String color, boolean isRented, boolean isRare){
+
         super(id, type, price, stock);
         this.color = color;
         this.isRented = isRented;
@@ -38,8 +42,15 @@ public class Labubu extends Product{
         System.out.println("Please keep them away from direct sunlight to prevent color fading");
     }
 
+    //Labubu's specific method
 
-    
+    //if a Labubu becomes Rare, changes its price
+    public void markAsRare(){
 
+        this.isRare = true;
+
+        this.price = price + (price * 0.5);
+
+    }
 
 }
