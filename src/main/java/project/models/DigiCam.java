@@ -1,7 +1,7 @@
 package src.main.java.project.models;
 
-import src.main.java.project.abstractclasses.Product;
-import src.main.java.project.interfaces.Rentable;
+import abstractclasses.Product;
+import interfaces.Rentable;
 
 class DigiCam extends Product implements Rentable {
     private static int nextId = 1;
@@ -10,7 +10,7 @@ class DigiCam extends Product implements Rentable {
     private boolean isRented;
     private boolean isOn;
 
-    // No argument constructor
+    // No-argument constructor
     public DigiCam() {
         super(nextId++, "Unknown", 0.0, 0);
         this.model = "";

@@ -26,7 +26,7 @@ public class Shop {
     		new Customer("Myo Thant", "Zin", "myothantzin@sjsu.edu", 300),
     		new Customer("Miyuki", "Tokuhara", "miyuki@sjsu.edu", 300),
     		new Customer("Dee", "Eain", "deeeain@sjsu.edu", 300),
-    		new Customer("Marl", "Johnson", "marljohnson@sjsu.edu", 300)
+    		new Customer("Marl", "Jonson", "marljonson@sjsu.edu", 300)
     		));
    
     public static void main(String[] args) {
