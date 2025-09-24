@@ -17,6 +17,7 @@ public class DigiCam extends Product implements Rentable {
         super(nextId++, TYPE, 0.0, stock++);
         this.model = "";
         this.isRented = false;
+        this.isOn = false;
 
         // Randomly set the battery between 0 to 100%
         this.batteryLife = (int) (Math.random() * 101);
@@ -28,6 +29,7 @@ public class DigiCam extends Product implements Rentable {
         super(nextId++, TYPE, price, stock++);
         this.model = model;
         this.isRented = isRented;
+        this.isOn = false;
         this.batteryLife = (int) (Math.random() * 101);
     }
 
