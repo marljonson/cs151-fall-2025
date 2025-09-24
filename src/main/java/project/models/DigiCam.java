@@ -111,15 +111,15 @@ class DigiCam extends Product implements Rentable {
     public void rentalReturn() {
         super.setStock(super.getStock() + 1);
         isRented = false;
-        // Need to remove the rental product from the customer's rentedProduct map?array?
     }
 
     @Override
     public void rent() {
-        super.setStock(super.getStock() - 1);
-        isRented = true;
-        // Need to add the rental product from the customer's rentedProduct map?array?
+        if (super.getStock() > 0) {      
+            super.setStock(super.getStock() - 1);
+            isRented = true;              
+        } else {
+            System.out.println("No stock available!");
+        }
     }
-
-
 }
