@@ -1,4 +1,4 @@
-package main.java.project.models;
+package models;
 
 import abstractclasses.Product;
 import interfaces.Rentable;
@@ -62,7 +62,7 @@ public class Labubu extends Product implements Rentable {
 
         //continue after importing Customer to the correct package
         // customer.returnProduct(aLabubuObject, 1); //check Customer class's returnProduct 
-        
+
 
     }
 
