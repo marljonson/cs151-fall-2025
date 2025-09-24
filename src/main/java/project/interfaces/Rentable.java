@@ -7,7 +7,7 @@ public interface Rentable {
 
     double getRentalPrice();
 
-    void rentalReturn(Customer customer);
+    void rentalReturn();
 
-    void rent(Customer customer);
+    void rent();
 }
