@@ -1,5 +1,5 @@
 
-package main.java.project.abstractclasses;
+package abstractclasses;
 
 
 public abstract class Product {
@@ -25,14 +25,20 @@ public abstract class Product {
         this.stock = stock;
     }
 
+    //creating a new product
+    public Product(int id, String type, double price){
+        this.id = id;
+        this.type = type;
+        this.price = price;
+        this.stock++; 
+    }
+
     //methods every class that extends Product must implement
     public abstract void describe();
     public abstract void usageInstruction();
 
 
     //methods subclass don't have to override
-
-    
     public void discount(double discountPercentage){
 
         //apply discount, update product's price
