@@ -106,7 +106,7 @@ public class DigiCam extends Product implements Rentable {
     // Rentable interface methods
     @Override
     public boolean isRentable() {
-        return super.getStock() > 0;
+        return !isRented;
     }
 
     @Override
@@ -119,21 +119,19 @@ public class DigiCam extends Product implements Rentable {
         if (!isRented) {
             System.out.println("This camera was not rented yet.");
         } else {
-            super.setStock(super.getStock() + 1);
+            stock++;       
             isRented = false;
+            powerOff(); 
         }
-        
     }
 
     @Override
     public void rent() {
         if (isRented) {
-            System.out.println("This camera is already rented!");
-        } else if (super.getStock() > 0) {
-            super.setStock(super.getStock() - 1);
-            isRented = true;    
+            System.out.println("This camera is already rented.");
         } else {
-            System.out.println("No stock available!");
+            stock--;        
+            isRented = true;
         }
     }
 
@@ -143,7 +141,6 @@ public class DigiCam extends Product implements Rentable {
                 "id=" + getId() +
                 ", model='" + model + 
                 ", batteryLife=" + batteryLife +
-                ", stock=" + getStock() +
                 ", price=" + getPrice() +
                 ", isRented=" + isRented +
                 ", isOn=" + isOn +
