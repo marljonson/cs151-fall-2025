@@ -1,6 +1,7 @@
 
 package main.java.project.abstractclasses;
 
+
 public abstract class Product {
     private int id;
     private String type;

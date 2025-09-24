@@ -1,14 +1,14 @@
-package models;
+package main.java.project.models;
 
-import abstractclasses.Product;
-import interfaces.Rentable;
+import main.java.project.abstractclasses.Product;
+import main.java.project.interfaces.Rentable;
 
-class Labubu extends Product implements Rentable {
+public class Labubu extends Product implements Rentable {
     private static int nextId = 1;
     private String color;
     private boolean isRented;
     private boolean isRare;
-    private boolean isReserved;
+    //private boolean isReserved;
 
     // Custom no-args constructor
     public Labubu() {
@@ -18,11 +18,22 @@ class Labubu extends Product implements Rentable {
         this.isRare = false;
     }
 
-    // Constructor
+     //what is this?
+    /* 
     public Labubu(String color, double price) {
         this.color = color;
     }
+    */
 
+    // Constructor
+    public Labubu(int id, String type, double price, int stock, String color, boolean isRented, boolean isRare){
+        super(id, type, price, stock);
+        this.color = color;
+        this.isRented = isRented;
+        this.isRare = isRare;
+    }
+
+    //override abstract methods of Product
     @Override
     public void describe() {
         System.out.println("Charm all your friends (and potential lovers) with a friendly Labubu!");
@@ -33,37 +44,60 @@ class Labubu extends Product implements Rentable {
         System.out.println("Hang on your backpack or on your waist with a carabiner.");
     }
 
+    //override methods from Rentable Interface 
+    @Override
+    public boolean isRentable(){
+        return true;
+    }
+
+    @Override
+    public double getRentalPrice(){
+        return 5.0; //$5 to rent a labubu
+    }
+
+    @Override
+    public void rentalReturn(Customer customer){
+
+        setStock(getStock() + 1);
+
+        //continue after importing Customer to the correct package
+        // customer.returnProduct(aLabubuObject, 1); //check Customer class's returnProduct 
+        
+
+    }
+
+    @Override
+    public void rent(Customer customer){
+
+        setStock(getStock() - 1);
+
+         //continue after importing Customer to the correct package
+
+    }
+
+
+    //Labubu Specific Method
+    //if a Labubu becomes Rare, changes its price
+    public void markAsRare(){
+        double currPrice = getPrice();
+        this.isRare = true;
+        setPrice(currPrice + (currPrice * 0.5));
+    }
+
     // Getters and setters
-    public String getColor() {
-        return color;
-    }
+    public String getColor() { return color;}
+    public void setColor(String color) { this.color = color;}
 
-    public void setColor(String color) {
-        this.color = color;
-    }
+    public boolean getIsRented() { return isRented; }
+    public void setIsRented(boolean isRented) { this.isRented = isRented; }
 
-    public boolean getIsRented() {
-        return isRented;
-    }
+    public boolean getIsRare() { return isRare; }
+    public void setIsRare(boolean isRare) { this.isRare = isRare; }
 
-    public void setIsRented(boolean isRented) {
-        this.isRented = isRented;
-    }
-
-    public boolean getIsRare() {
-        return isRare;
-    }
-
-    public void setIsRare(boolean isRare) {
-        this.isRare = isRare;
-    }
-
-    public boolean getIsReserved() {
-        return isReserved;
-    }
-
-    public void setIsReserved(boolean isReserved) {
-        this.isReserved = isReserved;
-    }
+    //won't be using these
+    /* 
+    public boolean getIsReserved() { return isReserved; }
+    public void setIsReserved(boolean isReserved) { this.isReserved = isReserved; }
+    */
 }
 
