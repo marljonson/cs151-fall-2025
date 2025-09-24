@@ -92,6 +92,10 @@ class DigiCam extends Product implements Rentable {
         batteryLife = 100;
     }
 
+    public void checkPower() {
+        System.out.println("Battery is " + batteryLife + "%");
+    }
+
     // Rentable interface methods
     @Override
     public boolean isRentable() {
@@ -104,17 +108,18 @@ class DigiCam extends Product implements Rentable {
     }
 
     @Override
-    public void rentalReturn(Customer customer) {
-        if (isRentable()) {
-            super.setStock(super.getStock() + 1);
-            customer.returnProduct(this);
-        }
+    public void rentalReturn() {
+        super.setStock(super.getStock() + 1);
+        isRented = false;
+        // Need to remove the rental product from the customer's rentedProduct map?array?
     }
 
     @Override
-    public void rent(Customer customer) {
+    public void rent() {
         super.setStock(super.getStock() - 1);
-        customer.rentProduct(this);
+        isRented = true;
+        // Need to add the rental product from the customer's rentedProduct map?array?
     }
+
 
 }
