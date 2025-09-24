@@ -1,5 +1,6 @@
 package models;
 
+import CS151Project1.src.Customer;
 import abstractclasses.Product;
 import interfaces.Rentable;
 
@@ -64,6 +65,25 @@ class Labubu extends Product implements Rentable {
 
     public void setIsReserved(boolean isReserved) {
         this.isReserved = isReserved;
+    }
+
+    // Rentable interface methods
+    @Override
+    public boolean isRentable() {
+        return super.getStock() > 0;
+    }
+
+    @Override
+    public double getRentalPrice() {
+        return super.getPrice();
+    }
+
+    @Override
+    public void rentalReturn(Customer customer) {
+    }
+
+    @Override
+    public void rent(Customer customer) {
     }
 }
 

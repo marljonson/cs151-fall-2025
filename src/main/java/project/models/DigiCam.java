@@ -1,4 +1,4 @@
-package src.main.java.project.models;
+package models;
 
 import abstractclasses.Product;
 import interfaces.Rentable;

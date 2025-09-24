@@ -49,4 +49,18 @@ class Matcha extends Product implements Buyable {
     public boolean hasToppings() {
         return hasToppings;
     }
+
+    // Buyable interface methods
+    @Override
+    public boolean isBuyable() {
+        return false; // fix later
+    }
+
+    public double getPrice() {
+        return 0.0; // fix later
+    }
+
+    public void buy() {
+
+    }
 }
