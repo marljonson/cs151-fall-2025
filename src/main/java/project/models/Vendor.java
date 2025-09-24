@@ -1,5 +1,9 @@
+package models;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import abstractclasses.Product;
 
 public class Vendor {
 	private Map<Integer, Product> productList; //product list for the vendor
