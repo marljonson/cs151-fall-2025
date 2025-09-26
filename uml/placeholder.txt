@@ -1,3 +1,9 @@
 when the uml diagram is complete, you can delete this file
 
 file to be stored here: PNG or PDF
+
+
+DELIVERABLES FOR EACH GROUP MEMBER
+- Speak on your portion of the code (you must know which files you coded)
+- Marl will post to his YouTube channel
+- Topics to cover: UML diagram, design process, code implementation, quick demo of some functions
