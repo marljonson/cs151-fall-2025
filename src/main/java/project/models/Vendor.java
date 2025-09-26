@@ -5,7 +5,7 @@ import abstractclasses.Product;
 
 public class Vendor {
 	private Map<Integer, Product> productList; //product list for the vendor
-	private Map<Integer, Integer> vendorStock; //to track stocks available at this vendpr
+	private Map<Integer, Integer> vendorStock; //to track stocks available at this vendor
 	private String name;
 	private int id;
 	private String email;
@@ -109,7 +109,7 @@ public class Vendor {
 			System.out.println("Vendor  "+ name + "removed " + removed.getType());
 		}
 		else {
-			System.out.println("This product is not available at thsi vendor");
+			System.out.println("This product is not available at this vendor");
 		}
 	}
 	
@@ -155,7 +155,7 @@ public class Vendor {
 			}
 		}
 		else {
-			System.out.println("Such product does not exist at thsi vendor");
+			System.out.println("Such product does not exist at this vendor");
 		}
 	}
 	
