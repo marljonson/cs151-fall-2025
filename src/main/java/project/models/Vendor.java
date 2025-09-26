@@ -1,6 +1,8 @@
 import java.util.HashMap;
 import java.util.Map;
 
+import abstractclasses.Product;
+
 public class Vendor {
 	private Map<Integer, Product> productList; //product list for the vendor
 	private Map<Integer, Integer> vendorStock; //to track stocks available at this vendpr
