@@ -2,6 +2,10 @@ when the uml diagram is complete, you can delete this file
 
 file to be stored here: PNG or PDF
 
+REQUIREMENTS OF OUR CODE
+- Unit tests for extra credit. The limit for any class is 100 objects; so, test 101 objects.
+- 3 custom exceptions; so, 3 corresponding try–catch blocks for each custom exception.
+- toString() method for each class.
 
 DELIVERABLES FOR EACH GROUP MEMBER
 - Speak on your portion of the code (you must know which files you coded)
