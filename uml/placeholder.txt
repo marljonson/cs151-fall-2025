@@ -1,1 +1,3 @@
 when the uml diagram is complete, you can delete this file
+
+file to be stored here: PNG or PDF
