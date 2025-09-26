@@ -5,7 +5,6 @@ import interfaces.Rentable;
 
 public class DigiCam extends Product implements Rentable {
     private static int nextId = 1;
-    private static int stock = 0;
     private static final String TYPE = "DigiCam";
     private String model;
     private int batteryLife;
@@ -26,7 +25,7 @@ public class DigiCam extends Product implements Rentable {
     // Product with type, price, stock, model, and isRented
     // id and batteryLife is assigned automatically
     public DigiCam(double price, String model, boolean isRented) {
-        super(nextId++, TYPE, price, stock++);
+        super(nextId++, TYPE, price, stock);
         this.model = model;
         this.isRented = isRented;
         this.isOn = false;
@@ -121,7 +120,7 @@ public class DigiCam extends Product implements Rentable {
         if (!isRented) {
             System.out.println("This camera was not rented yet.");
         } else {
-            stock++;       
+            setStock(getStock() + 1);       
             isRented = false;
             powerOff(); 
         }
@@ -132,7 +131,7 @@ public class DigiCam extends Product implements Rentable {
         if (isRented) {
             System.out.println("This camera is already rented.");
         } else {
-            stock--;        
+            setStock(getStock() - 1);         
             isRented = true;
         }
     }
