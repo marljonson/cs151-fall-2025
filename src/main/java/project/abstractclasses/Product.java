@@ -63,7 +63,7 @@ public abstract class Product {
         //price after applying discount
         this.price =  price - (price * discountPercentage);
 
-        //round the price down to 2 decimal places
+        //round the price to 2 decimal places
         this.price = Math.round(this.price * 100.0) / 100.0;
         
         //else we can print something out or throw an error
@@ -116,7 +116,7 @@ public abstract class Product {
         if(price < 0) throw new IllegalArgumentException("price must be >= 0");
         this.price = Math.round(price * 100.0) / 100.0; 
     }
-    public double getPrice() {return this.price; }
+    public double getPrice() {return Math.round(this.price * 100.0) / 100.0; }
 
     //for stock
     public void setStock(int stock) {
