@@ -14,7 +14,7 @@ public class DigiCam extends Product implements Rentable {
 
     // No-argument constructor
     public DigiCam() {
-        super(nextId++, TYPE, 0.0, stock++);
+        super(nextId++, TYPE, 0.0, stock);
         this.model = "";
         this.isRented = false;
         this.isOn = false;
