@@ -112,8 +112,7 @@ public class Labubu extends Product implements Rentable {
         this.isRare = true;
         setPrice(currPrice + (currPrice * 0.5)); //increase the price by 50%
     }
-
-
+    
 
     // Getters and setters
     public String getColor() { return color;}
@@ -125,20 +124,13 @@ public class Labubu extends Product implements Rentable {
     public boolean getIsRented() { return isRented; }
     public void setIsRented(boolean isRented) { this.isRented = isRented; }
 
-    public boolean getIsRare() {
-        return isRare;
-    }
+    public boolean getIsRare() { return isRare; }
+    public void setIsRare(boolean isRare) { this.isRare = isRare; }
 
-    public void setIsRare(boolean isRare) {
-        this.isRare = isRare;
-    }
-
-    public boolean getIsReserved() {
-        return isReserved;
-    }
-
-    public void setIsReserved(boolean isReserved) {
-        this.isReserved = isReserved;
-    }
+    //won't be using these
+    /* 
+    public boolean getIsReserved() { return isReserved; }
+    public void setIsReserved(boolean isReserved) { this.isReserved = isReserved; }
+    */
 }
 
