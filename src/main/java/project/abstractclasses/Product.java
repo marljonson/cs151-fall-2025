@@ -4,51 +4,51 @@ package abstractclasses;
 public abstract class Product {
     private int vendorProductId; //vendorProductId....each vendor will control the ids of its products  (vendor-scoped IDs)
     private String type;
-    private double price;
+    private double price; //will need to change it later to BigDecimal
     private int stock;
-    private int ownerVendorId; 
+    private Vendor owner; 
 
     //constructors
     //no argument constructor (just so the subclasses that could potentially use no-argumuent constructor don't crash, I don't see a case where we need to use this)
-    public Product() {
+    protected Product() { //only subclasses can call this (BUT DON'T CALL THIS, NullPtrException for owner)
         this.vendorProductId = 0; //0 for ids for our project means "not a valid id"
-        this.type = "default";
+        this.type = "";
         this.price = 0;
         this.stock = 0;
-        this.ownerVendorId = 0;
-    }
+        this.owner = null;
+    } 
 
     //product with id, type, price, stock (Matcha Vendor needs to use this if we don't want to give an ID to every matchas that the Matcha Vendor sells)
     //(BULK PRODUCTS)
-    public Product(int vendorProductId, String type, double price, int stock, int ownerVendorId){
+    protected Product(int vendorProductId, String type, double price, int stock, Vendor owner){
 
         if(vendorProductId <= 0) throw new IllegalArgumentException("vendorProductId must be > 0!");
         if(type == null || type.isBlank()) throw new IllegalArgumentException("type must be non-empty!");
         if(price < 0) throw new IllegalArgumentException("price must be >= 0");
         if(stock < 0) throw new IllegalArgumentException("stock must be >= 0");
-        if(ownerVendorId <= 0) throw new IllegalArgumentException("OwnerVendorID must be > 0!");
+        if(owner == null) throw new IllegalArgumentException("owner can't be null!");
 
         this.vendorProductId = vendorProductId;
-        this.type = type;
+        this.type = type.trim();
         this.price = Math.round(price * 100.0) / 100.0;
         this.stock = stock;
-        this.ownerVendorId = ownerVendorId;
+        this.owner= owner;
     }
 
     //creating a new product with stock of 1 (Labubu and DigiCam needs to use this to have specific id for each item) 
     //SERIALIZED PRODUCTS 
-    public Product(int vendorProductId, String type, double price, int ownerVendorId){
+    protected Product(int vendorProductId, String type, double price, Vendor owner){
 
         if(vendorProductId <= 0) throw new IllegalArgumentException("vendorProductId must be > 0!");
         if(type == null || type.isBlank()) throw new IllegalArgumentException("type must be non-empty!");
         if(price < 0) throw new IllegalArgumentException("price must be >= 0");
-        if(ownerVendorId <= 0) throw new IllegalArgumentException("OwnerVendorID must be > 0!");
+        if(owner == null) throw new IllegalArgumentException("owner can't be null!");
 
         this.vendorProductId = vendorProductId;
-        this.type = type;
+        this.type = type.trim();
         this.price = Math.round(price * 100.0) / 100.0;
         this.stock = 1;
-        this.ownerVendorId = ownerVendorId;
+        this.owner= owner;
     }
 
     //methods every class that extends Product must implement //***can return String for flexibility, will discuss on monday */
@@ -106,13 +106,13 @@ public abstract class Product {
                 "type=" + this.type + ", " + 
                 "price=" + formattedPrice + ", " +
                 "stock=" + this.stock + ", " +
-                "ownerVendorId=" + this.ownerVendorId + "}";
+                "owner=" + (this.owner == null ? "null" : this.owner.getName()) + "}"; //****vendor owner must have getName() */
     }
 
     //belows are setters and getters
     
     //for id
-    protected void setVendorProductId(int vendorProductId){ 
+    private void setVendorProductId(int vendorProductId){  //might not need this, ID should be immutable after creation
         if(vendorProductId <= 0) throw new IllegalArgumentException("vendorProductId must be > 0!");
         this.vendorProductId = vendorProductId; 
     }
@@ -121,7 +121,7 @@ public abstract class Product {
     //for type
     public void setType(String type) {
         if(type == null || type.isBlank()) throw new IllegalArgumentException("type must be non-empty!");
-        this.type = type; 
+        this.type = type.trim(); 
     }
     public String getType() {return this.type; }
 
@@ -147,6 +147,4 @@ public abstract class Product {
     }
 
     public int getOwnerVendorId() { return this.ownerVendorId; }
-
-    //
 }
