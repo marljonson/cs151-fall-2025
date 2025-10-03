@@ -119,7 +119,7 @@ public abstract class Product {
     public int getVendorProductId() { return this.vendorProductId; }
 
     //for type
-    public void setType(String type) {
+    protected void setType(String type) {
         if(type == null || type.isBlank()) throw new IllegalArgumentException("type must be non-empty!");
         this.type = type.trim(); 
     }
@@ -140,11 +140,11 @@ public abstract class Product {
     }
     public int getStock() {return this.stock; }
 
-    //for ownerVendorId
-    protected void setOwnerVendorId(int ownerVendorId) { 
-        if(ownerVendorId <= 0) throw new IllegalArgumentException("OwnerVendorId must be > 0!");
-        this.ownerVendorId = ownerVendorId; 
+    //for owner
+    protected void setOwner(Vendor owner) { 
+        if(owner == null) throw new IllegalArgumentException("owner can't be null!");
+        this.owner = owner; 
     }
 
-    public int getOwnerVendorId() { return this.ownerVendorId; }
+    public Vendor getOwner() { return this.owner; }
 }
