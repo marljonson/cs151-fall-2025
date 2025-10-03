@@ -6,4 +6,6 @@ public interface Buyable {
     double getPrice();
 
     void buy();
+
+    void buy(int amount);
 }
