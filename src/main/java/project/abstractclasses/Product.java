@@ -70,7 +70,7 @@ public abstract class Product {
         //apply discount, get the updated price
 
         //throw exception if the discountPercent is invalid 
-        if(discountFraction < 0.0 || discountFraction > 1.0 ){ //getting 0% or 100% discount is okay and applyable
+        if(discountFraction < 0.0 || discountFraction > 1.0 ){ //getting 0% or 100% discount is okay and applicable
             throw new IllegalArgumentException("discount fraction must be between 0 and 1 (inclusive)!"); 
         }
         
@@ -83,9 +83,9 @@ public abstract class Product {
         return actualPrice; 
     }
 
-    //won't be lettting a Product set its own price, its Vendor will handle this
+    //won't be letting a Product set its own price, its Vendor will handle this
     //this will update current price with inflation
-    public void updatePrice(double newPrice) {
+    protected void updatePrice(double newPrice) {
 
         //check newPrice is valid
         if(newPrice < 0){
@@ -94,7 +94,7 @@ public abstract class Product {
         this.price = Math.round(newPrice * 100.0) / 100.0; 
     }
 
-    //overriden toString method for Product
+    //overridden toString method for Product
     @Override 
     public String toString(){
 
@@ -112,37 +112,37 @@ public abstract class Product {
     //belows are setters and getters
     
     //for id
-    public void setId(int id){ 
-        if(id <= 0) throw new IllegalArgumentException("id must be > 0!");
-        this.id = id; 
+    protected void setVendorProductId(int vendorProductId){ 
+        if(vendorProductId <= 0) throw new IllegalArgumentException("vendorProductId must be > 0!");
+        this.vendorProductId = vendorProductId; 
     }
-    public int getId() { return this.id; }
+    public int getVendorProductId() { return this.vendorProductId; }
 
     //for type
     public void setType(String type) {
-        if(type == null) throw new IllegalArgumentException("type must be non-empty!");
+        if(type == null || type.isBlank()) throw new IllegalArgumentException("type must be non-empty!");
         this.type = type; 
     }
     public String getType() {return this.type; }
 
 
     //for price
-    public void setPrice(double price) {
+    protected void setPrice(double price) { //protected since only Vendor should be able to set price
         if(price < 0) throw new IllegalArgumentException("price must be >= 0");
         this.price = Math.round(price * 100.0) / 100.0; 
     }
-    public double getPrice() {return Math.round(this.price * 100.0) / 100.0; }
+    public double getPrice() {return this.price; } //don't need to reround again since I round the price on assignment
 
     //for stock
-    public void setStock(int stock) {
+    protected void setStock(int stock) { //protected since I enforce stock = 1 for serialized products
         if(stock < 0) throw new IllegalArgumentException("stock must be >= 0");
         this.stock = stock; 
     }
     public int getStock() {return this.stock; }
 
     //for ownerVendorId
-    public void setOwnerVendorId(int ownerVendorId) { 
-        if(id <= 0) throw new IllegalArgumentException("Owner Vendor Id must be > 0!");
+    protected void setOwnerVendorId(int ownerVendorId) { 
+        if(ownerVendorId <= 0) throw new IllegalArgumentException("OwnerVendorId must be > 0!");
         this.ownerVendorId = ownerVendorId; 
     }
 
