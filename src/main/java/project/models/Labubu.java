@@ -112,8 +112,7 @@ public class Labubu extends Product implements Rentable {
         this.isRare = true;
         setPrice(currPrice + (currPrice * 0.5)); //increase the price by 50%
     }
-
-
+    
 
     // Getters and setters
     public String getColor() { return color;}

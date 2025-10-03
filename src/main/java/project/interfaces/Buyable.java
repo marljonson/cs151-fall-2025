@@ -1,4 +1,4 @@
-package src.main.java.project.interfaces;
+package interfaces;
 
 public interface Buyable {
     boolean isBuyable();
@@ -6,4 +6,6 @@ public interface Buyable {
     double getPrice();
 
     void buy();
+
+    void buy(int amount);
 }

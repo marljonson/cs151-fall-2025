@@ -49,10 +49,6 @@ public class Customer {
 		return firstName + " " + lastName;
 	}
 	
-	public void setUserId(int id) {
-		this.userId = id;
-	}
-	
 	public int getUserId() {
 		return userId;
 	}
@@ -79,6 +75,9 @@ public class Customer {
 	
 	//needs to be updated after creating other class
 	public void makePurchase(Product product, int quantity, Vendor vendor) {
+		if (product == null) {
+			throw new IllegalArgumentException("Such product does not exist at our vendor");
+		}
 		if (quantity <= 0) {
 	        throw new IllegalArgumentException("Quantity must be positive");
 	    }
@@ -188,7 +187,7 @@ public class Customer {
 		return this.membershipType;
 	}
 	
-	public void returnProduct(Product product, int quantity) {
+	public void returnProduct(Product product, int quantity, Vendor vendor) {
 	    if (quantity <= 0) {
 	        throw new IllegalArgumentException("Quantity must be positive");
 	    }
@@ -208,6 +207,10 @@ public class Customer {
 		        return;
 		    }
 	        product.returnProduct(quantity);
+	        
+	        int currentVendorStock = vendor.getVendorStock().getOrDefault(productId, 0);
+	        vendor.getVendorStock().put(productId, currentVendorStock + quantity);
+	        
 	        System.out.println(getFullName() + " returned " + quantity + " rented " + product.getType());
 	        rentedProducts.put(productId, productCustomerRented - quantity);
 	    } 
@@ -229,9 +232,9 @@ public class Customer {
 	        for (Map.Entry<Integer, Integer> entry : boughtProducts.entrySet()) {
 	            int productId = entry.getKey();
 	            int qty = entry.getValue();
-	            Product product = productCatalog.get(productId); // look up by ID
+	            Product product = productCatalog.get(productId); 
 	            if (product != null && qty > 0) {
-	                System.out.println(product.getType() + " (x" + qty + ")");
+	                System.out.println("ID : " + product.getId() + " | " + product.getType() + " (x" + qty + ")");
 	            }
 	        }
 	    }
@@ -273,7 +276,7 @@ public class Customer {
 				System.out.println(this.getFullName() + " reserved " + quantity + " " + product.getType());
 			}
 			else {
-				System.out.println("Your need to be diamond or gold member to be able to reserve");
+				System.out.println("You need to be diamond or gold member to be able to reserve");
 			}
 		}
 		else {

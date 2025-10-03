@@ -1,9 +1,11 @@
 import java.util.HashMap;
 import java.util.Map;
 
+import abstractclasses.Product;
+
 public class Vendor {
 	private Map<Integer, Product> productList; //product list for the vendor
-	private Map<Integer, Integer> vendorStock; //to track stocks available at this vendpr
+	private Map<Integer, Integer> vendorStock; //to track stocks available at this vendor
 	private String name;
 	private int id;
 	private String email;
@@ -107,7 +109,7 @@ public class Vendor {
 			System.out.println("Vendor  "+ name + "removed " + removed.getType());
 		}
 		else {
-			System.out.println("This product is not available at thsi vendor");
+			System.out.println("This product is not available at this vendor");
 		}
 	}
 	
@@ -126,12 +128,18 @@ public class Vendor {
 		}
 	}
 	
-	public void displayitem() {
+	public void displayItem() {
 		System.out.println("Products offered by the vendor " + name);
 		for (Product product : productList.values()) {
 			int stock = vendorStock.getOrDefault(product.getId(), 0);
-			System.out.println(product.getId() + " | " + product.getType() + " | $" + product.getPrice() +
+			if (product instanceof Labubu labubu) {
+				System.out.println("ID : " + labubu.getId() + " | " + labubu.getType() + " " + labubu.getColor() + " | $" + labubu.getPrice() +
 					" | " + stock + "left ");
+			}
+			else if (product instanceof DigiCam digiCam) {
+				System.out.println("ID : " + digiCam.getId() + " | " + digiCam.getType() + " " + digiCam.getModel() + " | $" + digiCam.getPrice() +
+						" | " + stock + "left ");
+			}
 		}
 	}
 	
@@ -147,7 +155,7 @@ public class Vendor {
 			}
 		}
 		else {
-			System.out.println("Such product does not exist at thsi vendor");
+			System.out.println("Such product does not exist at this vendor");
 		}
 	}
 	
