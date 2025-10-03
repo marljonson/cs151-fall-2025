@@ -8,4 +8,6 @@ public interface Rentable {
     void rentalReturn();
 
     void rent();
+
+    void rent(int amount);
 }
