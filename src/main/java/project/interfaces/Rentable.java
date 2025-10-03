@@ -1,6 +1,4 @@
-package src.main.java.project.interfaces;
-
-import src.main.java.project.abstractclasses.Product;
+package interfaces;
 
 public interface Rentable {
     boolean isRentable();
