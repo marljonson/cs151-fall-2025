@@ -8,7 +8,7 @@ public interface RentableTemp {
     
     double quoteRental(Instant now); 
     /* pure review
-     * use Product's getEffectiveUnitPrice at now
+     * MUST use Product's getEffectiveUnitPrice at now
      */
     double rent(Instant quotedAt, double expectedTotal);
     /*

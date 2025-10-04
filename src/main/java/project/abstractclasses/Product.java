@@ -115,7 +115,7 @@ public abstract class Product {
 
     //always use this as a UnitPrice for every product whether rentable or buyable
     //this is to see if a vendor has a promoWindow for his products
-    double getEffectiveUnitPrice(Instant quotedAt){ //"at" is the time the user quoted the product
+    public double getEffectiveUnitPrice(Instant quotedAt){ //"at" is the time the user quoted the product
 
     if (owner.vendorPromo == null) { return this.price; } //if no promo, return the original price
 

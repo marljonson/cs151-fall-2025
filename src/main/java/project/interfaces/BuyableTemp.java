@@ -6,8 +6,7 @@ public interface BuyableTemp {
 
     boolean isBuyable(int userInputQty); //is there stock >= user's input quantity? check
     
-    //might move this 2 to product as concrete methods 
-    double getUnitPrice(); //same as getPrice (we might need to change this to BigDecimal because double don't work well with money, then round that to 2 decimals)
+    //moved this to product as concrete methods 
     double getEffectiveUnitPrice(Instant now); //if the vendor(owner) has an active promo window, 
                                                 //we will apply discountFraction to the unitPrice 
                                                 //Instant now is the time customer try to buy an item
