@@ -1,6 +1,10 @@
 
 package abstractclasses;
 
+import java.time.Instant;
+
+import project.models.Vendor;
+
 public abstract class Product {
     private int vendorProductId; //vendorProductId....each vendor will control the ids of its products  (vendor-scoped IDs)
     private String type;
@@ -109,6 +113,24 @@ public abstract class Product {
                 "owner=" + (this.owner == null ? "null" : this.owner.getName()) + "}"; //****vendor owner must have getName() */
     }
 
+    //always use this as a UnitPrice for every product whether rentable or buyable
+    //this is to see if a vendor has a promoWindow for his products
+    double getEffectiveUnitPrice(Instant quotedAt){ //"at" is the time the user quoted the product
+
+    if (owner.vendorPromo == null) { return this.price; } //if no promo, return the original price
+
+    //if there is vendorPromo object, check if the promo is active at the time "at"
+    PromoWindow promo = owner.vendorPromo;
+
+    if (promo.activeNow(quotedAt)) { //there is a PromoWindow for the owner (vendor), check if the user quotedAt the active promo window, if so apply discount and return the unitprice after applying discount
+        double unitPriceAfterDiscount = price - (price * promo.discountFraction);
+        unitPriceAfterDiscount = Math.round(unitPriceAfterDiscount * 100.0) / 100.0;
+        return unitPriceAfterDiscount;
+    }
+
+    return this.price;
+    }
+
     //belows are setters and getters
     
     //for id
@@ -127,6 +149,7 @@ public abstract class Product {
 
 
     //for price
+    //(we might need to change this to BigDecimal because double don't work well with money, then round that to 2 decimals)
     protected void setPrice(double price) { //protected since only Vendor should be able to set price
         if(price < 0) throw new IllegalArgumentException("price must be >= 0");
         this.price = Math.round(price * 100.0) / 100.0; 
