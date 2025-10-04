@@ -12,7 +12,7 @@ public interface BuyableTemp {
                                                 //we will apply discountFraction to the unitPrice 
                                                 //Instant now is the time customer try to buy an item
     
-    double quote(int amount, Instant now);//must use getEffectiveUnitPrice(Instant now), (only create 1 Instant now when the user try to buy for consistency (same time))
+    double quoteBuy(int amount, Instant now);//must use getEffectiveUnitPrice(Instant now), (only create 1 Instant now when the user try to buy for consistency (same time))
     double buy(int amount, Instant quotedAt, double expectedTotal); //only call this after Giving the user selects to see Quote 
                                                                     //must use quotedAt time so honor the quote, expectedTotal is to avoid inconsistent checking out total price problems
                                                                     //if recomputedTotal != expectedTotal, use expectedTotal
