@@ -22,4 +22,6 @@ public interface BuyableTemp {
     int availableQty(); 
     int getMinPurchaseQty(); 
     int getMaxPurchaseQty();
+
+    //TODO: take 1 method from 3 methods above and override in the products that implements them and get rid of others
 }
