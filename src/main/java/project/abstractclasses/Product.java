@@ -117,10 +117,10 @@ public abstract class Product {
     //this is to see if a vendor has a promoWindow for his products
     public double getEffectiveUnitPrice(Instant quotedAt){ //"at" is the time the user quoted the product
 
-    if (owner.vendorPromo == null) { return this.price; } //if no promo, return the original price
+    if (owner.getVendorPromo() == null) { return this.price; } //if no promo, return the original price
 
     //if there is vendorPromo object, check if the promo is active at the time "at"
-    PromoWindow promo = owner.vendorPromo;
+    PromoWindow promo = owner.getVendorPromo();
 
     if (promo.activeNow(quotedAt)) { //there is a PromoWindow for the owner (vendor), check if the user quotedAt the active promo window, if so apply discount and return the unitprice after applying discount
         double unitPriceAfterDiscount = price - (price * promo.discountFraction);
@@ -150,14 +150,14 @@ public abstract class Product {
 
     //for price
     //(we might need to change this to BigDecimal because double don't work well with money, then round that to 2 decimals)
-    protected void setPrice(double price) { //protected since only Vendor should be able to set price
+    public void setPrice(double price) { //can't make this protected anymore, TT, protected since only Vendor should be able to set price
         if(price < 0) throw new IllegalArgumentException("price must be >= 0");
         this.price = Math.round(price * 100.0) / 100.0; 
     }
     public double getPrice() {return this.price; } //don't need to reround again since I round the price on assignment
 
     //for stock
-    protected void setStock(int stock) { //protected since I enforce stock = 1 for serialized products
+    public void setStock(int stock) { //CAN't make it protected anymore TT protected since I enforce stock = 1 for serialized products
         if(stock < 0) throw new IllegalArgumentException("stock must be >= 0");
         this.stock = stock; 
     }
