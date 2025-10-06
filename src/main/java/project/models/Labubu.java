@@ -16,7 +16,7 @@ public class Labubu extends Product implements RentableTemp {
     //private boolean isRented; //don't need to use this because if stock <= 0, the labubu is rented
 
     //I don't expect us to use this anywhere but keep this here to have a no-args constructor since Java will not give us one
-    // Custom no-args constructor
+    //no-args constructor
     //never use this
     public Labubu() {
         super();

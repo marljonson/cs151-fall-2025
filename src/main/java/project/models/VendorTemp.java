@@ -92,7 +92,7 @@ public class VendorTemp {
         currProduct.setPrice(price);
     }
 
-    public void printInventoryById(){
+    public void printInventory(){
 
         //NOTE: I haven't learned lambda expressions or Comparable<> TT, but I know that TreeMap sorts the key naturally
         //create a new TreeMap and put the existing map (productList) inside it
