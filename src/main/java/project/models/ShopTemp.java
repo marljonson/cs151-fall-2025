@@ -194,8 +194,11 @@ public class ShopTemp {
 
         switch (vendorChoice){
             case 0 -> helperExit(sc);
-            case 8 -> handleRole(sc);
-             //TODO: all 1-8 cases
+            case 8 -> {
+                System.out.println("Successfully logged out!");
+                handleRole(sc); 
+            }
+             //TODO: all 1-7 cases
         }
     }//end of handleVendorChoice
 
@@ -207,8 +210,11 @@ public class ShopTemp {
 
         switch (customerChoice){
             case 0 -> helperExit(sc);
-            case 8 -> handleRole(sc);
-            //TODO: all 1-8 cases
+            case 8 -> {
+                System.out.println("Successfully logged out!");
+                handleRole(sc); 
+            }
+            //TODO: all 1-7 cases
         }
         
     }//end of handleCustomerChoice
