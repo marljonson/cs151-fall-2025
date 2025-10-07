@@ -97,7 +97,7 @@ public class VendorTemp {
         Product currProduct = productList.get(vendorProductId);
 
         //don't need this, we are using setPrice() which checks this if(price < 0) throw new IllegalArgumentException("price must be >= 0");
-        if(currProduct == null) { throw new NoSuchElementException("No such product exists at this vendor"); }
+        if(currProduct == null) { throw new NoSuchElementException("No such product exists!"); }
 
         currProduct.setPrice(price);
     }

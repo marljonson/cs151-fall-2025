@@ -94,7 +94,7 @@ public class ShopTemp {
         System.out.print("Enter your choice: ");
     }
 
-    public int getRole(Scanner sc){
+    public int getRole(Scanner sc){ //NOTE: this is helper method for handleRole()
         while(true){
             displayRoleMenu();
             try{
@@ -118,7 +118,7 @@ public class ShopTemp {
 
     //use this method, when the choice returned from getRole() is "[1] I'm a vendor"
     //same getChoice logic
-    public int getVendorChoice(Scanner sc){
+    public int getVendorChoice(Scanner sc){ //NOTE: this is helper method for handleVendorChoice()
 
         while(true){
             displayVendorMenu();
@@ -140,7 +140,7 @@ public class ShopTemp {
     }//end of getVendorChoice(), make sure to handle exit (0) and log out (if log out, do getRole again)
 
     //same logic again, there might be a way to make this short, I don't think I'll have time to do that for this project TT
-    public int getCustomerChoice(Scanner sc){
+    public int getCustomerChoice(Scanner sc){ //NOTE: this is helper method for handleCustomerChoice()
 
         while(true){
             displayCustomerMenu();
@@ -161,7 +161,55 @@ public class ShopTemp {
         }
     }//end of getCustomerChoice(), make sure to handle exit (0) and log out (if log out, do getRole again)
 
+    public void handleRole(Scanner sc){
+        
+        if(sc == null) throw new NullPointerException("Scanner cannot be null");
 
+        int roleChoice = getRole(sc);
+        
+        switch(roleChoice){
+            case 0 -> helperExit(sc);
+            case 1 -> handleVendorChoice(sc);
+            case 2 -> handleCustomerChoice(sc);
+            default -> {
+                System.out.println("this default branch will/should never happen");
+                throw new IllegalStateException("Default branch is getting executed");
+            }
+        }
+
+    }//end of handleRole()
+
+    public void helperExit(Scanner sc){
+        System.out.println("I am sad to see you go :'(");
+        sc.close();
+        System.exit(0);
+    }//end of helperExit
+
+
+    public void handleVendorChoice(Scanner sc){ //NOTE: this is helper method for handleRole()
+       
+        if(sc == null) throw new NullPointerException("Scanner cannot be null");
+
+        int vendorChoice = getVendorChoice(sc);
+
+        switch (vendorChoice){
+             case 0 -> helperExit(sc);
+             //TODO: all 1-8 cases
+        }
+    }//end of handleVendorChoice
+
+    public void handleCustomerChoice(Scanner sc){//NOTE: this is helper method for handleRole()
+
+        if(sc == null) throw new NullPointerException("Scanner cannot be null");
+
+        int customerChoice = getCustomerChoice(sc);
+
+        switch (customerChoice){
+             case 0 -> helperExit(sc);
+            //TODO: all 1-8 cases
+        }
+        
+    }//end of handleCustomerChoice
 
 
 
@@ -198,7 +246,9 @@ public class ShopTemp {
         }
         */
 
-
+        Scanner sc = new Scanner(System.in);
+        
+        shop.handleRole(sc);
         
        
 
