@@ -1,4 +1,4 @@
-package models;
+package project.models;
 
 import java.util.HashMap;
 import java.util.TreeMap; //for sorting by vendorProductId
@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.time.Instant;
 
-import abstractclasses.Product;
-import interfaces.BuyableTemp;
+import project.abstractclasses.Product;
+import project.interfaces.BuyableTemp;
 
 public class VendorTemp {
 
@@ -38,6 +38,16 @@ public class VendorTemp {
         this.vendorId = nextVendorId++;
         this.email = email.trim();
         this.balance = 0.0;
+    }
+
+    @Override
+    public String toString(){
+
+        //confirm whether the vendor has productLists or not
+        int productCount = (productList == null) ? 0 : productList.size();
+
+
+        return "";
     }
 
     //create and add Products to the Vendor's product list
@@ -94,6 +104,12 @@ public class VendorTemp {
 
     public void printInventory(){
 
+
+        if(productList.isEmpty()){
+            System.out.println("Inventory is empty for this vendor!");
+            return;
+        }
+        
         //NOTE: I haven't learned lambda expressions or Comparable<> TT, but I know that TreeMap sorts the key naturally
         //create a new TreeMap and put the existing map (productList) inside it
         Map<Integer, Product> treeMap = new TreeMap<>(productList);
