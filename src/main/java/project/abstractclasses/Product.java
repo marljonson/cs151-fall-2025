@@ -3,6 +3,7 @@ package abstractclasses;
 
 import java.time.Instant;
 
+import models.VendorTemp;
 import project.models.Vendor;
 
 public abstract class Product {
@@ -10,7 +11,7 @@ public abstract class Product {
     private String type;
     private double price; //will need to change it later to BigDecimal
     private int stock;
-    private Vendor owner; 
+    private VendorTemp owner; 
 
     //constructors
     //no argument constructor (just so the subclasses that could potentially use no-argumuent constructor don't crash, I don't see a case where we need to use this)
@@ -164,10 +165,10 @@ public abstract class Product {
     public int getStock() {return this.stock; }
 
     //for owner
-    protected void setOwner(Vendor owner) { 
+    protected void setOwner(VendorTemp owner) { 
         if(owner == null) throw new IllegalArgumentException("owner can't be null!");
         this.owner = owner; 
     }
 
-    public Vendor getOwner() { return this.owner; }
+    public VendorTemp getOwner() { return this.owner; }
 }
