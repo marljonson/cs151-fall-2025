@@ -40,14 +40,14 @@ public class VendorTemp {
         this.balance = 0.0;
     }
 
-    @Override
-    public String toString(){
+    //TODO: change this into overidden toString() if you have time
+    public void debug(){
+        
+        System.out.printf(
+        "\nVendor{id=%d, name='%s', email='%s', balance=%.2f, products=%d}\n",
+        vendorId, name, email, balance, productList.size());
 
-        //confirm whether the vendor has productLists or not
-        int productCount = (productList == null) ? 0 : productList.size();
-
-
-        return "";
+        printInventory();
     }
 
     //create and add Products to the Vendor's product list
@@ -109,7 +109,7 @@ public class VendorTemp {
             System.out.println("Inventory is empty for this vendor!");
             return;
         }
-        
+
         //NOTE: I haven't learned lambda expressions or Comparable<> TT, but I know that TreeMap sorts the key naturally
         //create a new TreeMap and put the existing map (productList) inside it
         Map<Integer, Product> treeMap = new TreeMap<>(productList);

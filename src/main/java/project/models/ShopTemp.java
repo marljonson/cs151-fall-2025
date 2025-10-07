@@ -1,15 +1,20 @@
-package models;
+package project.models;
 
 import java.time.Instant;
-import abstractclasses.Product;
-import interfacs.RentableTemp;
+import project.abstractclasses.Product;
+import project.interfaces.RentableTemp;
 
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 
 public class ShopTemp {
 
     private static List<VendorTemp> vendorsList = new ArrayList<>();
+
+    public ShopTemp(){
+        createVendors();
+    }
 
     //preset datas for Vendors and their products
     protected void createVendors(){
@@ -68,5 +73,21 @@ public class ShopTemp {
     "Olympus PEN E-PL10",
     "GoPro HERO10 Black"
 };
+
+    public static void main(String[] args){
+        
+        ShopTemp shop = new ShopTemp();
+
+        /* This works! 
+         * try printing out all the products of each vendor
+         
+        for(VendorTemp v : ShopTemp.vendorsList){
+            v.debug();
+        }
+        */
+       
+
+
+    }
 
 }
