@@ -1,7 +1,7 @@
-package models;
+package project.models;
 
-import abstractclasses.Product;
-import interfaces.RentableTemp;
+import project.abstractclasses.Product;
+import project.interfaces.RentableTemp;
 
 import java.util.HashMap;
 import java.util.Map; 
@@ -155,5 +155,40 @@ public class CustomerTemp {
       }
     }
 
+    //below are getters and setters
+    //for name
+    public void setFirstName(String name){
+        if(name == null || name.isBlank()) throw new IllegalArgumentException("firstName cannot be null or blank");
+        this.firstName = name.trim();
+    }
+    public String getFirstName(){ return this.firstName; }
 
+    public void setLastName(String name){
+        if(name == null || name.isBlank()) throw new IllegalArgumentException("lastName cannot be null or blank");
+        this.lastName = name.trim();
+    }
+    public String getLastName() { return this.lastName; }
+
+    public String getFullName() { return this.firstName + " " + this.lastName; }
+
+    //for email
+    public void setEmail(String email){
+        if(email == null || email.isBlank()) throw new IllegalArgumentException("Email cannot be null or blank");
+        this.email = email.trim();
+    }
+    public String getEmail() { return this.email; }
+
+    //for customerId
+    public int getCustomerId() { return this.customerId; }
+
+    //for balance
+    public void credit(double amount){
+        if(amount < 0) throw new IllegalArgumentException("amount cannot be negative");
+
+        this.balance = Math.round((this.balance + amount) * 100.0) / 100.0;
+    }
+    public double getBalance(){ return this.balance; }
+
+    //for amountSpent
+    public double getAmountSpent() { return this.amountSpent; }
 }

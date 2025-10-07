@@ -1,10 +1,10 @@
 
-package abstractclasses;
+package project.abstractclasses;
 
 import java.time.Instant;
 
-import models.VendorTemp;
-import project.models.Vendor;
+import project.models.VendorTemp;
+import project.models.PromoWindow;
 
 public abstract class Product {
     private int vendorProductId; //vendorProductId....each vendor will control the ids of its products  (vendor-scoped IDs)
@@ -25,7 +25,7 @@ public abstract class Product {
 
     //product with id, type, price, stock (Matcha Vendor needs to use this if we don't want to give an ID to every matchas that the Matcha Vendor sells)
     //(BULK PRODUCTS)
-    protected Product(int vendorProductId, String type, double price, int stock, Vendor owner){
+    protected Product(int vendorProductId, String type, double price, int stock, VendorTemp owner){
 
         if(vendorProductId <= 0) throw new IllegalArgumentException("vendorProductId must be > 0!");
         if(type == null || type.isBlank()) throw new IllegalArgumentException("type must be non-empty!");
@@ -42,7 +42,7 @@ public abstract class Product {
 
     //creating a new product with stock of 1 (Labubu and DigiCam needs to use this to have specific id for each item) 
     //SERIALIZED PRODUCTS 
-    protected Product(int vendorProductId, String type, double price, Vendor owner){
+    protected Product(int vendorProductId, String type, double price, VendorTemp owner){
 
         if(vendorProductId <= 0) throw new IllegalArgumentException("vendorProductId must be > 0!");
         if(type == null || type.isBlank()) throw new IllegalArgumentException("type must be non-empty!");
@@ -118,13 +118,13 @@ public abstract class Product {
     //this is to see if a vendor has a promoWindow for his products
     public double getEffectiveUnitPrice(Instant quotedAt){ //"at" is the time the user quoted the product
 
-    if (owner.getVendorPromo() == null) { return this.price; } //if no promo, return the original price
+    if (owner.getPromoWindow() == null) { return this.price; } //if no promo, return the original price
 
     //if there is vendorPromo object, check if the promo is active at the time "at"
-    PromoWindow promo = owner.getVendorPromo();
+    PromoWindow promo = owner.getPromoWindow();
 
     if (promo.activeNow(quotedAt)) { //there is a PromoWindow for the owner (vendor), check if the user quotedAt the active promo window, if so apply discount and return the unitprice after applying discount
-        double unitPriceAfterDiscount = price - (price * promo.discountFraction);
+        double unitPriceAfterDiscount = price - (price * promo.getDiscountFraction());
         unitPriceAfterDiscount = Math.round(unitPriceAfterDiscount * 100.0) / 100.0;
         return unitPriceAfterDiscount;
     }

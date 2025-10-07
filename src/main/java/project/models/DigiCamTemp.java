@@ -1,8 +1,9 @@
+
 package project.models;
 
-//TODO: import vendor (I will write customer and vendor soon)
-import abstractclasses.Product;
-import interfaces.RentableTemp;
+import project.models.VendorTemp;
+import project.abstractclasses.Product;
+import project.interfaces.RentableTemp;
 
 import java.time.Instant;
 
@@ -29,7 +30,7 @@ public class DigiCamTemp extends Product implements RentableTemp {
     }
 
     //Constructor: Serialized DigiCam Constructor
-    public DigiCamTemp(int vendorProductID, double price, Vendor owner, String model){
+    public DigiCamTemp(int vendorProductID, double price, VendorTemp owner, String model){
 
         super(vendorProductID, TYPE, price, owner); //Calling Product's Serialized Constructor
 

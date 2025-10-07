@@ -1,4 +1,4 @@
-package interfaces;
+package project.interfaces;
 
 import java.time.Instant;
 
