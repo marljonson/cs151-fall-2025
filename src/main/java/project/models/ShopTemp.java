@@ -101,13 +101,13 @@ public class ShopTemp {
                 int choice = sc.nextInt();
                 sc.nextLine(); //must do this because nextInt() leaves the line 
                 if(choice < 0 || choice > 2){
-                    throw new InvalidUserChoice("Enter 0, 1 or 2!");
+                    throw new InvalidUserChoice("\n\nEnter 0, 1 or 2!\n");
                 }
                 return choice;
             }catch (InputMismatchException e){
 
                 sc.nextLine(); //since exception is thrown, new line is not handled
-                System.out.println("Invalid input: you must enter an integer");
+                System.out.println("\n\nInvalid input: you must enter an integer\n");
             }catch(InvalidUserChoice e){
 
                 //if just invalidUserChoice, newline is handled above
@@ -126,12 +126,12 @@ public class ShopTemp {
                 int choice = sc.nextInt();
                 sc.nextLine();
                 if(choice < 0 || choice > 8){
-                    throw new InvalidUserChoice("Your choice must be between 0 and 8 (inclusive)!");
+                    throw new InvalidUserChoice("\n\nYour choice must be between 0 and 8 (inclusive)!\n");
                 }
                 return choice;
             }catch (InputMismatchException e){
                 sc.nextLine(); 
-                System.out.println("Invalid input: you must enter an integer");
+                System.out.println("\n\nInvalid input: you must enter an integer\n");
 
             }catch(InvalidUserChoice e){
                 System.out.println(e.getMessage());
@@ -148,12 +148,12 @@ public class ShopTemp {
                 int choice = sc.nextInt();
                 sc.nextLine();
                 if (choice < 0 || choice > 8){
-                    throw new InvalidUserChoice("Your choice must be between 0 and 8 (inclusive)!");
+                    throw new InvalidUserChoice("\n\nYour choice must be between 0 and 8 (inclusive)!\n");
                 }
                 return choice;
             }catch (InputMismatchException e){
                 sc.nextLine(); 
-                System.out.println("Invalid input: you must enter an integer");
+                System.out.println("\n\nInvalid input: you must enter an integer\n");
 
             }catch(InvalidUserChoice e){
                 System.out.println(e.getMessage());
@@ -180,7 +180,7 @@ public class ShopTemp {
     }//end of handleRole()
 
     public void helperExit(Scanner sc){
-        System.out.println("I am sad to see you go :'(");
+        System.out.println("\n\nI am sad to see you go :'(");
         sc.close();
         System.exit(0);
     }//end of helperExit
@@ -193,7 +193,8 @@ public class ShopTemp {
         int vendorChoice = getVendorChoice(sc);
 
         switch (vendorChoice){
-             case 0 -> helperExit(sc);
+            case 0 -> helperExit(sc);
+            case 8 -> handleRole(sc);
              //TODO: all 1-8 cases
         }
     }//end of handleVendorChoice
@@ -205,7 +206,8 @@ public class ShopTemp {
         int customerChoice = getCustomerChoice(sc);
 
         switch (customerChoice){
-             case 0 -> helperExit(sc);
+            case 0 -> helperExit(sc);
+            case 8 -> handleRole(sc);
             //TODO: all 1-8 cases
         }
         
