@@ -1,12 +1,15 @@
 package project.models;
 
+import java.util.Scanner;
 import java.time.Instant;
-import project.abstractclasses.Product;
-import project.interfaces.RentableTemp;
-
+import java.util.InputMismatchException; //for scanner, throw if wrong type
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
+
+import project.exceptions.InvalidUserChoice;
+import project.abstractclasses.Product;
+import project.interfaces.RentableTemp;
 
 public class ShopTemp {
 
@@ -16,7 +19,7 @@ public class ShopTemp {
         createVendors();
     }
 
-    //preset datas for Vendors and their products
+    //preset datas for Vendors and their products (CONFIRMED AND TESTED)
     protected void createVendors(){
 
         //create Vendors
@@ -37,8 +40,8 @@ public class ShopTemp {
             labubuVendor.stockLabubu((isRare ? price * 1.5 : price), color, isRare); //50% price increase if isRare
         }
 
-        //max 100 instances for Digicam class
-        for(int i = 0; i < 100; i++){
+        //only 50 instances for Digicam class
+        for(int i = 0; i < 50; i++){
 
             double price = 50 + rand.nextDouble() * 150; //random price b/w 50-200 range
             String model = possibleModels[rand.nextInt(possibleModels.length)]; //random model
@@ -48,7 +51,116 @@ public class ShopTemp {
         //add the vendors to the Shop's vendorsList
         vendorsList.add(labubuVendor);
         vendorsList.add(digiCamVendor);
+    }//end for createVendors()
+
+    //make the user who uses our system pick a role first
+    public void displayRoleMenu(){
+        System.out.println("===== CS 151 Pop-Up Plaza =====");
+        System.out.println("[1] I'm a Vendor");
+        System.out.println("[2] I'm a Customer");
+        System.out.println("[0] Exit :( ");
+        System.out.println("Type an integer (0, 1, or 2)");
+        System.out.println("=========================");
+        System.out.print("Enter your choice: ");
     }
+
+    public void displayVendorMenu(){
+        System.out.println("===== CS 151 Vendor Menu =====");
+        System.out.println("[1] Update price by productId");
+        System.out.println("[2] List my inventory");
+        System.out.println("[3] Discontinue an item by productId");
+        System.out.println("[4] Set Promo");
+        System.out.println("[5] Cancel Promo");
+        System.out.println("[6] Add Funds");
+        System.out.println("[7] Withdraw Cash");
+        System.out.println("[8] Log out");
+        System.out.println("[0] Exit");
+        System.out.println("=========================");
+        System.out.print("Enter your choice: ");
+    }
+
+    public void displayCustomerMenu(){
+        System.out.println("===== CS 151 Customer Menu =====");
+        System.out.println("[1] List vendors"); //TODO: ADD a method in ShopTemp to display vendors from vendorsList
+        System.out.println("[2] Browse vendor Inventory by ventorId");
+        System.out.println("[3] Quote a product"); //must use product.quoteRental(Instant now)
+        System.out.println("[4] Rent the quoted product");
+        System.out.println("[5] Return Product");
+        System.out.println("[6] Add Funds");
+        System.out.println("[7] View balance");
+        System.out.println("[8] Log out");
+        System.out.println("[0] Exit");
+        System.out.println("=========================");
+        System.out.print("Enter your choice: ");
+    }
+
+    public int getRole(Scanner sc){
+        while(true){
+            displayRoleMenu();
+            try{
+                int choice = sc.nextInt();
+                sc.nextLine(); //must do this because nextInt() leaves the line 
+                if(choice < 0 || choice > 2){
+                    throw new InvalidUserChoice("Enter 0, 1 or 2!");
+                }
+                return choice;
+            }catch (InputMismatchException e){
+
+                sc.nextLine(); //since exception is thrown, new line is not handled
+                System.out.println("Invalid input: you must enter an integer");
+            }catch(InvalidUserChoice e){
+
+                //if just invalidUserChoice, newline is handled above
+                System.out.println(e.getMessage());
+            }
+        }
+    }//end of getRole() //make sure to handle Exit [0] after this call
+
+    //use this method, when the choice returned from getRole() is "[1] I'm a vendor"
+    //same getChoice logic
+    public int getVendorChoice(Scanner sc){
+
+        while(true){
+            displayVendorMenu();
+            try{
+                int choice = sc.nextInt();
+                sc.nextLine();
+                if(choice < 0 || choice > 8){
+                    throw new InvalidUserChoice("Your choice must be between 0 and 8 (inclusive)!");
+                }
+                return choice;
+            }catch (InputMismatchException e){
+                sc.nextLine(); 
+                System.out.println("Invalid input: you must enter an integer");
+
+            }catch(InvalidUserChoice e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }//end of getVendorChoice(), make sure to handle exit (0) and log out (if log out, do getRole again)
+
+    //same logic again, there might be a way to make this short, I don't think I'll have time to do that for this project TT
+    public int getCustomerChoice(Scanner sc){
+
+        while(true){
+            displayCustomerMenu();
+            try{
+                int choice = sc.nextInt();
+                sc.nextLine();
+                if (choice < 0 || choice > 8){
+                    throw new InvalidUserChoice("Your choice must be between 0 and 8 (inclusive)!");
+                }
+                return choice;
+            }catch (InputMismatchException e){
+                sc.nextLine(); 
+                System.out.println("Invalid input: you must enter an integer");
+
+            }catch(InvalidUserChoice e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }//end of getCustomerChoice(), make sure to handle exit (0) and log out (if log out, do getRole again)
+
 
 
 
@@ -78,13 +190,16 @@ public class ShopTemp {
         
         ShopTemp shop = new ShopTemp();
 
-        /* This works! 
+        /* This (presetting demo data) works! 
          * try printing out all the products of each vendor
          
         for(VendorTemp v : ShopTemp.vendorsList){
             v.debug();
         }
         */
+
+
+        
        
 
 

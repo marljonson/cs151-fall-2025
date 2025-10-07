@@ -1,4 +1,4 @@
-package exceptions;
+package project.exceptions;
 
 public class InvalidUserChoice extends Exception {
 
