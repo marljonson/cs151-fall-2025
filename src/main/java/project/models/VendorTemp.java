@@ -42,7 +42,7 @@ public class VendorTemp {
 
     //create and add Products to the Vendor's product list
     //Only Vendor can create and add products 
-    public void createLabubu(double price, String color, boolean isRare){ //can skip all the error checks, did those in Product's Serialized Constructor and the check for color in Labubu's constructor
+    public void stockLabubu(double price, String color, boolean isRare){ //can skip all the error checks, did those in Product's Serialized Constructor and the check for color in Labubu's constructor
         int currId = nextVendorProductId++;
 
         Product labubu = new Labubu(currId, price, this, color, isRare); //Serialized Labubu constructor 
@@ -52,7 +52,7 @@ public class VendorTemp {
     }
 
     //same logic
-    public void createDigicam(double price, String model){
+    public void stockDigicam(double price, String model){
         int currId = nextVendorProductId++;
 
         Product digiCam = new DigiCamTemp(currId, price, this, model);

@@ -19,9 +19,10 @@ public interface BuyableTemp {
                             //return the total amount customer need to pay/(outside of buy() use this return to add to the owner's balance 
 
     //added these here just so we can get 4 methods for this interface
+    /* 
     int availableQty(); 
     int getMinPurchaseQty(); 
     int getMaxPurchaseQty();
-
+    */
     //TODO: take 1 method from 3 methods above and override in the products that implements them and get rid of others
 }
