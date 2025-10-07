@@ -5,3 +5,7 @@
 /.settings/
 /*.log
 .DS_Store
+
+/out/
+/sources.txt
+*.class
