@@ -194,7 +194,7 @@ public class ShopTemp {
 
         switch (vendorChoice){
             case 0 -> helperExit(sc);
-            case 8 -> {
+            case 8 -> { //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
                 System.out.println("Successfully logged out!");
                 handleRole(sc); 
             }
@@ -256,7 +256,7 @@ public class ShopTemp {
 
         Scanner sc = new Scanner(System.in);
         
-        shop.handleRole(sc);
+        shop.handleRole(sc); 
         
        
 
