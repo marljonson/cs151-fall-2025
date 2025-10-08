@@ -143,13 +143,13 @@ public class VendorTemp {
     public void setPromo(double discountFraction, Instant startTime, Instant endTime){
 
         this.vendorPromo = new PromoWindow(discountFraction, startTime, endTime); //checks are already handled in PromoWindow constructor 
-
     }
 
     public void cancelPromo(){
         
         //simply set the vendorPromo = null
         this.vendorPromo = null;
+        System.out.println("Your promo window is successfully cancelled!");
     }
 
     //below are getters and setters

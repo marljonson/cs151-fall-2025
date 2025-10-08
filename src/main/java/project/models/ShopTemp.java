@@ -224,6 +224,8 @@ public class ShopTemp {
             case 1 -> helperVendorCase1(sc, currVendor);
             case 2 -> currVendor.printInventory();
             case 3 -> helperVendorCase3(sc, currVendor);
+            case 4 -> helperVendorCase4(sc, currVendor);
+            case 5 -> currVendor.cancelPromo();
             case 8 -> { //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
                 System.out.println("Successfully logged out!");
                 handleRole(sc); 
@@ -252,6 +254,8 @@ public class ShopTemp {
 
     /*
      *below are all helper methods specifically for switch statment's cases  
+     *
+     * 
      */
 
     //Vendor's case 1 -> update price by product id
@@ -308,6 +312,34 @@ public class ShopTemp {
             }
         }
     }//end of vendor's case 3
+
+    //Vendor's case 4 -> set promo (give discount for every product for a period)
+    public void helperVendorCase4(Scanner sc, VendorTemp vendor){
+
+        while(true){
+            try{
+                System.out.print("Enter discount in fraction between 0.0 and 1.0 (or 0 to go back): ");
+                double discountFraction = sc.nextDouble();
+                sc.nextLine();
+
+                if(discountFraction == 0) return; //user type 0 -> return
+
+                //in reality, we should ask the vendor to input startTime and endTime
+                //but I have yet to learn how to convert user's input to Instant object
+                Instant start = Instant.now().minusSeconds(60);     // starts 60 seconds ago
+                Instant end = Instant.now().plusSeconds(7 * 24 * 3600); // 7 days later
+
+                vendor.setPromo(discountFraction, start, end);
+                System.out.println("A promo window is created. Every product from your inventory is " + discountFraction * 100 + "% off!");
+                return;
+            }catch(InputMismatchException e){
+                  sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
+                System.out.println("discount fraction must be a number between 0.0 and 1.0");
+            }catch(IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }//end of vendor's case 4
 
 
 
