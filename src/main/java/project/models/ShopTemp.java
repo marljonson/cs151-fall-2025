@@ -8,23 +8,24 @@ import java.util.Random;
 import java.util.ArrayList;
 
 import project.exceptions.InvalidUserChoice;
+import project.exceptions.ProductNotFound;
 import project.abstractclasses.Product;
 import project.interfaces.RentableTemp;
 
 public class ShopTemp {
 
-    private static List<VendorTemp> vendorsList = new ArrayList<>();
+    private List<VendorTemp> vendorsList = new ArrayList<>();
 
     public ShopTemp(){
         createVendors();
     }
 
     //preset datas for Vendors and their products (CONFIRMED AND TESTED)
-    protected void createVendors(){
+    private void createVendors(){
 
         //create Vendors
-        VendorTemp labubuVendor = new VendorTemp("Labubu Rental Shop", "rentALabubu@gmail.com");
-        VendorTemp digiCamVendor = new VendorTemp("Digicam Rental Shop", "rentDigitalCamera@gmail.com"); 
+        VendorTemp labubuVendor = new VendorTemp("Labubu Rental Shop", "rentlabubu11@gmail.com");
+        VendorTemp digiCamVendor = new VendorTemp("Digicam Rental Shop", "rentdigitalcamera22@gmail.com"); 
         
         //Vendors stock items to inventory (Vendor buys random labubus)
         Random rand = new Random(); 
@@ -169,7 +170,12 @@ public class ShopTemp {
         
         switch(roleChoice){
             case 0 -> helperExit(sc);
-            case 1 -> handleVendorChoice(sc);
+            case 1 -> {
+
+                VendorTemp currVendor = validateVendorAndReturnVendor(sc);
+                if(currVendor == null) return; //MUST HANDLE IN THE MAIN (may be a while loop) --> when return goes back to handleRole(sc), we can calll handleRole(sc) here directly but this could cause StackOverflowError
+                handleVendorChoice(sc, currVendor);
+            }
             case 2 -> handleCustomerChoice(sc);
             default -> {
                 System.out.println("this default branch will/should never happen");
@@ -179,6 +185,27 @@ public class ShopTemp {
 
     }//end of handleRole()
 
+    public VendorTemp validateVendorAndReturnVendor(Scanner sc){//validate Vendor if "I am a Vendor" is chosen
+
+        while(true){
+            System.out.print(" Enter your email address: ");
+            String userEmail = sc.nextLine().trim().toLowerCase();
+
+            if(userEmail.equals("0")){
+                return null; //user type 0 -> exit
+            }
+            System.out.println();
+
+            for(VendorTemp vendor : vendorsList){
+                if(vendor.getEmail().equals(userEmail)){
+                    return vendor;//found the valid vendor, return vendor 
+                }
+            }
+            
+            System.out.println("\nNo vendor found with that email, Please try again or type 0 to go back.");
+        }
+    }
+
     public void helperExit(Scanner sc){
         System.out.println("\n\nI am sad to see you go :'(");
         sc.close();
@@ -186,7 +213,7 @@ public class ShopTemp {
     }//end of helperExit
 
 
-    public void handleVendorChoice(Scanner sc){ //NOTE: this is helper method for handleRole()
+    public void handleVendorChoice(Scanner sc, VendorTemp currVendor){ //NOTE: this is helper method for handleRole()
        
         if(sc == null) throw new NullPointerException("Scanner cannot be null");
 
@@ -194,6 +221,7 @@ public class ShopTemp {
 
         switch (vendorChoice){
             case 0 -> helperExit(sc);
+            case 1 -> helperVendorCase1(sc, currVendor);
             case 8 -> { //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
                 System.out.println("Successfully logged out!");
                 handleRole(sc); 
@@ -220,12 +248,44 @@ public class ShopTemp {
     }//end of handleCustomerChoice
 
 
+    //below are all helper methods specifically for switch statment's cases 
+
+    //Vendor's case 1 -> update price by product id
+    public void helperVendorCase1(Scanner sc, VendorTemp vendor){
+
+        while(true){
+            try{
+                System.out.print("Enter the product's ID (or 0 to go back): ");
+                int vendorProductId = sc.nextInt();
+                sc.nextLine();
+                //System.out.println();
+
+                if(vendorProductId == 0) return; //user type 0 -> return //OR should I throw a custom exception here?
+
+                System.out.print("Enter the updated price (or 0 to go back): ");
+                double price = sc.nextDouble();
+                sc.nextLine();
+                //System.out.println();
+                if(price == 0) return;//user type 0 -> return
+
+                vendor.updatePriceById(vendorProductId, price);
+                return; //price is successfully updated -> return 
+                
+            }catch (ProductNotFound e){ 
+                System.out.println(e.getMessage());
+            }
+            catch (InputMismatchException e){
+                sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
+                System.out.println("enter an integer for product id and a double for updated price");
+            }
+        }
+    }//end of vendor's case 1
 
 
 
 
     //getter for vendorsList
-    public static List<VendorTemp> getVendorsList(){ return vendorsList; }
+    public List<VendorTemp> getVendorsList(){ return vendorsList; }
 
     //popular models for DigiCams (I got this from ChatGPT)
     //I will take more models later so that each digicam having a uique ID makes sense
