@@ -103,7 +103,7 @@ public class VendorTemp {
         currProduct.setPrice(price);
 
         System.out.print("Price for " + currProduct.getType() + " with ID: " + currProduct.getVendorProductId() + " is now set to ");
-        System.out.printf("%.2f\n", price);
+        System.out.printf("%.2f\n\n", price);
     }
 
     public void printInventory(){
