@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.time.Instant;
 
 import project.abstractclasses.Product;
+import project.exceptions.ProductNotFound;
 import project.interfaces.BuyableTemp;
 
 public class VendorTemp {
@@ -91,15 +92,18 @@ public class VendorTemp {
         System.out.println("Stock for the product with ID: " + currProduct.getVendorProductId()+ " and type: " + currProduct.getType() + " has now been set to " + updatedStock);
     }
 
-    public void updatePriceById(int vendorProductId, double price){
+    public void updatePriceById (int vendorProductId, double price) throws ProductNotFound {
 
         //look for the product with vendorProductId
         Product currProduct = productList.get(vendorProductId);
 
         //don't need this, we are using setPrice() which checks this if(price < 0) throw new IllegalArgumentException("price must be >= 0");
-        if(currProduct == null) { throw new NoSuchElementException("No such product exists!"); }
+        if(currProduct == null) { throw new ProductNotFound("No such product exists in your inventory!"); }
 
         currProduct.setPrice(price);
+
+        System.out.print("Price for " + currProduct.getType() + " with ID: " + currProduct.getVendorProductId() + " is now set to ");
+        System.out.printf("%.2f\n", price);
     }
 
     public void printInventory(){
