@@ -123,18 +123,19 @@ public class VendorTemp {
         }
     }
 
-    public void discontinueProductById(int vendorProductId){ //flip the product's stock
+    public void discontinueProductById(int vendorProductId) throws ProductNotFound{ //flip the product's stock
 
         //look for the product with vendorProductId
         Product currProduct = productList.get(vendorProductId);
-        if(currProduct == null) { throw new NoSuchElementException("No such product exists at this vendor"); }
+        if(currProduct == null) { throw new ProductNotFound("No such product exists at this vendor"); }
 
         if(currProduct.getStock() == 0) return; //already discontinued
         
         currProduct.setStock(0);
 
-        //TODO : print with comment stating this product with id, type, is discontinued ...
-        //TODO HERE
+        //System.out.println("For the product " + currProduct.getType() + " with ID " + currProduct.getVendorProductId() + ", its stock is set to " + currProduct.getStock());
+        System.out.println("The following product is successfully discontinued");
+        System.out.println(currProduct);
     }
 
     //PromoWindow

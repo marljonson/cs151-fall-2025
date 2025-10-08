@@ -223,11 +223,12 @@ public class ShopTemp {
             case 0 -> helperExit(sc);
             case 1 -> helperVendorCase1(sc, currVendor);
             case 2 -> currVendor.printInventory();
+            case 3 -> helperVendorCase3(sc, currVendor);
             case 8 -> { //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
                 System.out.println("Successfully logged out!");
                 handleRole(sc); 
             }
-             //TODO: all 2-7 cases
+             //TODO: all 4-7 cases
         }
     }//end of handleVendorChoice
 
@@ -249,7 +250,9 @@ public class ShopTemp {
     }//end of handleCustomerChoice
 
 
-    //below are all helper methods specifically for switch statment's cases 
+    /*
+     *below are all helper methods specifically for switch statment's cases  
+     */
 
     //Vendor's case 1 -> update price by product id
     public void helperVendorCase1(Scanner sc, VendorTemp vendor){
@@ -277,11 +280,34 @@ public class ShopTemp {
             }
             catch (InputMismatchException e){
                 sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
-                System.out.println("enter an integer for product id and a double for updated price");
+                System.out.println("enter an integer for product ID and a double for updated price");
             }
         }
     }//end of vendor's case 1
 
+    //Vendor's case 3 --> Discontinue a product by id
+    public void helperVendorCase3(Scanner sc, VendorTemp vendor){
+        
+        while(true){
+            try{
+                System.out.print("Enter the product's ID (or 0 to go back): ");
+                int vendorProductId = sc.nextInt();
+                sc.nextLine();
+                //System.out.println();
+
+                if(vendorProductId == 0) return; //user type 0 -> return
+
+                vendor.discontinueProductById(vendorProductId);
+                return; //successfully discontinued -> return
+            }catch (ProductNotFound e){ 
+                System.out.println(e.getMessage());
+            }
+            catch (InputMismatchException e){
+                sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
+                System.out.println("enter an integer for product ID");
+            }
+        }
+    }//end of vendor's case 3
 
 
 
