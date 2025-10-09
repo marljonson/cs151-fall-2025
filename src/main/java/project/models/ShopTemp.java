@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import project.exceptions.InvalidUserChoice;
 import project.exceptions.ProductNotFound;
+import project.exceptions.VendorNotFound;
 import project.abstractclasses.Product;
 import project.interfaces.RentableTemp;
 
@@ -83,7 +84,7 @@ public class ShopTemp {
     public void displayCustomerMenu(){
         System.out.println("===== CS 151 Customer Menu =====");
         System.out.println("[1] List vendors"); //TODO: ADD a method in ShopTemp to display vendors from vendorsList
-        System.out.println("[2] Browse vendor Inventory by ventorId");
+        System.out.println("[2] Browse vendor inventory by ventorId");
         System.out.println("[3] Quote and Rent a product"); //must use product.quoteRental(Instant now)
         System.out.println("[4] View my active rentals");
         System.out.println("[5] Return Product");
@@ -248,6 +249,7 @@ public class ShopTemp {
         switch (customerChoice){
             case 0 -> helperExit(sc);
             case 1 -> listAllVendors();
+            case 2 -> helperCustomerCase2(sc);
             case 8 -> {
                 System.out.println("Successfully logged out!");
                 return;
@@ -423,6 +425,39 @@ public class ShopTemp {
      *
      * 
      */
+
+    //Customer's case 2 -> Browse vendor inventory by vendorID
+    public void helperCustomerCase2(Scanner sc){
+
+        listAllVendors(); //in case customer forgets vendor's ID //will only display 1 time
+        while(true){
+            try{
+                System.out.print("Enter Vendor ID (or 0 to go back): ");
+                int vId = sc.nextInt();
+                sc.nextLine();
+
+                if(vId == 0) return; //user type 0 -> return
+
+                VendorTemp currVendor = null;
+                for(VendorTemp vendor : vendorsList){
+                    if(vendor.getVendorId() == vId){
+                        currVendor = vendor;
+                        break; //break early after we find the vendor
+                    }
+                }
+
+                if (currVendor == null) throw new VendorNotFound("Vendor with this ID does not exist");
+                currVendor.printInventory();
+                return;
+            }catch(InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Vendor ID must be an integer");
+            }catch(VendorNotFound e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }//end for helperCustomerCase2
+
 
     //getter for vendorsList
     public List<VendorTemp> getVendorsList(){ return vendorsList; }
