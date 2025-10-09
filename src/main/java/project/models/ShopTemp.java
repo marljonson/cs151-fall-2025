@@ -84,8 +84,8 @@ public class ShopTemp {
         System.out.println("===== CS 151 Customer Menu =====");
         System.out.println("[1] List vendors"); //TODO: ADD a method in ShopTemp to display vendors from vendorsList
         System.out.println("[2] Browse vendor Inventory by ventorId");
-        System.out.println("[3] Quote a product"); //must use product.quoteRental(Instant now)
-        System.out.println("[4] Rent the quoted product");
+        System.out.println("[3] Quote and Rent a product"); //must use product.quoteRental(Instant now)
+        System.out.println("[4] View my active rentals");
         System.out.println("[5] Return Product");
         System.out.println("[6] Add Funds");
         System.out.println("[7] View balance");
@@ -213,6 +213,7 @@ public class ShopTemp {
     }//end of helperExit
 
 
+    //if the user is a vendor
     public void handleVendorChoice(Scanner sc, VendorTemp currVendor){ //NOTE: this is helper method for handleRole()
        
         if(sc == null) throw new NullPointerException("Scanner cannot be null");
@@ -227,15 +228,17 @@ public class ShopTemp {
             case 4 -> helperVendorCase4(sc, currVendor);
             case 5 -> currVendor.cancelPromo();
             case 6 -> helperVendorCase6(sc, currVendor);
-            //todo case 7
-            case 8 -> { //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
+            case 7 -> helperVendorCase7(sc, currVendor);
+            case 8 -> { 
                 System.out.println("Successfully logged out!");
-                handleRole(sc); 
+                return; 
+                //handleRole(sc); //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
             }
-             //TODO: all only 7th cas
+             
         }
     }//end of handleVendorChoice
 
+    //if the user is a customer
     public void handleCustomerChoice(Scanner sc){//NOTE: this is helper method for handleRole()
 
         if(sc == null) throw new NullPointerException("Scanner cannot be null");
@@ -244,18 +247,43 @@ public class ShopTemp {
 
         switch (customerChoice){
             case 0 -> helperExit(sc);
+            case 1 -> listAllVendors();
             case 8 -> {
                 System.out.println("Successfully logged out!");
-                handleRole(sc); 
+                return;
             }
             //TODO: all 1-7 cases
         }
         
     }//end of handleCustomerChoice
 
+    public void listAllVendors(){
+
+        if(vendorsList.isEmpty()){ 
+            System.out.println("Sorry, we are temporarily closed"); 
+            return;
+        }
+
+        System.out.println("===== Vendor Directory =====");
+        for(VendorTemp vendor : vendorsList){
+
+            System.out.println("[Vendor ID: " + vendor.getVendorId() + "] " + vendor.getName());
+            System.out.print("Promo: ");
+
+            PromoWindow currPromo = vendor.getPromoWindow();
+            if(currPromo != null && currPromo.activeNow(Instant.now())){
+                System.out.print(vendor.getPromoWindow().getDiscountFraction() * 100 + "% off!\n");
+            }
+            else{
+                System.out.print("None\n");
+            } 
+        }//end iterating thru vendorsList
+        System.out.println("=============================");
+    }
+
 
     /*
-     *below are all helper methods specifically for switch statment's cases  
+     *below are all helper methods for a vendor (specifically for switch statment's cases)
      *
      * 
      */
@@ -390,6 +418,11 @@ public class ShopTemp {
     }//end of helperVendorCase7
 
 
+    /*
+     *below are all helper methods for a customer (specifically for switch statment's cases)
+     *
+     * 
+     */
 
     //getter for vendorsList
     public List<VendorTemp> getVendorsList(){ return vendorsList; }
