@@ -226,11 +226,13 @@ public class ShopTemp {
             case 3 -> helperVendorCase3(sc, currVendor);
             case 4 -> helperVendorCase4(sc, currVendor);
             case 5 -> currVendor.cancelPromo();
+            case 6 -> helperVendorCase6(sc, currVendor);
+            //todo case 7
             case 8 -> { //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
                 System.out.println("Successfully logged out!");
                 handleRole(sc); 
             }
-             //TODO: all 4-7 cases
+             //TODO: all only 7th cas
         }
     }//end of handleVendorChoice
 
@@ -340,6 +342,52 @@ public class ShopTemp {
             }
         }
     }//end of vendor's case 4
+
+    //Vendor's case 6 --> add funds
+    public void helperVendorCase6(Scanner sc, VendorTemp vendor){
+
+        while(true){
+            try{
+                System.out.print("Enter the amount of credit (or 0 to go back): ");
+                double amount = sc.nextDouble();
+                sc.nextLine();
+
+                if(amount == 0) return; //user type 0, exit
+                
+                vendor.credit(amount);
+                return;
+            }catch(IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }catch (InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Invalid input: please enter a number.");
+            }
+        }
+    }//end of vendor's case 6
+
+    //Vendor's case 7 --> Withdraw Cash
+    public void helperVendorCase7(Scanner sc, VendorTemp vendor){
+
+        while(true){
+            try{
+                System.out.println("Enter the amount to withdraw (or 0 to go back): ");
+                double amount = sc.nextDouble();
+                sc.nextLine();
+
+                if(amount == 0) return; //user type 0 --> return 
+
+                vendor.debit(amount);
+                return;
+            }catch(IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }catch(IllegalStateException e) {
+                System.out.println(e.getMessage());
+            }catch (InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Invalid input: please enter a number.");
+            }
+        }
+    }//end of helperVendorCase7
 
 
 

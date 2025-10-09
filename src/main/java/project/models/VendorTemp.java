@@ -176,6 +176,7 @@ public class VendorTemp {
         if(amount < 0) throw new IllegalArgumentException("amount must be >= 0");
         this.balance += amount;
         this.balance = Math.round(this.balance * 100.0) / 100.0;
+        System.out.println("Total Balance: "+ this.balance);
     }
     protected void debit(double amount){
         if(amount < 0) throw new IllegalArgumentException("amount must be >= 0");
@@ -183,10 +184,12 @@ public class VendorTemp {
 
         if(amount == this.balance){
             this.balance = 0.0;
+            System.out.println("Total Balance: " + this.balance);
             return;
         }
         this.balance -= amount;
         this.balance = Math.round(this.balance * 100.0) / 100.0;
+        System.out.println("Total Balance: " + this.balance);
 
     }
     public double getBalance(){ return this.balance; }
