@@ -1,45 +1,40 @@
-package models;
+package project.models;
 
-import abstractclasses.Product;
-import interfaces.Rentable;
+import project.models.VendorTemp;
+import project.abstractclasses.Product;
+import project.interfaces.RentableTemp; //TODO: Confirm RentableTemp
 
-public class Labubu extends Product implements Rentable {
+import java.time.Instant;
+
+public class Labubu extends Product implements RentableTemp {
 
     //constant type for all Labubu
     public static final String TYPE = "Labubu";
-
-    private static int nextId = 1;
     private String color;
-    private boolean isRented;
     private boolean isRare;
-    //private boolean isReserved;
 
-    // Custom no-args constructor
+    //private boolean isRented; //don't need to use this because if stock <= 0, the labubu is rented
+
+    //I don't expect us to use this anywhere but keep this here to have a no-args constructor since Java will not give us one
+    //no-args constructor
+    //never use this
     public Labubu() {
-        super(nextId++, TYPE , 0.0, 0);
+        super();
         this.color = "";
-        this.isRented = false;
         this.isRare = false;
     }
 
-     //what is this?
-    /* 
-    public Labubu(String color, double price) {
-        this.color = color;
-    }
-    */
+    //Constructor: Serialized Labubus Constructor (each labubu has a unique ID)
+    public Labubu(int vendorProductId, double price, VendorTemp owner, String color, boolean isRare){
+        super(vendorProductId, TYPE, price, owner); //call Product's constructor first
 
-    // Constructor
-    public Labubu(int id,  double price, int stock, String color, boolean isRented, boolean isRare){
-        super(id, TYPE, price, stock);
-
-        if(color == null) throw new IllegalArgumentException("Color must be non-empty!");
-        this.color = color;
-        this.isRented = isRented;
+        if(color == null || color.isBlank()) throw new IllegalArgumentException("color can't be null or blank.");
+        
+        this.color = color.trim();
         this.isRare = isRare;
     }
 
-    //override abstract methods of Product
+    //must override abstract methods of Product
     @Override
     public void describe() {
         System.out.println("Charm all your friends (and potential lovers) with a friendly Labubu!");
@@ -50,56 +45,65 @@ public class Labubu extends Product implements Rentable {
         System.out.println("Hang on your backpack or on your waist with a carabiner.");
     }
 
-    //override methods from Rentable Interface 
+    //must override methods from Rentable Interface 
     @Override
     public boolean isRentable(){
-        
-        return !isRented && getStock() > 0; //are we gonna treat each Labubu as 1 item or multiple items
+        return this.getStock() > 0; //remember we are treating each Labubu as 1 item with a unique ID
     }
 
     @Override
-    public double getRentalPrice(){
-        return 5.0; //$5 to rent a labubu
+    public double quoteRental(Instant now){
+        double unitPriceAfterDiscount = this.getEffectiveUnitPrice(now);
+        return unitPriceAfterDiscount;
     }
 
     @Override
-    public void rentalReturn(){
+    public double rent(Instant quotedAt, double expectedTotal){
 
-        if(!isRented){
-            System.out.println("Invalid Return: item is not currently rented"); 
-            return;
-        }
-        //else 
-        setStock(getStock() + 1);
-        isRented = false;
-        //System.out.println(customer.userId + "return the product!"); //won't be using any parameter
-    }
+        if(quotedAt == null) throw new IllegalArgumentException("quotedAt can't be null");
+        if(expectedTotal < 0) throw new IllegalArgumentException("expectedTotal can't be negative");
+        if(!isRentable()) throw new IllegalStateException("Unavailable to rent!"); //will add a custom exception later if I have time 
+       
+        //recompute the unitPrice to be safe
+        double unitPriceAfterDiscount = this.getEffectiveUnitPrice(quotedAt);
 
-    @Override
-    public void rent(){
+        //safeguard to avoid mismatch only due to the rounding error
+        unitPriceAfterDiscount = Math.round(unitPriceAfterDiscount * 100.0) / 100.0; 
+        double expected = Math.round(expectedTotal * 100.0) / 100.0;
 
-        if(!isRentable()){ //reusing isRentable()
-            System.out.println("This Labubu is not available now");
-            return;
+        //honor the quotedAt time
+        if (unitPriceAfterDiscount != expected){
+            unitPriceAfterDiscount = expected;
         }
 
-        //else
-        setStock(getStock() - 1);
-        isRented = true;
-        //System.out.println(customer.userId + "return the product");  //won't be using any parameter for now
+        //update/decrement stock
+        this.setStock(this.getStock() - 1);
+
+        return unitPriceAfterDiscount;
     }
 
+      @Override
+    public void rentalReturn(Instant returnedAt){ //might not need returnedAt if we won't charge late fees but looks really good to have this
+
+
+        if(returnedAt == null) throw new IllegalArgumentException("returnedAt time cannot be null");
+        if(this.getStock() != 0) throw new IllegalStateException("Invalid Return: this labubu is never rented!");
+
+        //restock
+        this.setStock(1);
+    }
+
+    //to make it easier to debug
     @Override 
     public String toString(){
 
         String formattedPrice = String.format("%.2f", getPrice());
         return "Labubu{" +
-            "id=" + getId() +
+            "id=" + getVendorProductId() +
             ", type=" + getType() +
             ", price=" + formattedPrice +
             ", stock=" + getStock() +
             ", color=" + this.color +
-            ", isRented=" + isRented +
             ", isRare=" + isRare + 
             "}"; 
 
@@ -112,33 +116,16 @@ public class Labubu extends Product implements Rentable {
         this.isRare = true;
         setPrice(currPrice + (currPrice * 0.5)); //increase the price by 50%
     }
-
-
-
+    
     // Getters and setters
     public String getColor() { return color;}
-    public void setColor(String color) { 
-        if(color == null) throw new IllegalArgumentException("Color must be non-empty!");
-        this.color = color;
+    protected void setColor(String color) { 
+        if(color == null || color.isBlank()) throw new IllegalArgumentException("Color must be non-empty!");
+        this.color = color.trim();
     }
 
-    public boolean getIsRented() { return isRented; }
-    public void setIsRented(boolean isRented) { this.isRented = isRented; }
+    public boolean getIsRare() { return isRare; }
+    protected void setIsRare(boolean isRare) { this.isRare = isRare; }
 
-    public boolean getIsRare() {
-        return isRare;
-    }
-
-    public void setIsRare(boolean isRare) {
-        this.isRare = isRare;
-    }
-
-    public boolean getIsReserved() {
-        return isReserved;
-    }
-
-    public void setIsReserved(boolean isReserved) {
-        this.isReserved = isReserved;
-    }
 }
 

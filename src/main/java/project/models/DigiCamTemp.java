@@ -1,21 +1,28 @@
-package models;
+
+package project.models;
+
+import project.models.VendorTemp;
+import project.abstractclasses.Product;
+import project.interfaces.RentableTemp;
 
 import java.time.Instant;
 
-import models.Vendor;
-import abstractclasses.Product;
-import interfaces.Rentable;
+//TODO: this class name is DigiCamTemp, be careful when you rewrite them in your DigiCam
+public class DigiCamTemp extends Product implements RentableTemp {
 
-public class DigiCam extends Product implements Rentable {
-
+    //no ID field; Vendors will create new products and take care of the IDS
+    //no isRented; each DigiCam will have a uique ID and only 1 stock exists (when the getStock() returns 1, it is not rented, when returns 0, it is rented)  
+    //stock is always 1 (don't need to set stock here, Product's Serialized Constructor takes care of the stock
+    //use (Product's getStock()) Please refer to Product's Serialized Constructor for more info
+    
     private static final String TYPE = "DigiCam";
     private String model; 
     private int batteryLife;  
     private boolean isOn; 
 
-
-    // No-argument constructor
-    public DigiCam(){
+    //this is just to apply our knowledge that when we have other constructors, Java will not provide no-args constructor
+    //Never use this
+    public DigiCamTemp(){
         super();
         this.model = "";
         this.isOn = false;
@@ -23,7 +30,7 @@ public class DigiCam extends Product implements Rentable {
     }
 
     //Constructor: Serialized DigiCam Constructor
-    public DigiCam(int vendorProductID, double price, VendorTemp owner, String model){
+    public DigiCamTemp(int vendorProductID, double price, VendorTemp owner, String model){
 
         super(vendorProductID, TYPE, price, owner); //Calling Product's Serialized Constructor
 
@@ -34,7 +41,7 @@ public class DigiCam extends Product implements Rentable {
         this.batteryLife = (int) (Math.random() * 101); //0 to 100 inclusive
     }
 
-    // Override methods from the Product class
+    //Overriding abstract methods from Product
     @Override
     public void describe() {
         System.out.println("This is the ultimate DigiCam that will change your photo experience!");
@@ -46,14 +53,15 @@ public class DigiCam extends Product implements Rentable {
         System.out.println("2. Take a photo!");
     }
 
-    //Override methods from Rentable interface 
+    //TODO: most of the methods behave the same as Rentable Labubu, so I copy pasted some, pls carefully confirm that I don't use Labubu here
+    //Overriding methods from Rentable Interface //moved these up to make sure for us to see easily that every method get overriden 
     @Override
     public boolean isRentable(){
-        return (this.getStock() > 0); 
+        return (this.getStock() > 0); //remember we are treating each DigiCam as 1 item with a unique ID //we will use this concept that "something isRentable if it is an instanceof Rentable"
     }
 
     @Override
-    public double quoteRental(Instant now){ //"now" is the time the customer chooses to see the quote 
+    public double quoteRental(Instant now){ //"now" is the time the customer chooses to see the quote (the concept is already taken care of in Product, see Product's getEffectiveUnitPrice)
         double unitPriceAfterDiscount = this.getEffectiveUnitPrice(now);
         return unitPriceAfterDiscount;
     }
@@ -92,6 +100,7 @@ public class DigiCam extends Product implements Rentable {
         this.setStock(1);
     }
 
+    //No major change is made for your Unique methods 
     // Unique methods for DigiCam class
     public void powerOn() {
         if (isOn) {
@@ -126,6 +135,7 @@ public class DigiCam extends Product implements Rentable {
         System.out.println("Battery is " + batteryLife + "%");
     }
 
+
     //Getters and Setters
     public String getModel() {
         return model;
@@ -136,13 +146,14 @@ public class DigiCam extends Product implements Rentable {
         this.model = model.trim(); //added trim() here
     }
 
+
     public int getBatteryLife() {
         return this.batteryLife;
     }
 
     public void setBatteryLife(int batteryLife) {
         if(batteryLife < 0 || batteryLife > 100) throw new IllegalArgumentException("batteryLife can't be lower than 0 or greater than 100");  //added exception here just to be consistent 
-        this.batteryLife = batteryLife; 
+        this.batteryLife = batteryLife; //added "this" to look nice (don't really matter if you don't use it)
     }
 
     public boolean isOn() {
@@ -152,11 +163,10 @@ public class DigiCam extends Product implements Rentable {
     public void setOn(boolean isOn) {
         this.isOn = isOn;
     }
-    
-    @Override 
-    public String getType(){ 
-        return TYPE; 
-    } 
+
+    //Added getType here
+    @Override //because I have included getType() in my Product (haven't checked this part yet, I will come back)
+    public String getType(){ return TYPE; } //didn't use "this" here (static)
 
     @Override
     public String toString() {
@@ -169,4 +179,6 @@ public class DigiCam extends Product implements Rentable {
                 ", isOn=" + isOn +
                 '}';
     }
+
+
 }
