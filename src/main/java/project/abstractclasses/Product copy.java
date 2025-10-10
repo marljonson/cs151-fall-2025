@@ -187,7 +187,18 @@ public abstract class Product {
     }
 
     @Override
-    public int hashCode() {
-
+    public int hashCode() { // hash is consistent value based on logical identity, thus must use all factors in equals()
+        // include vendorProductId in result, using Wrapper class to be consistent with Double, String, etc.
+        int result = Integer.hashCode(vendorProductId);
+        // if type is not null, include type in result
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        // include price in result
+        result = 31 * result + Double.hashCode(price);
+        // include stock in result
+        result = 31 * result + Integer.hashCode(stock);
+        // if owner (of type Vendor) is not null, include owner in result
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        // returns the final hash value for this Product
+        return result;
     }
 }
