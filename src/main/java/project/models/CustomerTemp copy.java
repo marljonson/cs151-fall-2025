@@ -190,4 +190,25 @@ public class CustomerTemp {
 
     //for amountSpent
     public double getAmountSpent() { return this.amountSpent; }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Customer:{}")
+          .append("customerId=").append(customerId)
+          .append(", name=").append(firstName).append(" ").append(lastName)
+          .append(", email=").append(email)
+          .append(", balance=$").append(String.format("%.2f", balance))
+          .append(", amountSpent=$").append(String.format("%.2f", amountSpent))
+    }
+
+    @Override
+    public String equals() {
+        if (this == obj) return true; // same exact object
+        if (obj == null || getClass() != obj.getClass) return false;
+
+        Product other = (Product) obj;
+
+        return  this.f
+    }
 }
