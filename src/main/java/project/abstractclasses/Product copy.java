@@ -102,16 +102,16 @@ public abstract class Product {
     //overridden toString method for Product
     @Override 
     public String toString(){
-
-        //to make sure that we don't print no more than 2 decimals
-        String formattedPrice = String.format("%.2f", price);
-
-        return "Product{" +
-                "vendorProductId= " + this.vendorProductId + ", " + 
-                "type=" + this.type + ", " + 
-                "price=" + formattedPrice + ", " +
-                "stock=" + this.stock + ", " +
-                "owner=" + (this.owner == null ? "null" : this.owner.getName()) + "}"; //****vendor owner must have getName() */
+        StringBuilder sb = new StringBuilder();
+        sb.append("Product: {")
+          .append("vendorProductId=").append(vendorProductId);
+          .append(", type='").append(type).append("\'")
+          .append(", price=$").append(String.format("%.2f", price))
+          .append(", stock=").append(stock)
+          //****vendor owner must have getName() */
+          .append(", owner='").append(this.owner == null ? "null" : this.owner.getName()).append("\"")
+          .append("}");
+        return sb.toString();
     }
 
     //always use this as a UnitPrice for every product whether rentable or buyable

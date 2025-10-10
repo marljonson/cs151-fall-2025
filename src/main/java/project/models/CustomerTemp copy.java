@@ -194,7 +194,7 @@ public class CustomerTemp {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Customer:{}")
+        sb.append("Customer:{")
           .append("customerId=").append(customerId)
           .append(", name='").append(firstName).append(" ").append(lastName).append("\"")
           .append(", email='").append(email).append("\"")
