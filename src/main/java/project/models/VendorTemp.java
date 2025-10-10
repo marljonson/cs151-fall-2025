@@ -197,5 +197,34 @@ public class VendorTemp {
     public PromoWindow getPromoWindow(){ return this.vendorPromo; } //here the name don't match, I am using getPromoWindow() in Product, can change later 
 
     public Map<Integer, Product> getProductList(){ return this.productList; }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Vendor{id=").append(vendorId)
+          .append(", name='").append(name).append(''')
+          .append(", email='").append(email).append(''')
+          .append(", balance=").append(String.format("%.2f", balance))
+          .append(", products=").append(productList.size())
+          .append('}');
+        return sb.toString();
+    }
 
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        VendorTemp2 vendor = (VendorTemp2) obj;
+        return this.vendorId == vendor.vendorId; 
+    }
+
+    @Override
+    public int hashCode(){
+        return Integer.hashCode(vendorId);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException("Cloning of Vendor is not supported");
+    }
 }
