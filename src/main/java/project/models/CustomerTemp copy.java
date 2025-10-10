@@ -217,4 +217,11 @@ public class CustomerTemp {
         return  this.customerId == other.customerId &&
                 this.email.equalsIgnoreCase(other.email);
     }
+
+    @Override
+    public int hashCode() {
+        int result = Integer.hashCode(customerId);
+        result = 31 * result + email.toLowerCase().hashCode();
+        return result;
+    }
 }
