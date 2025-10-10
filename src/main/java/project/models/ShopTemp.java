@@ -676,5 +676,35 @@ public class ShopTemp {
 
 
     }
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Shop{vendors=")
+          .append(vendorsList.size())
+          .append("}\n");
+        for(VendorTemp vendor : vendorsList){
+            sb.append(vendor.toString()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        ShopTemp2 shop = (ShopTemp2) obj;
+        return this.vendorsList.equals(shop.vendorsList); 
+    }
+    @Override
+    public int hashCode(){
+        return vendorsList.hashCode();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        ShopTemp2 copy = (ShopTemp2) super.clone();
+        copy.vendorsList = new ArrayList<>(this.vendorsList); 
+        return copy;
+    }
 
 }
