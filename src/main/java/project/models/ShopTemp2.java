@@ -465,7 +465,14 @@ public class ShopTemp2 {
 
     @Override
     public String toString(){
-        return "Shop{vendors=" + vendorsList.size() + "}";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Shop{vendors=")
+          .append(vendorsList.size())
+          .append("}\n");
+        for(VendorTemp vendor : vendorsList){
+            sb.append(vendor.toString()).append("\n");
+        }
+        return sb.toString();
     }
 
     @Override

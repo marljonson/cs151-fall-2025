@@ -199,7 +199,14 @@ public class VendorTemp2 {
 
     @Override
     public String toString(){
-        return "Vendor{id=" + vendorId + ", name='" + name + "', email='" + email + "', balance=" + String.format("%.2f", balance) + ", products=" + productList.size() + "}";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Vendor{id=").append(vendorId)
+          .append(", name='").append(name).append('\'')
+          .append(", email='").append(email).append('\'')
+          .append(", balance=").append(String.format("%.2f", balance))
+          .append(", products=").append(productList.size())
+          .append('}');
+        return sb.toString();
     }
 
     @Override
