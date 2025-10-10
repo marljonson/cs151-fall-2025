@@ -25,6 +25,9 @@ public class CustomerTemp {
     public static String makeKey(Product p){ //making a String using vendor Id and product Id to use this String as a key for the HashMap
         return p.getOwner().getVendorId() + ":" + p.getVendorProductId();
     }
+    public static String makeKey(int vendorId, int vendorProductId){ //Overloaded the method here (I am so proud of the idea that popped up on my mind)
+        return vendorId + ":" + vendorProductId;
+    }
     
     //no-arg constructor
     //we won't be using this but just in case 
@@ -112,7 +115,7 @@ public class CustomerTemp {
 
         System.out.println("You have rented the following:\n");
         for(Product p : rentedProducts.values()){
-            System.out.println("item " + p.getType() + " with ID " + p.getVendorProductId() + " from vendor " + p.getOwner().getName());
+            System.out.println("item " + p.getType() + " with ID " + p.getVendorProductId() + " from vendor " + p.getOwner().getName() + " with Vendor ID: " + p.getOwner().getVendorId());
         }
     }
 
@@ -182,6 +185,13 @@ public class CustomerTemp {
     public int getCustomerId() { return this.customerId; }
 
     //for balance
+
+    public void addFunds(double amount){
+        if(amount < 0) throw new IllegalArgumentException("amount cannot be negative");
+        this.balance = Math.round((this.balance + amount) * 100.0) / 100.0;
+        System.out.println("Your updated balance: "+ this.balance);
+    
+    }
     public void deduct(double amount){
         if(amount < 0) throw new IllegalArgumentException("amount cannot be negative");
         if(amount > this.balance) throw new IllegalStateException("You don't have enough funds");

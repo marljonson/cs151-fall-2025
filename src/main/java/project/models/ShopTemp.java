@@ -6,6 +6,8 @@ import java.util.InputMismatchException; //for scanner, throw if wrong type
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import project.exceptions.InvalidUserChoice;
 import project.exceptions.ProductNotFound;
@@ -254,6 +256,7 @@ public class ShopTemp {
             case 2 -> helperCustomerCase2(sc);
             case 3 -> quoteAndRent(sc, currCus);
             case 4 -> currCus.viewMyRentals();
+            case 5 -> helperCustomerCase5(sc, currCus);
             case 8 -> {
                 System.out.println("Successfully logged out!");
                 return;
@@ -532,6 +535,69 @@ public class ShopTemp {
         
         }
     }//end of quoteAndRent
+
+    //Customer's case 5 -->Return a product
+    public void helperCustomerCase5(Scanner sc, CustomerTemp currCus){
+
+        //show customers what he rented //will display only 1 time
+        currCus.viewMyRentals();
+
+        if (currCus.getRentedProducts().size() == 0) {
+            //System.out.println("you have no active rentals"); //don't need it since I print it in viewMyRentals()
+            return;
+        }
+
+        while(true){
+
+            try{
+                //same logic asking user input for vendor Id and product id
+                 System.out.print("Enter Vendor ID (or 0 to go back): ");
+                int vId = sc.nextInt();
+                sc.nextLine();
+
+                if(vId == 0) return; //user type 0 -> return
+
+                VendorTemp currVendor = null;
+                for(VendorTemp vendor : vendorsList){
+                    if(vendor.getVendorId() == vId){
+                        currVendor = vendor;
+                        break; //break early after we find the vendor
+                    } 
+                }
+
+                if (currVendor == null) throw new VendorNotFound("Vendor with this ID does not exist");
+
+                System.out.print("Enter the product ID you'd like to return (or 0 to go back): "); //customer will see the price of the product with discount if there is any
+                int vendorProductId = sc.nextInt();
+                sc.nextLine();
+                
+                if(vendorProductId == 0) return; 
+                
+                //now I will check if that product with (product Id and vendor id) exists in the customer's rentedProduct list
+
+                //pls remember that I use Map<String, Product> for rentedProducts inside Customer and use makeKey() to make key String type
+                String key = CustomerTemp.makeKey(currVendor.getVendorId(), vendorProductId);
+
+                //check if that key exists in customer's rentedProduct
+                if(!currCus.getRentedProducts().containsKey(key)){
+                    throw new IllegalStateException("You have never rented this product");
+                }
+
+                Product p = currCus.getRentedProducts().get(key);
+
+                currCus.returnRental(p, Instant.now());
+                return; //return after success 
+
+            }catch (IllegalStateException e){
+                System.out.println(e.getMessage());
+            }catch (VendorNotFound e){
+                System.out.println(e.getMessage());
+            }catch (InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Vendor ID and product ID must be integers");
+            }
+        }
+    }//end of helperCustomerCase5()
 
 
     //getter for vendorsList
