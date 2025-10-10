@@ -175,11 +175,18 @@ public class ShopTemp {
             case 0 -> helperExit(sc);
             case 1 -> {
 
-                VendorTemp currVendor = validateVendorAndReturnVendor(sc);
-                if(currVendor == null) return; //MUST HANDLE IN THE MAIN (may be a while loop) --> when return goes back to handleRole(sc), we can calll handleRole(sc) here directly but this could cause StackOverflowError
-                handleVendorChoice(sc, currVendor);
+                while(true){
+                    VendorTemp currVendor = validateVendorAndReturnVendor(sc);
+                    if(currVendor == null) return; //MUST HANDLE IN THE MAIN (may be a while loop) --> when return goes back to handleRole(sc), we can calll handleRole(sc) here directly but this could cause StackOverflowError
+                    handleVendorChoice(sc, currVendor);
+                }
             }
-            case 2 -> handleCustomerChoice(sc);
+            case 2 -> {
+                while(true){
+                    handleCustomerChoice(sc);
+                }
+            }
+
             default -> {
                 System.out.println("this default branch will/should never happen");
                 throw new IllegalStateException("Default branch is getting executed");
@@ -257,11 +264,15 @@ public class ShopTemp {
             case 3 -> quoteAndRent(sc, currCus);
             case 4 -> currCus.viewMyRentals();
             case 5 -> helperCustomerCase5(sc, currCus);
+            case 6 -> helperCustomerCase6(sc, currCus);
+            case 7 -> {
+                System.out.println("===== My Wallet =====");
+                System.out.println("Total balance: $"+ currCus.getBalance());
+            }
             case 8 -> {
                 System.out.println("Successfully logged out!");
                 return;
             }
-            //TODO: all 3-7 cases
         }
         
     }//end of handleCustomerChoice
@@ -599,6 +610,30 @@ public class ShopTemp {
         }
     }//end of helperCustomerCase5()
 
+    public void helperCustomerCase6(Scanner sc, CustomerTemp currCus){
+
+        while(true){
+            try{
+                System.out.println("Enter the amount of money to add (or 0 to go back): ");
+                double amount = sc.nextDouble();
+                sc.nextLine();
+
+                if(amount == 0) return; //user type 0 -> exit
+
+                currCus.addFunds(amount);
+                return;
+            }catch(InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Amount must be > 0");
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+
+        }
+    }//end of helperCustomrCase6 
+
+
+
 
     //getter for vendorsList
     public List<VendorTemp> getVendorsList(){ return vendorsList; }
@@ -632,7 +667,10 @@ public class ShopTemp {
 
         Scanner sc = new Scanner(System.in);
         
-        shop.handleRole(sc); 
+        while(true){
+            shop.handleRole(sc); 
+        }
+        
         
        
 
