@@ -196,10 +196,14 @@ public class CustomerTemp {
         StringBuilder sb = new StringBuilder();
         sb.append("Customer:{}")
           .append("customerId=").append(customerId)
-          .append(", name=").append(firstName).append(" ").append(lastName)
-          .append(", email=").append(email)
+          .append(", name='").append(firstName).append(" ").append(lastName).append("\"")
+          .append(", email='").append(email).append("\"")
           .append(", balance=$").append(String.format("%.2f", balance))
           .append(", amountSpent=$").append(String.format("%.2f", amountSpent))
+          .append(", activeRentals=").append(rentedProducts.size())
+          .append(", rentalHistoryCount=").append(rentalHistory.size())
+          .append("}");
+        return sb.toString();
     }
 
     @Override
