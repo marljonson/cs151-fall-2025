@@ -209,10 +209,12 @@ public class CustomerTemp {
     @Override
     public String equals() {
         if (this == obj) return true; // same exact object
-        if (obj == null || getClass() != obj.getClass) return false;
+        if (obj == null || getClass() != obj.getClass()) return false; // check null; check class type
 
-        Product other = (Product) obj;
+        CustomerTemp other = (CustomerTemp) obj;
 
-        return  this.f
+        // to identify a customer, it is sufficient to use just customerId and email
+        return  this.customerId == other.customerId &&
+                this.email.equalsIgnoreCase(other.email);
     }
 }
