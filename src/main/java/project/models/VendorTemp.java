@@ -202,8 +202,8 @@ public class VendorTemp {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("Vendor{id=").append(vendorId)
-          .append(", name='").append(name).append(''')
-          .append(", email='").append(email).append(''')
+          .append(", name='").append(name).append('\'')
+          .append(", email='").append(email).append('\'')
           .append(", balance=").append(String.format("%.2f", balance))
           .append(", products=").append(productList.size())
           .append('}');
