@@ -242,6 +242,8 @@ public class ShopTemp {
     //if the user is a customer
     public void handleCustomerChoice(Scanner sc){//NOTE: this is helper method for handleRole()
 
+        CustomerTemp currCus = new CustomerTemp("guest", "01", "firstCustomer@default.com", 200);
+
         if(sc == null) throw new NullPointerException("Scanner cannot be null");
 
         int customerChoice = getCustomerChoice(sc);
@@ -250,11 +252,12 @@ public class ShopTemp {
             case 0 -> helperExit(sc);
             case 1 -> listAllVendors();
             case 2 -> helperCustomerCase2(sc);
+            case 3 -> quoteAndRent(sc, currCus);
             case 8 -> {
                 System.out.println("Successfully logged out!");
                 return;
             }
-            //TODO: all 1-7 cases
+            //TODO: all 3-7 cases
         }
         
     }//end of handleCustomerChoice
@@ -443,7 +446,7 @@ public class ShopTemp {
                     if(vendor.getVendorId() == vId){
                         currVendor = vendor;
                         break; //break early after we find the vendor
-                    }
+                    } 
                 }
 
                 if (currVendor == null) throw new VendorNotFound("Vendor with this ID does not exist");
@@ -457,6 +460,77 @@ public class ShopTemp {
             }
         }
     }//end for helperCustomerCase2
+
+    //Customer's case 3 -> Quote and rent a product 
+    public void quoteAndRent(Scanner sc, CustomerTemp currCus){
+
+        //same logic as helperCustomerCase2, I should have created 1 helper method where custmers can findVendorById
+        listAllVendors(); //in case customer forgets vendor's ID //will only display 1 time
+        while(true){
+            try{
+                System.out.print("Enter Vendor ID (or 0 to go back): ");
+                int vId = sc.nextInt();
+                sc.nextLine();
+
+                if(vId == 0) return; //user type 0 -> return
+
+                VendorTemp currVendor = null;
+                for(VendorTemp vendor : vendorsList){
+                    if(vendor.getVendorId() == vId){
+                        currVendor = vendor;
+                        break; //break early after we find the vendor
+                    } 
+                }
+
+                if (currVendor == null) throw new VendorNotFound("Vendor with this ID does not exist");
+                System.out.println("===== Vendor Inventory =====");
+                currVendor.printInventory();
+                System.out.println("==============================");
+
+                System.out.print("Enter the product ID you'd like to quote (or 0 to go back): "); //customer will see the price of the product with discount if there is any
+                int vendorProductId = sc.nextInt();
+                sc.nextLine();
+                
+                if(vendorProductId == 0) return; 
+
+                //go thru the productList of the vendor and get the info of that product
+                Product p = currVendor.getProductList().get(vendorProductId);
+
+                if (p == null ) throw new ProductNotFound("Product with such ID doesn't exist");
+
+                if(!(p instanceof RentableTemp)){ throw new IllegalStateException("Product is not rentable"); }
+
+                Instant quotedAt = Instant.now();
+                double quotedPrice = ((RentableTemp)p).quoteRental(quotedAt); //basically Instant.now()
+
+                //show user quoted price
+                System.out.println("This rental costs $ " + quotedPrice + " (after discount).");
+
+                //give 1 more choice for user if he wants to proceed with renting or not
+                System.out.println("Proceed with renting? (type ONLY \"y\" or \"n\")"); //if not y or n, this will loop back to Vendor selection
+                String answer = sc.nextLine().trim().toLowerCase();
+
+                if(answer.equals("y")){
+
+                    currCus.rentProduct(p, quotedAt);
+                    System.out.println("Your remaining balance: " + currCus.getBalance() );
+                    return;
+                }
+                else if(answer.equals("n")) return; //handle in the main case to show the customer menu again***
+
+            }catch (ProductNotFound e){
+                System.out.println(e.getMessage());
+            }catch (VendorNotFound e){
+                System.out.println(e.getMessage());
+            }catch(InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Vendor ID and product ID must be integers");
+            }catch (IllegalStateException e){
+                System.out.println(e.getMessage());
+            }
+        
+        }
+    }//end of quoteAndRent
 
 
     //getter for vendorsList

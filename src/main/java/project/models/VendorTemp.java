@@ -176,7 +176,6 @@ public class VendorTemp {
         if(amount < 0) throw new IllegalArgumentException("amount must be >= 0");
         this.balance += amount;
         this.balance = Math.round(this.balance * 100.0) / 100.0;
-        System.out.println("Total Balance: "+ this.balance);
     }
     protected void debit(double amount){
         if(amount < 0) throw new IllegalArgumentException("amount must be >= 0");
@@ -196,5 +195,7 @@ public class VendorTemp {
 
     //for promoWindow
     public PromoWindow getPromoWindow(){ return this.vendorPromo; } //here the name don't match, I am using getPromoWindow() in Product, can change later 
+
+    public Map<Integer, Product> getProductList(){ return this.productList; }
 
 }
