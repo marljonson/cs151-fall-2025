@@ -282,7 +282,7 @@ public class ShopTemp {
             return;
         }
 
-        System.out.println("===== Vendor Directory =====");
+        System.out.println("\n\n===== Vendor Directory =====");
         for(VendorTemp vendor : vendorsList){
 
             System.out.println("[Vendor ID: " + vendor.getVendorId() + "] " + vendor.getName());
@@ -296,7 +296,7 @@ public class ShopTemp {
                 System.out.print("None\n");
             } 
         }//end iterating thru vendorsList
-        System.out.println("=============================");
+        System.out.println("=============================\n\n");
     }
 
 
