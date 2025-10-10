@@ -171,4 +171,34 @@ public abstract class Product {
     }
 
     public VendorTemp getOwner() { return this.owner; }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // same exact object
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Product other = (Product) obj;
+
+        return  vendorProductId == other.vendorProductId &&
+                type.equals(other.type) &&
+                Double.compare(price, other.price) == 0 &&
+                stock == other.stock &&
+                (owner != null && owner.equals(other.owner));
+    }
+
+    @Override
+    public int hashCode() { // hash is consistent value based on logical identity, thus must use all factors in equals()
+        // include vendorProductId in result, using Wrapper class to be consistent with Double, String, etc.
+        int result = Integer.hashCode(vendorProductId);
+        // if type is not null, include type in result
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        // include price in result
+        result = 31 * result + Double.hashCode(price);
+        // include stock in result
+        result = 31 * result + Integer.hashCode(stock);
+        // if owner (of type Vendor) is not null, include owner in result
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        // returns the final hash value for this Product
+        return result;
+    }
 }
