@@ -1,4 +1,3 @@
-
 public abstract class Product {
     private int id;
     private String type;
@@ -25,8 +24,8 @@ public abstract class Product {
     //methods every class that extends Product must implement
     public abstract void describe();
     public abstract void usageInstruction();
-
-
+    public abstract String displayInfo();
+    public abstract String getInfo();
     //methods subclass don't have to override
 
     
