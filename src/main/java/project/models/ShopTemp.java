@@ -108,6 +108,7 @@ public class ShopTemp implements Cloneable {
                 helperCatchUserTypedExit(sc, userInput);
 
                 int choice = Integer.parseInt(userInput);
+
                 if(choice < 0 || choice > 2){
                     throw new InvalidUserChoice("\n\nEnter 0, 1 or 2!\n");
                 }
@@ -338,8 +339,11 @@ public class ShopTemp implements Cloneable {
         while(true){
             try{
                 System.out.print("\n\nEnter the product's ID (or 0 to go back): ");
-                int vendorProductId = sc.nextInt();
-                sc.nextLine();
+
+                String userInput = sc.nextLine().trim(); //updated here to fix user typed "exit" logic
+                helperCatchUserTypedExit(sc, userInput);
+
+                int vendorProductId = Integer.parseInt(userInput);
                 //System.out.println();
 
                 if(vendorProductId == 0) return; //user type 0 -> return //OR should I throw a custom exception here?
@@ -353,12 +357,15 @@ public class ShopTemp implements Cloneable {
                 vendor.updatePriceById(vendorProductId, price);
                 return; //price is successfully updated -> return 
                 
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch (ProductNotFound e){ 
                 System.out.println(e.getMessage());
             }
-            catch (InputMismatchException e){
-                sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
+            catch (InputMismatchException e){ //may not need this error anymore since I handle user input with my helperCatchUserTypedExit() and won't be using sc.nextInt() anymore
                 System.out.println("Enter an integer for product ID and a double for updated price");
+            }catch (InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }
         }
     }//end of vendor's case 1
@@ -369,20 +376,25 @@ public class ShopTemp implements Cloneable {
         while(true){
             try{
                 System.out.print("\n\nEnter the product's ID (or 0 to go back): ");
-                int vendorProductId = sc.nextInt();
-                sc.nextLine();
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int vendorProductId = Integer.parseInt(userInput);
+               
                 //System.out.println();
 
                 if(vendorProductId == 0) return; //user type 0 -> return
 
                 vendor.discontinueProductById(vendorProductId);
                 return; //successfully discontinued -> return
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch (ProductNotFound e){ 
                 System.out.println(e.getMessage());
             }
-            catch (InputMismatchException e){
-                sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
-                System.out.println("Enter an integer for product ID");
+            catch(InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }
         }
     }//end of vendor's case 3
@@ -393,8 +405,10 @@ public class ShopTemp implements Cloneable {
         while(true){
             try{
                 System.out.print("\n\nEnter discount in fraction between 0.0 and 1.0 (or 0 to go back): ");
-                double discountFraction = sc.nextDouble();
-                sc.nextLine();
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                double discountFraction = Double.parseDouble(userInput);
 
                 if(discountFraction == 0) return; //user type 0 -> return
 
@@ -406,9 +420,11 @@ public class ShopTemp implements Cloneable {
                 vendor.setPromo(discountFraction, start, end);
                 System.out.println("A promo window is created. Every product from your inventory is " + discountFraction * 100 + "% off!");
                 return;
-            }catch(InputMismatchException e){
-                  sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
-                System.out.println("discount fraction must be a number between 0.0 and 1.0");
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
+            }catch(InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }
@@ -420,19 +436,25 @@ public class ShopTemp implements Cloneable {
 
         while(true){
             try{
-                System.out.print("Enter the amount of credit (or 0 to go back): ");
-                double amount = sc.nextDouble();
-                sc.nextLine();
+                System.out.print("\n\nEnter the amount of credit (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
 
+                double amount = Double.parseDouble(userInput);
+        
                 if(amount == 0) return; //user type 0, exit
                 
                 vendor.credit(amount);
                 return;
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }catch (InputMismatchException e){
-                sc.nextLine();
                 System.out.println("Invalid input: please enter a number.");
+            }catch (InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }
         }
     }//end of vendor's case 6
@@ -442,21 +464,27 @@ public class ShopTemp implements Cloneable {
 
         while(true){
             try{
-                System.out.println("Enter the amount to withdraw (or 0 to go back): ");
-                double amount = sc.nextDouble();
-                sc.nextLine();
+                System.out.print("\n\nEnter the amount to withdraw (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                double amount = Double.parseDouble(userInput);
 
                 if(amount == 0) return; //user type 0 --> return 
 
                 vendor.debit(amount);
                 return;
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }catch(IllegalStateException e) {
                 System.out.println(e.getMessage());
             }catch (InputMismatchException e){
-                sc.nextLine();
                 System.out.println("Invalid input: please enter a number.");
+            }catch(InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }
         }
     }//end of helperVendorCase7
@@ -638,7 +666,7 @@ public class ShopTemp implements Cloneable {
 
         while(true){
             try{
-                System.out.println("Enter the amount of money to add (or 0 to go back): ");
+                System.out.println("\n\nEnter the amount of money to add (or 0 to go back): ");
                 double amount = sc.nextDouble();
                 sc.nextLine();
 
