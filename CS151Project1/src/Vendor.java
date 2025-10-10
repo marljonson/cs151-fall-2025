@@ -28,6 +28,7 @@ public class Vendor {
 		this.id = numOfVendors;
 		this.productList = new HashMap<>();
 		this.vendorStock = new HashMap<>();
+		
 	}
 	
 	public void setName(String name) {
@@ -68,7 +69,6 @@ public class Vendor {
 		}
 		productList.put(product.getId(), product);
 		vendorStock.put(product.getId(), 0);
-		System.out.println("Vendor " + name + "added " + product.getType());
 	}
 	
 	public void addProduct(Product product, int quantity) {
@@ -78,9 +78,13 @@ public class Vendor {
 		if (quantity < 0) {
 			throw new IllegalArgumentException("Quantity cannot be less than zero");
 		}
+		if (quantity > product.getStock()) {
+	        throw new IllegalArgumentException("Not enough stock available. Only " + product.getStock() + " left.");
+	    }
 		productList.put(product.getId(), product);
 		vendorStock.put(product.getId(), vendorStock.getOrDefault(product.getId(), 0) + quantity);
-		System.out.println("Vendor " + name + "added " + quantity + " " + product.getType());
+		System.out.println("Vendor " + name + " added " + quantity + " × " + product.displayInfo());
+		product.setStock(product.getStock() - quantity);
 	}
 	
 	public void removeProduct(Product product) {
@@ -88,9 +92,11 @@ public class Vendor {
 			throw new IllegalArgumentException("Cannot remove a null product");
 		}
 		if (productList.containsKey(product.getId())) {
+			int quantity = vendorStock.getOrDefault(product.getId(), 0);
 			productList.remove(product.getId()); 
 			vendorStock.remove(product.getId());
 			System.out.println("Vendor  "+ name + "removed " + product.getType());
+			product.setStock(product.getStock() + quantity);
 		}
 		else {
 			System.out.println(product.getType() + " is not available at thsi vendor");
@@ -102,9 +108,12 @@ public class Vendor {
 			throw new IllegalArgumentException("Cannot remove a non-existing product");
 		}
 		if (productList.containsKey(productId)) {
-			Product removed = productList.remove(productId); 
+			Product removed = productList.get(productId);
+			int quantity = vendorStock.getOrDefault(productId, 0);
+			productList.remove(productId);
 			vendorStock.remove(productId);
 			System.out.println("Vendor  "+ name + "removed " + removed.getType());
+			removed.setStock(removed.getStock() - quantity);
 		}
 		else {
 			System.out.println("This product is not available at thsi vendor");
@@ -117,28 +126,21 @@ public class Vendor {
 		}
 		Product product = productList.get(productId);
 		if (product != null) {
-			System.out.print("The price of " + product.getType() + " is increased from " + product.getPrice());
+			System.out.print(product.displayInfo() + " | The price is increased from $" + product.getPrice());
 			product.setPrice(newPrice);
-			System.out.println(" to " + product.getPrice());
+			System.out.println(" to $" + product.getPrice());
 		}
 		else {
 			System.out.println("Such product does not exist at this vendor");
 		}
 	}
 	
-	public void displayitem() {
+	public void displayItem() {
 		System.out.println("Products offered by the vendor " + name);
-		for (Product product : productList.values()) {
-			int stock = vendorStock.getOrDefault(product.getId(), 0);
-			if (product instanceof Labubu labubu) {
-				System.out.println(labubu.getId() + " | " + labubu.getType() + " " + labubu.getColor() + " | $" + labubu.getPrice() +
-					" | " + stock + "left ");
-			}
-			else if (product instanceof DigiCam digiCam) {
-				System.out.println(digiCam.getId() + " | " + digiCam.getType() + " " + digiCam.getModel() + " | $" + digiCam.getPrice() +
-						" | " + stock + "left ");
-			}
-		}
+	    for (Product product : productList.values()) {
+	        int stock = vendorStock.getOrDefault(product.getId(), 0);
+	        System.out.println(product.displayInfo() + " | " + stock + " left");
+	    }
 	}
 	
 	public void updateStock(int productId, int quantity) {
