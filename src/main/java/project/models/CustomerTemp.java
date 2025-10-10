@@ -22,7 +22,7 @@ public class CustomerTemp {
     private List<Product> rentalHistory = new ArrayList<>(); //can add a PurchaseRecord class if I have time and use that as a type
     //private Map<Integer, Product> rentedProduct = new HashMap<>(); //running into problem where ids from different vendors collide
     private Map<String, Product> rentedProducts = new HashMap<>(); //key = "vendorId:vendorProductId" , value = Product
-    private static String makeKey(Product p){ //making a String using vendor Id and product Id to use this String as a key for the HashMap
+    public static String makeKey(Product p){ //making a String using vendor Id and product Id to use this String as a key for the HashMap
         return p.getOwner().getVendorId() + ":" + p.getVendorProductId();
     }
     
@@ -182,13 +182,18 @@ public class CustomerTemp {
     public int getCustomerId() { return this.customerId; }
 
     //for balance
-    public void credit(double amount){
+    public void deduct(double amount){
         if(amount < 0) throw new IllegalArgumentException("amount cannot be negative");
+        if(amount > this.balance) throw new IllegalStateException("You don't have enough funds");
 
-        this.balance = Math.round((this.balance + amount) * 100.0) / 100.0;
+        this.balance = Math.round((this.balance -  amount) * 100.0) / 100.0;
     }
     public double getBalance(){ return this.balance; }
 
     //for amountSpent
     public double getAmountSpent() { return this.amountSpent; }
+
+    public Map<String, Product> getRentedProducts(){
+        return this.rentedProducts;
+    }
 }
