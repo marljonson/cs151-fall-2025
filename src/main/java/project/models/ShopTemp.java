@@ -149,16 +149,19 @@ public class ShopTemp implements Cloneable {
         while(true){
             displayCustomerMenu();
             try{
-                int choice = sc.nextInt();
-                sc.nextLine();
+
+                //updated here to handle "exit"
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput); //program will exit if the user type "exit" in userchoice method //I will need to handle other steps somewhere else to keep this "exit" logic alive
+
+                int choice = Integer.parseInt(userInput);//change userInput from String to integer
+
                 if (choice < 0 || choice > 8){
                     throw new InvalidUserChoice("\n\nYour choice must be between 0 and 8 (inclusive)!\n");
                 }
                 return choice;
-            }catch (InputMismatchException e){
-                sc.nextLine(); 
+            }catch (NumberFormatException e){
                 System.out.println("\n\nInvalid input: you must enter an integer\n");
-
             }catch(InvalidUserChoice e){
                 System.out.println(e.getMessage());
             }
@@ -193,7 +196,7 @@ public class ShopTemp implements Cloneable {
     public VendorTemp validateVendorAndReturnVendor(Scanner sc){//validate Vendor if "I am a Vendor" is chosen
 
         while(true){
-            System.out.print(" \n\nEnter your email address: ");
+            System.out.print(" \n\nEnter your email address (or type 0 to go back): ");
             String userEmail = sc.nextLine().trim().toLowerCase();
 
             if(userEmail.equals("0")){
@@ -216,6 +219,18 @@ public class ShopTemp implements Cloneable {
         sc.close();
         System.exit(0);
     }//end of helperExit
+
+    //I had to fix my whole program because I missed the requirement that says a user can exit the program anywhere anytime when he types "exit" (my program before was implemented so that a user can exit when type "0")
+    public void helperCatchUserTypedExit (Scanner sc, String userInput) throws InvalidUserChoice{ //now i will change the logic inside the getCustomerChoice and getVendorChoice to let the user exit when type "exit" anywhere
+
+        if(userInput == null || userInput.isBlank()){
+            throw new InvalidUserChoice("Input cannot be null or blank");
+        }
+
+        if(userInput.equalsIgnoreCase("exit")){
+            helperExit(sc);
+        }
+    }
 
 
     //if the user is a vendor
@@ -669,11 +684,9 @@ public class ShopTemp implements Cloneable {
             shop.handleRole(sc); 
         }
         
-        
-       
-
-
     }
+
+    //4 overridden methods
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
