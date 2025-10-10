@@ -102,7 +102,7 @@ public class CustomerTemp {
         //add it to the customer's rentedProducts
         rentedProducts.put(makeKey(product), product); //should actually check if the key already exists first
 
-        System.out.println("You have successfully rented the product with ID: " + product.getVendorProductId() + " Type: " + product.getType() + " for $ " + charged);
+        System.out.println("You have successfully rented the product with ID: " + product.getVendorProductId() + " Type: " + product.getType() + " for $ " + (Math.round(charged * 100.0) / 100.0));
     }
 
     //list all the products the customer has rented
@@ -113,10 +113,12 @@ public class CustomerTemp {
             return;
         }
 
-        System.out.println("You have rented the following:\n");
+        System.out.println("\n\nYou have rented the following:\n");
         for(Product p : rentedProducts.values()){
             System.out.println("item " + p.getType() + " with ID " + p.getVendorProductId() + " from vendor " + p.getOwner().getName() + " with Vendor ID: " + p.getOwner().getVendorId());
         }
+
+        System.out.println("\n");
     }
 
     public void returnRental(Product product, Instant returnedAt){ //might not need returntedAt Instant if I don't have time to implement late fee concept
@@ -198,7 +200,7 @@ public class CustomerTemp {
 
         this.balance = Math.round((this.balance -  amount) * 100.0) / 100.0;
     }
-    public double getBalance(){ return this.balance; }
+    public double getBalance(){ return (Math.round(this.balance * 100.0)/100.0); }
 
     //for amountSpent
     public double getAmountSpent() { return this.amountSpent; }

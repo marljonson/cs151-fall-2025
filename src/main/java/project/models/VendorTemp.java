@@ -118,9 +118,11 @@ public class VendorTemp {
         //create a new TreeMap and put the existing map (productList) inside it
         Map<Integer, Product> treeMap = new TreeMap<>(productList);
 
+        System.out.println("\n=====Vendor Inventory =====\n");
         for(Product p: treeMap.values()){
             System.out.println(p); //print using Product's overriden toString (COOL TIP: RHS Object Reference will be executed at the Runtime!)
         }
+        System.out.println("\n\n"); //Add 2 newlines for better user interface
     }
 
     public void discontinueProductById(int vendorProductId) throws ProductNotFound{ //flip the product's stock
