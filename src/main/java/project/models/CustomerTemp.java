@@ -223,7 +223,7 @@ public class CustomerTemp {
     }
 
     @Override
-    public String equals() {
+    public boolean equals(Object obj) {
         if (this == obj) return true; // same exact object
         if (obj == null || getClass() != obj.getClass()) return false; // check null; check class type
 

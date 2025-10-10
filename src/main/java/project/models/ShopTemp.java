@@ -174,17 +174,12 @@ public class ShopTemp {
         switch(roleChoice){
             case 0 -> helperExit(sc);
             case 1 -> {
-
-                while(true){
-                    VendorTemp currVendor = validateVendorAndReturnVendor(sc);
-                    if(currVendor == null) return; //MUST HANDLE IN THE MAIN (may be a while loop) --> when return goes back to handleRole(sc), we can calll handleRole(sc) here directly but this could cause StackOverflowError
-                    handleVendorChoice(sc, currVendor);
-                }
+                VendorTemp currVendor = validateVendorAndReturnVendor(sc);
+                if(currVendor == null) return; //MUST HANDLE IN THE MAIN (may be a while loop) --> when return goes back to handleRole(sc), we can calll handleRole(sc) here directly but this could cause StackOverflowError
+                handleVendorChoice(sc, currVendor);
             }
             case 2 -> {
-                while(true){
-                    handleCustomerChoice(sc);
-                }
+                handleCustomerChoice(sc);
             }
 
             default -> {
@@ -198,7 +193,7 @@ public class ShopTemp {
     public VendorTemp validateVendorAndReturnVendor(Scanner sc){//validate Vendor if "I am a Vendor" is chosen
 
         while(true){
-            System.out.print(" Enter your email address: ");
+            System.out.print(" \n\nEnter your email address: ");
             String userEmail = sc.nextLine().trim().toLowerCase();
 
             if(userEmail.equals("0")){
@@ -212,12 +207,12 @@ public class ShopTemp {
                 }
             }
             
-            System.out.println("\nNo vendor found with that email, Please try again or type 0 to go back.");
+            System.out.println("\n\nNo vendor found with that email, Please try again or type 0 to go back.");
         }
     }
 
     public void helperExit(Scanner sc){
-        System.out.println("\n\nI am sad to see you go :'(");
+        System.out.println("\n\nI am sad to see you go :'(\n");
         sc.close();
         System.exit(0);
     }//end of helperExit
@@ -228,23 +223,24 @@ public class ShopTemp {
        
         if(sc == null) throw new NullPointerException("Scanner cannot be null");
 
-        int vendorChoice = getVendorChoice(sc);
+        while(true){
+            int vendorChoice = getVendorChoice(sc);
 
-        switch (vendorChoice){
-            case 0 -> helperExit(sc);
-            case 1 -> helperVendorCase1(sc, currVendor);
-            case 2 -> currVendor.printInventory();
-            case 3 -> helperVendorCase3(sc, currVendor);
-            case 4 -> helperVendorCase4(sc, currVendor);
-            case 5 -> currVendor.cancelPromo();
-            case 6 -> helperVendorCase6(sc, currVendor);
-            case 7 -> helperVendorCase7(sc, currVendor);
-            case 8 -> { 
-                System.out.println("Successfully logged out!");
-                return; 
-                //handleRole(sc); //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
+            switch (vendorChoice){
+                case 0 -> helperExit(sc);
+                case 1 -> helperVendorCase1(sc, currVendor);
+                case 2 -> currVendor.printInventory();
+                case 3 -> helperVendorCase3(sc, currVendor);
+                case 4 -> helperVendorCase4(sc, currVendor);
+                case 5 -> currVendor.cancelPromo();
+                case 6 -> helperVendorCase6(sc, currVendor);
+                case 7 -> helperVendorCase7(sc, currVendor);
+                case 8 -> { 
+                    System.out.println("\n\nSuccessfully logged out!\n");
+                    return; 
+                    //handleRole(sc); //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
+                }
             }
-             
         }
     }//end of handleVendorChoice
 
@@ -255,23 +251,25 @@ public class ShopTemp {
 
         if(sc == null) throw new NullPointerException("Scanner cannot be null");
 
-        int customerChoice = getCustomerChoice(sc);
+        while(true){
+            int customerChoice = getCustomerChoice(sc);
 
-        switch (customerChoice){
-            case 0 -> helperExit(sc);
-            case 1 -> listAllVendors();
-            case 2 -> helperCustomerCase2(sc);
-            case 3 -> quoteAndRent(sc, currCus);
-            case 4 -> currCus.viewMyRentals();
-            case 5 -> helperCustomerCase5(sc, currCus);
-            case 6 -> helperCustomerCase6(sc, currCus);
-            case 7 -> {
-                System.out.println("===== My Wallet =====");
-                System.out.println("Total balance: $"+ currCus.getBalance());
-            }
-            case 8 -> {
-                System.out.println("Successfully logged out!");
-                return;
+            switch (customerChoice){
+                case 0 -> helperExit(sc);
+                case 1 -> listAllVendors();
+                case 2 -> helperCustomerCase2(sc);
+                case 3 -> quoteAndRent(sc, currCus);
+                case 4 -> currCus.viewMyRentals();
+                case 5 -> helperCustomerCase5(sc, currCus);
+                case 6 -> helperCustomerCase6(sc, currCus);
+                case 7 -> {
+                    System.out.println("===== My Wallet =====");
+                    System.out.println("Total balance: $"+ currCus.getBalance() +"\n");
+                }
+                case 8 -> {
+                    System.out.println("\n\nSuccessfully logged out!\n");
+                    return;
+                }
             }
         }
         
@@ -313,14 +311,14 @@ public class ShopTemp {
 
         while(true){
             try{
-                System.out.print("Enter the product's ID (or 0 to go back): ");
+                System.out.print("\n\nEnter the product's ID (or 0 to go back): ");
                 int vendorProductId = sc.nextInt();
                 sc.nextLine();
                 //System.out.println();
 
                 if(vendorProductId == 0) return; //user type 0 -> return //OR should I throw a custom exception here?
 
-                System.out.print("Enter the updated price (or 0 to go back): ");
+                System.out.print("\n\nEnter the updated price (or 0 to go back): ");
                 double price = sc.nextDouble();
                 sc.nextLine();
                 //System.out.println();
@@ -334,7 +332,7 @@ public class ShopTemp {
             }
             catch (InputMismatchException e){
                 sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
-                System.out.println("enter an integer for product ID and a double for updated price");
+                System.out.println("Enter an integer for product ID and a double for updated price");
             }
         }
     }//end of vendor's case 1
@@ -344,7 +342,7 @@ public class ShopTemp {
         
         while(true){
             try{
-                System.out.print("Enter the product's ID (or 0 to go back): ");
+                System.out.print("\n\nEnter the product's ID (or 0 to go back): ");
                 int vendorProductId = sc.nextInt();
                 sc.nextLine();
                 //System.out.println();
@@ -358,7 +356,7 @@ public class ShopTemp {
             }
             catch (InputMismatchException e){
                 sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
-                System.out.println("enter an integer for product ID");
+                System.out.println("Enter an integer for product ID");
             }
         }
     }//end of vendor's case 3
@@ -368,7 +366,7 @@ public class ShopTemp {
 
         while(true){
             try{
-                System.out.print("Enter discount in fraction between 0.0 and 1.0 (or 0 to go back): ");
+                System.out.print("\n\nEnter discount in fraction between 0.0 and 1.0 (or 0 to go back): ");
                 double discountFraction = sc.nextDouble();
                 sc.nextLine();
 
@@ -692,7 +690,7 @@ public class ShopTemp {
     public boolean equals(Object obj){
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
-        ShopTemp2 shop = (ShopTemp2) obj;
+        ShopTemp shop = (ShopTemp) obj;
         return this.vendorsList.equals(shop.vendorsList); 
     }
     @Override
@@ -702,7 +700,7 @@ public class ShopTemp {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        ShopTemp2 copy = (ShopTemp2) super.clone();
+        ShopTemp copy = (ShopTemp) super.clone();
         copy.vendorsList = new ArrayList<>(this.vendorsList); 
         return copy;
     }

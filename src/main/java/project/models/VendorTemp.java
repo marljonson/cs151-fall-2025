@@ -214,7 +214,7 @@ public class VendorTemp {
     public boolean equals(Object obj){
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
-        VendorTemp2 vendor = (VendorTemp2) obj;
+        VendorTemp vendor = (VendorTemp) obj;
         return this.vendorId == vendor.vendorId; 
     }
 
