@@ -108,7 +108,6 @@ public class ShopTemp implements Cloneable {
                 helperCatchUserTypedExit(sc, userInput);
 
                 int choice = Integer.parseInt(userInput);
-                sc.nextLine(); //must do this because nextInt() leaves the line 
                 if(choice < 0 || choice > 2){
                     throw new InvalidUserChoice("\n\nEnter 0, 1 or 2!\n");
                 }
