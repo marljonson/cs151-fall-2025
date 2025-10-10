@@ -1,4 +1,4 @@
-public class DigiCam extends Product implements Rentable{
+public class DigiCam extends Product implements Rentable {
     private String model;
     private int batteryLife;
     //private boolean isRented;
@@ -27,6 +27,7 @@ public class DigiCam extends Product implements Rentable{
         // More detailed instruction to be implemented
         System.out.println("1. Press the power on button.");
         System.out.println("2. Take a photo!");
+        System.out.println("3. Turn off the camera when not in use.");
     }
 
     // Getters and Setters
@@ -63,10 +64,6 @@ public class DigiCam extends Product implements Rentable{
         }
     }
 
-    public void powerOff() {
-
-    }
-    
     /*
     @Override
     public boolean isRentable() {
@@ -97,4 +94,15 @@ public class DigiCam extends Product implements Rentable{
     	}
     	sellOrRent(quantity);
     }
+    
+    @Override
+    public String displayInfo() {
+        return getInfo() + " | $" + getPrice() + " | " + getStock();
+    }
+    
+    @Override
+    public String getInfo() {
+    	return "ID: " + getId() + " | " + getType() + " (" + getModel() + ")";
+    }
+
 }
