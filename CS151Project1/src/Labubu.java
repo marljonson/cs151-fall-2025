@@ -94,4 +94,15 @@ public class Labubu extends Product implements Buyable{
     	sellOrRent(quantity);
     }
 
+    @Override
+    public String displayInfo() {
+        return getInfo() + " | $" + getPrice() + " | " + getStock();
+    }
+    
+    @Override
+    public String getInfo() {
+    	return "ID: " + getId() + " | " + getType() + " (" + getColor() + ")";
+    }
+    
+  
 }
