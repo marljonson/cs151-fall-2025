@@ -102,7 +102,12 @@ public class ShopTemp implements Cloneable {
         while(true){
             displayRoleMenu();
             try{
-                int choice = sc.nextInt();
+
+                //updated here to handle "exit"
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int choice = Integer.parseInt(userInput);
                 sc.nextLine(); //must do this because nextInt() leaves the line 
                 if(choice < 0 || choice > 2){
                     throw new InvalidUserChoice("\n\nEnter 0, 1 or 2!\n");
@@ -127,14 +132,17 @@ public class ShopTemp implements Cloneable {
         while(true){
             displayVendorMenu();
             try{
-                int choice = sc.nextInt();
-                sc.nextLine();
+                //I had to update these to handle "exit" logic
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int choice = Integer.parseInt(userInput); //same as before, I just changed from sc.nextInt() to Integer.parseInt(userInput) to change String to int for our options
+             
                 if(choice < 0 || choice > 8){
                     throw new InvalidUserChoice("\n\nYour choice must be between 0 and 8 (inclusive)!\n");
                 }
                 return choice;
-            }catch (InputMismatchException e){
-                sc.nextLine(); 
+            }catch (InputMismatchException e){ 
                 System.out.println("\n\nInvalid input: you must enter an integer\n");
 
             }catch(InvalidUserChoice e){
@@ -198,6 +206,10 @@ public class ShopTemp implements Cloneable {
         while(true){
             System.out.print(" \n\nEnter your email address (or type 0 to go back): ");
             String userEmail = sc.nextLine().trim().toLowerCase();
+
+            if(userEmail.equalsIgnoreCase("exit")){
+                helperExit(sc);
+            }
 
             if(userEmail.equals("0")){
                 return null; //user type 0 -> exit
