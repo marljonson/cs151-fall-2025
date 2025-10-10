@@ -15,7 +15,7 @@ import project.exceptions.VendorNotFound;
 import project.abstractclasses.Product;
 import project.interfaces.RentableTemp;
 
-public class ShopTemp {
+public class ShopTemp implements Cloneable {
 
     private List<VendorTemp> vendorsList = new ArrayList<>();
 
@@ -85,8 +85,8 @@ public class ShopTemp {
 
     public void displayCustomerMenu(){
         System.out.println("===== CS 151 Customer Menu =====");
-        System.out.println("[1] List vendors"); //TODO: ADD a method in ShopTemp to display vendors from vendorsList
-        System.out.println("[2] Browse vendor inventory by ventorId");
+        System.out.println("[1] List vendors"); 
+        System.out.println("[2] Browse vendor inventory by vendorId");
         System.out.println("[3] Quote and Rent a product"); //must use product.quoteRental(Instant now)
         System.out.println("[4] View my active rentals");
         System.out.println("[5] Return Product");
