@@ -203,11 +203,11 @@ public class VendorTemp2 {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
-        VendorTemp2 v = (VendorTemp2) o;
-        return this.vendorId == v.vendorId; //vendorId is unique per vendor
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        VendorTemp2 vendor = (VendorTemp2) obj;
+        return this.vendorId == vendor.vendorId; 
     }
 
     @Override
@@ -219,8 +219,4 @@ public class VendorTemp2 {
     public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Cloning of Vendor is not supported");
     }
-
-
-
-
 }
