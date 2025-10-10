@@ -206,4 +206,38 @@ public class CustomerTemp {
     public Map<String, Product> getRentedProducts(){
         return this.rentedProducts;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Customer:{")
+          .append("customerId=").append(customerId)
+          .append(", name='").append(firstName).append(" ").append(lastName).append("\"")
+          .append(", email='").append(email).append("\"")
+          .append(", balance=$").append(String.format("%.2f", balance))
+          .append(", amountSpent=$").append(String.format("%.2f", amountSpent))
+          .append(", activeRentals=").append(rentedProducts.size())
+          .append(", rentalHistoryCount=").append(rentalHistory.size())
+          .append("}");
+        return sb.toString();
+    }
+
+    @Override
+    public String equals() {
+        if (this == obj) return true; // same exact object
+        if (obj == null || getClass() != obj.getClass()) return false; // check null; check class type
+
+        CustomerTemp other = (CustomerTemp) obj;
+
+        // to identify a customer, it is sufficient to use just customerId and email
+        return  this.customerId == other.customerId &&
+                this.email.equalsIgnoreCase(other.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Integer.hashCode(customerId);
+        result = 31 * result + email.toLowerCase().hashCode();
+        return result;
+    }
 }
