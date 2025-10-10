@@ -253,6 +253,7 @@ public class ShopTemp {
             case 1 -> listAllVendors();
             case 2 -> helperCustomerCase2(sc);
             case 3 -> quoteAndRent(sc, currCus);
+            case 4 -> currCus.viewMyRentals();
             case 8 -> {
                 System.out.println("Successfully logged out!");
                 return;
