@@ -2,7 +2,7 @@ package project.interfaces;
 
 import java.time.Instant;
 
-public interface BuyableTemp {
+public interface BuyableTemp { //We won't be using BuyableTemp and Matcha or Product's Bulk constructor 
 
     boolean isBuyable(int userInputQty); //is there stock >= user's input quantity? check
     
@@ -24,5 +24,4 @@ public interface BuyableTemp {
     int getMinPurchaseQty(); 
     int getMaxPurchaseQty();
     */
-    //TODO: take 1 method from 3 methods above and override in the products that implements them and get rid of others
 }
