@@ -21,8 +21,11 @@ public class CustomerTemp {
     private List<Product> rentalHistory = new ArrayList<>(); //can add a PurchaseRecord class if I have time and use that as a type
     //private Map<Integer, Product> rentedProduct = new HashMap<>(); //running into problem where ids from different vendors collide
     private Map<String, Product> rentedProducts = new HashMap<>(); //key = "vendorId:vendorProductId" , value = Product
-    private static String makeKey(Product p){ //making a String using vendor Id and product Id to use this String as a key for the HashMap
+    public static String makeKey(Product p){ //making a String using vendor Id and product Id to use this String as a key for the HashMap
         return p.getOwner().getVendorId() + ":" + p.getVendorProductId();
+    }
+    public static String makeKey(int vendorId, int vendorProductId){ //Overloaded the method here (I am so proud of the idea that popped up on my mind)
+        return vendorId + ":" + vendorProductId;
     }
     
     //no-arg constructor
@@ -98,7 +101,7 @@ public class CustomerTemp {
         //add it to the customer's rentedProducts
         rentedProducts.put(makeKey(product), product); //should actually check if the key already exists first
 
-        System.out.println("You have successfully rented the product with ID: " + product.getVendorProductId() + " Type: " + product.getType() + " for $ " + charged);
+        System.out.println("You have successfully rented the product with ID: " + product.getVendorProductId() + " Type: " + product.getType() + " for $ " + (Math.round(charged * 100.0) / 100.0));
     }
 
     //list all the products the customer has rented
@@ -109,10 +112,12 @@ public class CustomerTemp {
             return;
         }
 
-        System.out.println("You have rented the following:\n");
+        System.out.println("\n\nYou have rented the following:\n");
         for(Product p : rentedProducts.values()){
-            System.out.println("item " + p.getType() + " with ID " + p.getVendorProductId() + " from vendor " + p.getOwner().getName());
+            System.out.println("item " + p.getType() + " with ID " + p.getVendorProductId() + " from vendor " + p.getOwner().getName() + " with Vendor ID: " + p.getOwner().getVendorId());
         }
+
+        System.out.println("\n");
     }
 
     public void returnRental(Product product, Instant returnedAt){ //might not need returntedAt Instant if I don't have time to implement late fee concept
@@ -181,13 +186,59 @@ public class CustomerTemp {
     public int getCustomerId() { return this.customerId; }
 
     //for balance
-    public void credit(double amount){
-        if(amount < 0) throw new IllegalArgumentException("amount cannot be negative");
 
+    public void addFunds(double amount){
+        if(amount < 0) throw new IllegalArgumentException("amount cannot be negative");
         this.balance = Math.round((this.balance + amount) * 100.0) / 100.0;
+        System.out.println("Your updated balance: "+ this.balance);
+    
     }
-    public double getBalance(){ return this.balance; }
+    public void deduct(double amount){
+        if(amount < 0) throw new IllegalArgumentException("amount cannot be negative");
+        if(amount > this.balance) throw new IllegalStateException("You don't have enough funds");
+
+        this.balance = Math.round((this.balance -  amount) * 100.0) / 100.0;
+    }
+    public double getBalance(){ return (Math.round(this.balance * 100.0)/100.0); }
 
     //for amountSpent
     public double getAmountSpent() { return this.amountSpent; }
+
+    public Map<String, Product> getRentedProducts(){
+        return this.rentedProducts;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Customer:{")
+          .append("customerId=").append(customerId)
+          .append(", name='").append(firstName).append(" ").append(lastName).append("\"")
+          .append(", email='").append(email).append("\"")
+          .append(", balance=$").append(String.format("%.2f", balance))
+          .append(", amountSpent=$").append(String.format("%.2f", amountSpent))
+          .append(", activeRentals=").append(rentedProducts.size())
+          .append(", rentalHistoryCount=").append(rentalHistory.size())
+          .append("}");
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // same exact object
+        if (obj == null || getClass() != obj.getClass()) return false; // check null; check class type
+
+        CustomerTemp other = (CustomerTemp) obj;
+
+        // to identify a customer, it is sufficient to use just customerId and email
+        return  this.customerId == other.customerId &&
+                this.email.equalsIgnoreCase(other.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Integer.hashCode(customerId);
+        result = 31 * result + email.toLowerCase().hashCode();
+        return result;
+    }
 }

@@ -118,9 +118,11 @@ public class VendorTemp {
         //create a new TreeMap and put the existing map (productList) inside it
         Map<Integer, Product> treeMap = new TreeMap<>(productList);
 
+        System.out.println("\n=====Vendor Inventory =====\n");
         for(Product p: treeMap.values()){
             System.out.println(p); //print using Product's overriden toString (COOL TIP: RHS Object Reference will be executed at the Runtime!)
         }
+        System.out.println("\n\n"); //Add 2 newlines for better user interface
     }
 
     public void discontinueProductById(int vendorProductId) throws ProductNotFound{ //flip the product's stock
@@ -176,7 +178,6 @@ public class VendorTemp {
         if(amount < 0) throw new IllegalArgumentException("amount must be >= 0");
         this.balance += amount;
         this.balance = Math.round(this.balance * 100.0) / 100.0;
-        System.out.println("Total Balance: "+ this.balance);
     }
     protected void debit(double amount){
         if(amount < 0) throw new IllegalArgumentException("amount must be >= 0");
@@ -197,4 +198,35 @@ public class VendorTemp {
     //for promoWindow
     public PromoWindow getPromoWindow(){ return this.vendorPromo; } //here the name don't match, I am using getPromoWindow() in Product, can change later 
 
+    public Map<Integer, Product> getProductList(){ return this.productList; }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Vendor{id=").append(vendorId)
+          .append(", name='").append(name).append('\'')
+          .append(", email='").append(email).append('\'')
+          .append(", balance=").append(String.format("%.2f", balance))
+          .append(", products=").append(productList.size())
+          .append('}');
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        VendorTemp vendor = (VendorTemp) obj;
+        return this.vendorId == vendor.vendorId; 
+    }
+
+    @Override
+    public int hashCode(){
+        return Integer.hashCode(vendorId);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException("Cloning of Vendor is not supported");
+    }
 }

@@ -6,13 +6,16 @@ import java.util.InputMismatchException; //for scanner, throw if wrong type
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import project.exceptions.InvalidUserChoice;
 import project.exceptions.ProductNotFound;
+import project.exceptions.VendorNotFound;
 import project.abstractclasses.Product;
 import project.interfaces.RentableTemp;
 
-public class ShopTemp {
+public class ShopTemp implements Cloneable {
 
     private List<VendorTemp> vendorsList = new ArrayList<>();
 
@@ -82,8 +85,8 @@ public class ShopTemp {
 
     public void displayCustomerMenu(){
         System.out.println("===== CS 151 Customer Menu =====");
-        System.out.println("[1] List vendors"); //TODO: ADD a method in ShopTemp to display vendors from vendorsList
-        System.out.println("[2] Browse vendor Inventory by ventorId");
+        System.out.println("[1] List vendors"); 
+        System.out.println("[2] Browse vendor inventory by vendorId");
         System.out.println("[3] Quote and Rent a product"); //must use product.quoteRental(Instant now)
         System.out.println("[4] View my active rentals");
         System.out.println("[5] Return Product");
@@ -99,8 +102,13 @@ public class ShopTemp {
         while(true){
             displayRoleMenu();
             try{
-                int choice = sc.nextInt();
-                sc.nextLine(); //must do this because nextInt() leaves the line 
+
+                //updated here to handle "exit"
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int choice = Integer.parseInt(userInput);
+
                 if(choice < 0 || choice > 2){
                     throw new InvalidUserChoice("\n\nEnter 0, 1 or 2!\n");
                 }
@@ -124,14 +132,17 @@ public class ShopTemp {
         while(true){
             displayVendorMenu();
             try{
-                int choice = sc.nextInt();
-                sc.nextLine();
+                //I had to update these to handle "exit" logic
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int choice = Integer.parseInt(userInput); //same as before, I just changed from sc.nextInt() to Integer.parseInt(userInput) to change String to int for our options
+             
                 if(choice < 0 || choice > 8){
                     throw new InvalidUserChoice("\n\nYour choice must be between 0 and 8 (inclusive)!\n");
                 }
                 return choice;
-            }catch (InputMismatchException e){
-                sc.nextLine(); 
+            }catch (InputMismatchException e){ 
                 System.out.println("\n\nInvalid input: you must enter an integer\n");
 
             }catch(InvalidUserChoice e){
@@ -146,16 +157,19 @@ public class ShopTemp {
         while(true){
             displayCustomerMenu();
             try{
-                int choice = sc.nextInt();
-                sc.nextLine();
+
+                //updated here to handle "exit"
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput); //program will exit if the user type "exit" in userchoice method //I will need to handle other steps somewhere else to keep this "exit" logic alive
+
+                int choice = Integer.parseInt(userInput);//change userInput from String to integer
+
                 if (choice < 0 || choice > 8){
                     throw new InvalidUserChoice("\n\nYour choice must be between 0 and 8 (inclusive)!\n");
                 }
                 return choice;
-            }catch (InputMismatchException e){
-                sc.nextLine(); 
+            }catch (NumberFormatException e){
                 System.out.println("\n\nInvalid input: you must enter an integer\n");
-
             }catch(InvalidUserChoice e){
                 System.out.println(e.getMessage());
             }
@@ -171,12 +185,14 @@ public class ShopTemp {
         switch(roleChoice){
             case 0 -> helperExit(sc);
             case 1 -> {
-
                 VendorTemp currVendor = validateVendorAndReturnVendor(sc);
                 if(currVendor == null) return; //MUST HANDLE IN THE MAIN (may be a while loop) --> when return goes back to handleRole(sc), we can calll handleRole(sc) here directly but this could cause StackOverflowError
                 handleVendorChoice(sc, currVendor);
             }
-            case 2 -> handleCustomerChoice(sc);
+            case 2 -> {
+                handleCustomerChoice(sc);
+            }
+
             default -> {
                 System.out.println("this default branch will/should never happen");
                 throw new IllegalStateException("Default branch is getting executed");
@@ -188,8 +204,12 @@ public class ShopTemp {
     public VendorTemp validateVendorAndReturnVendor(Scanner sc){//validate Vendor if "I am a Vendor" is chosen
 
         while(true){
-            System.out.print(" Enter your email address: ");
+            System.out.print(" \n\nEnter your email address (or type 0 to go back): ");
             String userEmail = sc.nextLine().trim().toLowerCase();
+
+            if(userEmail.equalsIgnoreCase("exit")){
+                helperExit(sc);
+            }
 
             if(userEmail.equals("0")){
                 return null; //user type 0 -> exit
@@ -202,15 +222,27 @@ public class ShopTemp {
                 }
             }
             
-            System.out.println("\nNo vendor found with that email, Please try again or type 0 to go back.");
+            System.out.println("\n\nNo vendor found with that email, Please try again or type 0 to go back.");
         }
     }
 
     public void helperExit(Scanner sc){
-        System.out.println("\n\nI am sad to see you go :'(");
+        System.out.println("\n\nI am sad to see you go :'(\n");
         sc.close();
         System.exit(0);
     }//end of helperExit
+
+    //I had to fix my whole program because I missed the requirement that says a user can exit the program anywhere anytime when he types "exit" (my program before was implemented so that a user can exit when type "0")
+    public void helperCatchUserTypedExit (Scanner sc, String userInput) throws InvalidUserChoice{ //now i will change the logic inside the getCustomerChoice and getVendorChoice to let the user exit when type "exit" anywhere
+
+        if(userInput == null || userInput.isBlank()){
+            throw new InvalidUserChoice("Input cannot be null or blank");
+        }
+
+        if(userInput.equalsIgnoreCase("exit")){
+            helperExit(sc);
+        }
+    }
 
 
     //if the user is a vendor
@@ -218,41 +250,54 @@ public class ShopTemp {
        
         if(sc == null) throw new NullPointerException("Scanner cannot be null");
 
-        int vendorChoice = getVendorChoice(sc);
+        while(true){
+            int vendorChoice = getVendorChoice(sc);
 
-        switch (vendorChoice){
-            case 0 -> helperExit(sc);
-            case 1 -> helperVendorCase1(sc, currVendor);
-            case 2 -> currVendor.printInventory();
-            case 3 -> helperVendorCase3(sc, currVendor);
-            case 4 -> helperVendorCase4(sc, currVendor);
-            case 5 -> currVendor.cancelPromo();
-            case 6 -> helperVendorCase6(sc, currVendor);
-            case 7 -> helperVendorCase7(sc, currVendor);
-            case 8 -> { 
-                System.out.println("Successfully logged out!");
-                return; 
-                //handleRole(sc); //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
+            switch (vendorChoice){
+                case 0 -> helperExit(sc);
+                case 1 -> helperVendorCase1(sc, currVendor);
+                case 2 -> currVendor.printInventory();
+                case 3 -> helperVendorCase3(sc, currVendor);
+                case 4 -> helperVendorCase4(sc, currVendor);
+                case 5 -> currVendor.cancelPromo();
+                case 6 -> helperVendorCase6(sc, currVendor);
+                case 7 -> helperVendorCase7(sc, currVendor);
+                case 8 -> { 
+                    System.out.println("\n\nSuccessfully logged out!\n");
+                    return; 
+                    //handleRole(sc); //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
+                }
             }
-             
         }
     }//end of handleVendorChoice
 
     //if the user is a customer
     public void handleCustomerChoice(Scanner sc){//NOTE: this is helper method for handleRole()
 
+        CustomerTemp currCus = new CustomerTemp("guest", "01", "firstCustomer@default.com", 200);
+
         if(sc == null) throw new NullPointerException("Scanner cannot be null");
 
-        int customerChoice = getCustomerChoice(sc);
+        while(true){
+            int customerChoice = getCustomerChoice(sc);
 
-        switch (customerChoice){
-            case 0 -> helperExit(sc);
-            case 1 -> listAllVendors();
-            case 8 -> {
-                System.out.println("Successfully logged out!");
-                return;
+            switch (customerChoice){
+                case 0 -> helperExit(sc);
+                case 1 -> listAllVendors();
+                case 2 -> helperCustomerCase2(sc);
+                case 3 -> quoteAndRent(sc, currCus);
+                case 4 -> currCus.viewMyRentals();
+                case 5 -> helperCustomerCase5(sc, currCus);
+                case 6 -> helperCustomerCase6(sc, currCus);
+                case 7 -> {
+                    System.out.println("\n\n===== My Wallet =====");
+                    System.out.println("Total balance: $"+ currCus.getBalance() +"\n");
+                }
+                case 8 -> {
+                    System.out.println("\n\nSuccessfully logged out!\n");
+                    return;
+                }
             }
-            //TODO: all 1-7 cases
         }
         
     }//end of handleCustomerChoice
@@ -264,7 +309,7 @@ public class ShopTemp {
             return;
         }
 
-        System.out.println("===== Vendor Directory =====");
+        System.out.println("\n\n===== Vendor Directory =====");
         for(VendorTemp vendor : vendorsList){
 
             System.out.println("[Vendor ID: " + vendor.getVendorId() + "] " + vendor.getName());
@@ -278,7 +323,7 @@ public class ShopTemp {
                 System.out.print("None\n");
             } 
         }//end iterating thru vendorsList
-        System.out.println("=============================");
+        System.out.println("=============================\n\n");
     }
 
 
@@ -293,14 +338,17 @@ public class ShopTemp {
 
         while(true){
             try{
-                System.out.print("Enter the product's ID (or 0 to go back): ");
-                int vendorProductId = sc.nextInt();
-                sc.nextLine();
+                System.out.print("\n\nEnter the product's ID (or 0 to go back): ");
+
+                String userInput = sc.nextLine().trim(); //updated here to fix user typed "exit" logic
+                helperCatchUserTypedExit(sc, userInput);
+
+                int vendorProductId = Integer.parseInt(userInput);
                 //System.out.println();
 
                 if(vendorProductId == 0) return; //user type 0 -> return //OR should I throw a custom exception here?
 
-                System.out.print("Enter the updated price (or 0 to go back): ");
+                System.out.print("\n\nEnter the updated price (or 0 to go back): ");
                 double price = sc.nextDouble();
                 sc.nextLine();
                 //System.out.println();
@@ -309,12 +357,15 @@ public class ShopTemp {
                 vendor.updatePriceById(vendorProductId, price);
                 return; //price is successfully updated -> return 
                 
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch (ProductNotFound e){ 
                 System.out.println(e.getMessage());
             }
-            catch (InputMismatchException e){
-                sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
-                System.out.println("enter an integer for product ID and a double for updated price");
+            catch (InputMismatchException e){ //may not need this error anymore since I handle user input with my helperCatchUserTypedExit() and won't be using sc.nextInt() anymore
+                System.out.println("Enter an integer for product ID and a double for updated price");
+            }catch (InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }
         }
     }//end of vendor's case 1
@@ -324,21 +375,26 @@ public class ShopTemp {
         
         while(true){
             try{
-                System.out.print("Enter the product's ID (or 0 to go back): ");
-                int vendorProductId = sc.nextInt();
-                sc.nextLine();
+                System.out.print("\n\nEnter the product's ID (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int vendorProductId = Integer.parseInt(userInput);
+               
                 //System.out.println();
 
                 if(vendorProductId == 0) return; //user type 0 -> return
 
                 vendor.discontinueProductById(vendorProductId);
                 return; //successfully discontinued -> return
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch (ProductNotFound e){ 
                 System.out.println(e.getMessage());
             }
-            catch (InputMismatchException e){
-                sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
-                System.out.println("enter an integer for product ID");
+            catch(InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }
         }
     }//end of vendor's case 3
@@ -348,9 +404,11 @@ public class ShopTemp {
 
         while(true){
             try{
-                System.out.print("Enter discount in fraction between 0.0 and 1.0 (or 0 to go back): ");
-                double discountFraction = sc.nextDouble();
-                sc.nextLine();
+                System.out.print("\n\nEnter discount in fraction between 0.0 and 1.0 (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                double discountFraction = Double.parseDouble(userInput);
 
                 if(discountFraction == 0) return; //user type 0 -> return
 
@@ -362,9 +420,11 @@ public class ShopTemp {
                 vendor.setPromo(discountFraction, start, end);
                 System.out.println("A promo window is created. Every product from your inventory is " + discountFraction * 100 + "% off!");
                 return;
-            }catch(InputMismatchException e){
-                  sc.nextLine(); //must have this since nextInt() and nextDouble() leave a line behind
-                System.out.println("discount fraction must be a number between 0.0 and 1.0");
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
+            }catch(InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }
@@ -376,19 +436,25 @@ public class ShopTemp {
 
         while(true){
             try{
-                System.out.print("Enter the amount of credit (or 0 to go back): ");
-                double amount = sc.nextDouble();
-                sc.nextLine();
+                System.out.print("\n\nEnter the amount of credit (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
 
+                double amount = Double.parseDouble(userInput);
+        
                 if(amount == 0) return; //user type 0, exit
                 
                 vendor.credit(amount);
                 return;
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }catch (InputMismatchException e){
-                sc.nextLine();
                 System.out.println("Invalid input: please enter a number.");
+            }catch (InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }
         }
     }//end of vendor's case 6
@@ -398,21 +464,27 @@ public class ShopTemp {
 
         while(true){
             try{
-                System.out.println("Enter the amount to withdraw (or 0 to go back): ");
-                double amount = sc.nextDouble();
-                sc.nextLine();
+                System.out.print("\n\nEnter the amount to withdraw (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                double amount = Double.parseDouble(userInput);
 
                 if(amount == 0) return; //user type 0 --> return 
 
                 vendor.debit(amount);
                 return;
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
             }catch(IllegalStateException e) {
                 System.out.println(e.getMessage());
             }catch (InputMismatchException e){
-                sc.nextLine();
                 System.out.println("Invalid input: please enter a number.");
+            }catch(InvalidUserChoice e){
+                System.out.println(e.getMessage());
             }
         }
     }//end of helperVendorCase7
@@ -423,6 +495,224 @@ public class ShopTemp {
      *
      * 
      */
+
+    //Customer's case 2 -> Browse vendor inventory by vendorID
+    public void helperCustomerCase2(Scanner sc){
+
+        listAllVendors(); //in case customer forgets vendor's ID //will only display 1 time
+        while(true){
+            try{
+                System.out.print("\n\nEnter Vendor ID (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int vId = Integer.parseInt(userInput);
+                
+                if(vId == 0) return; //user type 0 -> return
+
+                VendorTemp currVendor = null;
+                for(VendorTemp vendor : vendorsList){
+                    if(vendor.getVendorId() == vId){
+                        currVendor = vendor;
+                        break; //break early after we find the vendor
+                    } 
+                }
+
+                if (currVendor == null) throw new VendorNotFound("Vendor with this ID does not exist");
+                currVendor.printInventory();
+                return;
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
+            }catch(InputMismatchException e){ //we might not need this here anymore since we are not gonna use Scanner's nextInt()
+                 System.out.println("Vendor ID must be an integer");
+            }catch(VendorNotFound e){
+                System.out.println(e.getMessage());
+            }catch(InvalidUserChoice e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }//end for helperCustomerCase2
+
+    //Customer's case 3 -> Quote and rent a product 
+    public void quoteAndRent(Scanner sc, CustomerTemp currCus){
+
+        //same logic as helperCustomerCase2, I should have created 1 helper method where custmers can findVendorById
+        listAllVendors(); //in case customer forgets vendor's ID //will only display 1 time
+        while(true){
+            try{
+                System.out.print("\n\nEnter Vendor ID (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int vId = Integer.parseInt(userInput);
+
+                if(vId == 0) return; //user type 0 -> return
+
+                VendorTemp currVendor = null;
+                for(VendorTemp vendor : vendorsList){
+                    if(vendor.getVendorId() == vId){
+                        currVendor = vendor;
+                        break; //break early after we find the vendor
+                    } 
+                }
+
+                if (currVendor == null) throw new VendorNotFound("Vendor with this ID does not exist");
+                System.out.println("===== Vendor Inventory =====");
+                currVendor.printInventory();
+                System.out.println("==============================");
+
+                System.out.print("\n\nEnter the product ID you'd like to quote (or 0 to go back): "); //customer will see the price of the product with discount if there is any
+                String userInput1 = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput1);
+
+                int vendorProductId = Integer.parseInt(userInput1);
+                
+                if(vendorProductId == 0) return; 
+
+                //go thru the productList of the vendor and get the info of that product
+                Product p = currVendor.getProductList().get(vendorProductId);
+
+                if (p == null ) throw new ProductNotFound("Product with such ID doesn't exist");
+
+                if(!(p instanceof RentableTemp)){ throw new IllegalStateException("Product is not rentable"); }
+
+                Instant quotedAt = Instant.now();
+                double quotedPrice = ((RentableTemp)p).quoteRental(quotedAt); //basically Instant.now()
+
+                //show user quoted price
+                System.out.println("This rental costs $ " + quotedPrice + " (after discount).");
+
+                //give 1 more choice for user if he wants to proceed with renting or not
+                System.out.println("Proceed with renting? (type ONLY \"y\" or \"n\")"); //if not y or n, this will loop back to Vendor selection
+                String answer = sc.nextLine().trim().toLowerCase();
+
+                if(answer.equals("y")){
+
+                    currCus.rentProduct(p, quotedAt);
+                    System.out.println("\nYour remaining balance: " + currCus.getBalance() );
+                    return;
+                }
+                else if(answer.equals("n")) return; //handle in the main case to show the customer menu again***
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
+            }catch (ProductNotFound e){
+                System.out.println(e.getMessage());
+            }catch (VendorNotFound e){
+                System.out.println(e.getMessage());
+            }catch(InputMismatchException e){
+                sc.nextLine();
+                System.out.println("Vendor ID and product ID must be integers");
+            }catch (IllegalStateException e){
+                System.out.println(e.getMessage());
+            }catch (InvalidUserChoice e) {
+                System.out.println(e.getMessage());
+            }
+        
+        }
+    }//end of quoteAndRent
+
+    //Customer's case 5 -->Return a product
+    public void helperCustomerCase5(Scanner sc, CustomerTemp currCus){
+
+        //show customers what he rented //will display only 1 time
+        currCus.viewMyRentals();
+
+        if (currCus.getRentedProducts().size() == 0) {
+            //System.out.println("you have no active rentals"); //don't need it since I print it in viewMyRentals()
+            return;
+        }
+
+        while(true){
+
+            try{
+                //same logic asking user input for vendor Id and product id
+                System.out.print("\n\nEnter Vendor ID (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int vId = Integer.parseInt(userInput);
+
+                if(vId == 0) return; //user type 0 -> return
+
+                VendorTemp currVendor = null;
+                for(VendorTemp vendor : vendorsList){
+                    if(vendor.getVendorId() == vId){
+                        currVendor = vendor;
+                        break; //break early after we find the vendor
+                    } 
+                }
+
+                if (currVendor == null) throw new VendorNotFound("Vendor with this ID does not exist");
+
+                System.out.print("\n\nEnter the product ID you'd like to return (or 0 to go back): "); //customer will see the price of the product with discount if there is any
+                String userInput1 = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput1);
+
+                int vendorProductId = Integer.parseInt(userInput1);
+                
+                if(vendorProductId == 0) return; 
+                
+                //now I will check if that product with (product Id and vendor id) exists in the customer's rentedProduct list
+
+                //pls remember that I use Map<String, Product> for rentedProducts inside Customer and use makeKey() to make key String type
+                String key = CustomerTemp.makeKey(currVendor.getVendorId(), vendorProductId);
+
+                //check if that key exists in customer's rentedProduct
+                if(!currCus.getRentedProducts().containsKey(key)){
+                    throw new IllegalStateException("You have never rented this product");
+                }
+
+                Product p = currCus.getRentedProducts().get(key);
+
+                currCus.returnRental(p, Instant.now());
+                return; //return after success 
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
+            }catch (IllegalStateException e){
+                System.out.println(e.getMessage());
+            }catch (VendorNotFound e){
+                System.out.println(e.getMessage());
+            }catch (InputMismatchException e){
+                System.out.println("Vendor ID and product ID must be integers");
+            }catch (InvalidUserChoice e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }//end of helperCustomerCase5()
+
+    public void helperCustomerCase6(Scanner sc, CustomerTemp currCus){
+
+        while(true){
+            try{
+                System.out.println("\n\nEnter the amount of money to add (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                double amount = Double.parseDouble(userInput);
+                
+                if(amount == 0) return; //user type 0 -> exit
+
+                currCus.addFunds(amount);
+                return;
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
+            }catch(InputMismatchException e){
+                System.out.println("Amount must be > 0");
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }catch (InvalidUserChoice e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
+    }//end of helperCustomrCase6 
+
+
+
 
     //getter for vendorsList
     public List<VendorTemp> getVendorsList(){ return vendorsList; }
@@ -456,11 +746,42 @@ public class ShopTemp {
 
         Scanner sc = new Scanner(System.in);
         
-        shop.handleRole(sc); 
+        while(true){
+            shop.handleRole(sc); 
+        }
         
-       
+    }
 
+    //4 overridden methods
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Shop{vendors=")
+          .append(vendorsList.size())
+          .append("}\n");
+        for(VendorTemp vendor : vendorsList){
+            sb.append(vendor.toString()).append("\n");
+        }
+        return sb.toString();
+    }
 
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        ShopTemp shop = (ShopTemp) obj;
+        return this.vendorsList.equals(shop.vendorsList); 
+    }
+    @Override
+    public int hashCode(){
+        return vendorsList.hashCode();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        ShopTemp copy = (ShopTemp) super.clone();
+        copy.vendorsList = new ArrayList<>(this.vendorsList); 
+        return copy;
     }
 
 }

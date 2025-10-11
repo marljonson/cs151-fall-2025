@@ -11,7 +11,6 @@ This is your temple. The walls are plastered with ironic posters of 2000s cartoo
 You leave the Performative Pop Shop with a tote bag full of aura. The world may never understand you, but at least your Instagram followers will.
 
 ## Overview
-Testing Marl's changes
 
 ## Design
 
