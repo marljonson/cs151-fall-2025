@@ -55,4 +55,12 @@ public class PromoWindow {
                 this.startTime.equals(other.startTime) &&
                 this.endTime.equals(other.endTime);
     }
+
+    @Override
+    public int hashCode() {
+        int result = Integer.hashCode(discountFraction);
+        result = 31 * result + startTime.hashCode();
+        result = 31 * result + endTime.hashCode();
+        return result;
+    }
 }
