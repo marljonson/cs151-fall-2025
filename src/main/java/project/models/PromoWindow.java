@@ -35,4 +35,14 @@ public class PromoWindow {
     public double getDiscountFraction() { return this.discountFraction; }
     public Instant getStartTime() { return this.startTime; }
     public Instant getEndTime() { return this.endTime; }
+
+    @Override 
+    public String toString(){
+
+        return "PromoWindow{"+
+                "discount fraction= " + getDiscountFraction() +
+                "}";
+        }
+        
 }
+
