@@ -2,6 +2,8 @@ package project.models;
 
 import java.time.Instant;
 
+import javax.swing.ProgressMonitor;
+
 public class PromoWindow {
 
     private final double discountFraction;
@@ -35,4 +37,22 @@ public class PromoWindow {
     public double getDiscountFraction() { return this.discountFraction; }
     public Instant getStartTime() { return this.startTime; }
     public Instant getEndTime() { return this.endTime; }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("PromoWindow{discountFraction=").append(discountFraction)
+          .append(", startTime=").append(startTime)
+          .append(", endTime=").append(endTime).append("}");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null || this.getClass() != obj.getClass()) return false;
+        PromoWindow other = (PromoWindow) obj;
+        return  this.discountFraction == other.discountFraction &&
+                this.startTime.equals(other.startTime) &&
+                this.endTime.equals(other.endTime);
+    }
 }

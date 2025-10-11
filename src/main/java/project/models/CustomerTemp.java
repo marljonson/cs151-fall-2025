@@ -2,6 +2,7 @@ package project.models;
 
 import project.abstractclasses.Product;
 import project.interfaces.RentableTemp;
+import project.models.VendorTemp;
 
 import java.util.HashMap;
 import java.util.Map; 
