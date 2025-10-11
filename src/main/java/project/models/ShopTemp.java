@@ -1,3 +1,15 @@
+/*
+ * Vendors will have to verify their email address before they can update their inventory (I only added email address verification (not the password) to shorten the validate the process of validateVendorAndReturnVendor)
+ * labubu vendor's email = rentlabubu11@gmail.com
+ * digicam vendor's email = rentdigitalcam22@gmail.com
+ * 
+ * Note: I am not using any database, all the options work in correspondence when a user chooses option "[8] Log out" 
+ * 
+ * every step of the program can be shut down by typing in "exit"
+ * 
+ * typing in "0" will go back to 1 level above
+ */
+
 package project.models;
 
 import java.util.Scanner;
@@ -10,6 +22,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import project.exceptions.InvalidUserChoice;
+import project.exceptions.OverHundredObjects;
 import project.exceptions.ProductNotFound;
 import project.exceptions.VendorNotFound;
 import project.abstractclasses.Product;
@@ -18,48 +31,91 @@ import project.interfaces.RentableTemp;
 public class ShopTemp implements Cloneable {
 
     private List<VendorTemp> vendorsList = new ArrayList<>();
+    private CustomerTemp currCus;
+
+    //for 100 maximum instances requirement
+    public static final int MAXIMUM_INSTANCES = 100;
+
+    //I'll be creating instances of these classes 
+    public static int instancesVendorTemp = 0;
+    public static int instancesCustomerTemp = 0;
+    public static int instancesLabubu = 0;
+    public static int instancesDigicam = 0;
 
     public ShopTemp(){
         createVendors();
+        createCustomer();
     }
 
     //preset datas for Vendors and their products (CONFIRMED AND TESTED)
     private void createVendors(){
 
-        //create Vendors
-        VendorTemp labubuVendor = new VendorTemp("Labubu Rental Shop", "rentlabubu11@gmail.com");
-        VendorTemp digiCamVendor = new VendorTemp("Digicam Rental Shop", "rentdigitalcamera22@gmail.com"); 
-        
-        //Vendors stock items to inventory (Vendor buys random labubus)
-        Random rand = new Random(); 
-        String[] possibleColors = {"Luck", "Macaron", "Lychee", "Berry", "Love", "Hope"}; //possible labubu's color
-        String[] possibleModels = DIGICAM_MODELS; //possible digicam models
+        while(true){ //if more than 100 instances are made, system will display an error without crashing the program (but this is preset, this won't crash or throw)
+            try{
+                //create Vendors
+                VendorTemp labubuVendor = new VendorTemp("Labubu Rental Shop", "rentlabubu11@gmail.com");
+                instancesVendorTemp++;
 
-        //max 100 instances for Labubu class
-        for(int i = 0; i < 100; i++){
+                if(instancesVendorTemp > MAXIMUM_INSTANCES) throw new OverHundredObjects("Vendor instances must be less than 100");
+            
+                VendorTemp digiCamVendor = new VendorTemp("Digicam Rental Shop", "rentdigitalcam22@gmail.com"); 
+                instancesVendorTemp++;
 
-            double price = 10 + rand.nextDouble() * 20; //random price between 10 and 30 (random.nextDouble() gives [0.0 (inclusive), 1.0 (exlusive)])
-            String color = possibleColors[rand.nextInt(possibleColors.length)]; //random color
-            boolean isRare = rand.nextBoolean(); //true or false for isRare chosen randomly (this is 50% rare, need to look up syntax to decrease the amount of rare labubus)
-            labubuVendor.stockLabubu((isRare ? price * 1.5 : price), color, isRare); //50% price increase if isRare
+                if(instancesVendorTemp > MAXIMUM_INSTANCES) throw new OverHundredObjects("Vendor instances must be less than 100");
+
+                
+                //Vendors stock items to inventory (Vendor buys random labubus)
+                Random rand = new Random(); 
+                String[] possibleColors = {"Luck", "Macaron", "Lychee", "Berry", "Love", "Hope"}; //possible labubu's color
+                String[] possibleModels = DIGICAM_MODELS; //possible digicam models
+
+                //max 100 instances for Labubu class
+                for(int i = 0; i < 100; i++){
+
+                    double price = 10 + rand.nextDouble() * 20; //random price between 10 and 30 (random.nextDouble() gives [0.0 (inclusive), 1.0 (exlusive)])
+                    String color = possibleColors[rand.nextInt(possibleColors.length)]; //random color
+                    boolean isRare = rand.nextBoolean(); //true or false for isRare chosen randomly (this is 50% rare, need to look up syntax to decrease the amount of rare labubus)
+                    labubuVendor.stockLabubu((isRare ? price * 1.5 : price), color, isRare); //50% price increase if isRare 
+
+                    //stockLabubu() calls Labubu constructor 1 time
+                    instancesLabubu++;
+                    if(instancesLabubu > MAXIMUM_INSTANCES) throw new OverHundredObjects("Labubu instances must be less than 100");
+                }
+
+                //only 50 instances for Digicam class
+                for(int i = 0; i < 50; i++){
+
+                    double price = 50 + rand.nextDouble() * 150; //random price b/w 50-200 range
+                    String model = possibleModels[rand.nextInt(possibleModels.length)]; //random model
+                    digiCamVendor.stockDigicam(price, model);
+
+                    //stockDigicam() calls Digicam constructor 1 time
+                    instancesDigicam++;
+                    if(instancesDigicam > MAXIMUM_INSTANCES) throw new OverHundredObjects("DigiCamTemp instances must be less than 100");
+                }
+
+                //add the vendors to the Shop's vendorsList
+                vendorsList.add(labubuVendor);
+                vendorsList.add(digiCamVendor);
+                return;
+            }catch(OverHundredObjects e){
+                System.out.println(e.getMessage());
+            }
         }
-
-        //only 50 instances for Digicam class
-        for(int i = 0; i < 50; i++){
-
-            double price = 50 + rand.nextDouble() * 150; //random price b/w 50-200 range
-            String model = possibleModels[rand.nextInt(possibleModels.length)]; //random model
-            digiCamVendor.stockDigicam(price, model);
-        }
-
-        //add the vendors to the Shop's vendorsList
-        vendorsList.add(labubuVendor);
-        vendorsList.add(digiCamVendor);
     }//end for createVendors()
+
+    private void createCustomer(){
+        try{
+            this.currCus = new CustomerTemp("guest", "01", "firstCustomer@default.com", 200);
+            if(instancesCustomerTemp > MAXIMUM_INSTANCES) throw new OverHundredObjects("CustomerTemp instances must be less than 100");
+        }catch(OverHundredObjects e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     //make the user who uses our system pick a role first
     public void displayRoleMenu(){
-        System.out.println("===== CS 151 Pop-Up Plaza =====");
+        System.out.println("\n\n===== CS 151 Pop-Up Plaza =====");
         System.out.println("[1] I'm a Vendor");
         System.out.println("[2] I'm a Customer");
         System.out.println("[0] Exit :( ");
@@ -69,7 +125,7 @@ public class ShopTemp implements Cloneable {
     }
 
     public void displayVendorMenu(){
-        System.out.println("===== CS 151 Vendor Menu =====");
+        System.out.println("\n\n===== CS 151 Vendor Menu =====");
         System.out.println("[1] Update price by productId");
         System.out.println("[2] List my inventory");
         System.out.println("[3] Discontinue an item by productId");
@@ -78,13 +134,14 @@ public class ShopTemp implements Cloneable {
         System.out.println("[6] Add Funds");
         System.out.println("[7] Withdraw Cash");
         System.out.println("[8] Log out");
+        System.out.println("[9] View Funds"); //Note: I added this at the last and want to keep using 8 (same number to log out) for both vendor and customer
         System.out.println("[0] Exit");
         System.out.println("=========================");
         System.out.print("Enter your choice: ");
     }
 
     public void displayCustomerMenu(){
-        System.out.println("===== CS 151 Customer Menu =====");
+        System.out.println("\n\n===== CS 151 Customer Menu =====");
         System.out.println("[1] List vendors"); 
         System.out.println("[2] Browse vendor inventory by vendorId");
         System.out.println("[3] Quote and Rent a product"); //must use product.quoteRental(Instant now)
@@ -113,9 +170,9 @@ public class ShopTemp implements Cloneable {
                     throw new InvalidUserChoice("\n\nEnter 0, 1 or 2!\n");
                 }
                 return choice;
+            }catch(NumberFormatException e){
+                System.out.println("\n\nInput must be an integer or type exit to exit the program");
             }catch (InputMismatchException e){
-
-                sc.nextLine(); //since exception is thrown, new line is not handled
                 System.out.println("\n\nInvalid input: you must enter an integer\n");
             }catch(InvalidUserChoice e){
 
@@ -138,7 +195,7 @@ public class ShopTemp implements Cloneable {
 
                 int choice = Integer.parseInt(userInput); //same as before, I just changed from sc.nextInt() to Integer.parseInt(userInput) to change String to int for our options
              
-                if(choice < 0 || choice > 8){
+                if(choice < 0 || choice > 9){
                     throw new InvalidUserChoice("\n\nYour choice must be between 0 and 8 (inclusive)!\n");
                 }
                 return choice;
@@ -192,7 +249,6 @@ public class ShopTemp implements Cloneable {
             case 2 -> {
                 handleCustomerChoice(sc);
             }
-
             default -> {
                 System.out.println("this default branch will/should never happen");
                 throw new IllegalStateException("Default branch is getting executed");
@@ -267,14 +323,18 @@ public class ShopTemp implements Cloneable {
                     return; 
                     //handleRole(sc); //this could cause StackOverFlowError //instead of calling handleRole() we should handle this with a loop at a top level (either in main) //this works fine for now, I can only fix this if I have time. I have yet to review Collection lecture TT
                 }
+                case 9 -> { //check earnings case 
+
+                    System.out.println("\n\n===== Your Funds =====");
+                    System.out.println("$ " + currVendor.getBalance() + "\n\n");
+
+                }
             }
         }
     }//end of handleVendorChoice
 
     //if the user is a customer
     public void handleCustomerChoice(Scanner sc){//NOTE: this is helper method for handleRole()
-
-        CustomerTemp currCus = new CustomerTemp("guest", "01", "firstCustomer@default.com", 200);
 
         if(sc == null) throw new NullPointerException("Scanner cannot be null");
 
@@ -285,10 +345,10 @@ public class ShopTemp implements Cloneable {
                 case 0 -> helperExit(sc);
                 case 1 -> listAllVendors();
                 case 2 -> helperCustomerCase2(sc);
-                case 3 -> quoteAndRent(sc, currCus);
+                case 3 -> quoteAndRent(sc, this.currCus);
                 case 4 -> currCus.viewMyRentals();
-                case 5 -> helperCustomerCase5(sc, currCus);
-                case 6 -> helperCustomerCase6(sc, currCus);
+                case 5 -> helperCustomerCase5(sc, this.currCus);
+                case 6 -> helperCustomerCase6(sc, this.currCus);
                 case 7 -> {
                     System.out.println("\n\n===== My Wallet =====");
                     System.out.println("Total balance: $"+ currCus.getBalance() +"\n");
@@ -323,7 +383,7 @@ public class ShopTemp implements Cloneable {
                 System.out.print("None\n");
             } 
         }//end iterating thru vendorsList
-        System.out.println("=============================\n\n");
+        System.out.println("=============================");
     }
 
 
