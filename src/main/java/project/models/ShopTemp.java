@@ -290,7 +290,7 @@ public class ShopTemp implements Cloneable {
                 case 5 -> helperCustomerCase5(sc, currCus);
                 case 6 -> helperCustomerCase6(sc, currCus);
                 case 7 -> {
-                    System.out.println("===== My Wallet =====");
+                    System.out.println("\n\n===== My Wallet =====");
                     System.out.println("Total balance: $"+ currCus.getBalance() +"\n");
                 }
                 case 8 -> {
@@ -502,10 +502,12 @@ public class ShopTemp implements Cloneable {
         listAllVendors(); //in case customer forgets vendor's ID //will only display 1 time
         while(true){
             try{
-                System.out.print("Enter Vendor ID (or 0 to go back): ");
-                int vId = sc.nextInt();
-                sc.nextLine();
+                System.out.print("\n\nEnter Vendor ID (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
 
+                int vId = Integer.parseInt(userInput);
+                
                 if(vId == 0) return; //user type 0 -> return
 
                 VendorTemp currVendor = null;
@@ -519,10 +521,14 @@ public class ShopTemp implements Cloneable {
                 if (currVendor == null) throw new VendorNotFound("Vendor with this ID does not exist");
                 currVendor.printInventory();
                 return;
-            }catch(InputMismatchException e){
-                sc.nextLine();
-                System.out.println("Vendor ID must be an integer");
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
+            }catch(InputMismatchException e){ //we might not need this here anymore since we are not gonna use Scanner's nextInt()
+                 System.out.println("Vendor ID must be an integer");
             }catch(VendorNotFound e){
+                System.out.println(e.getMessage());
+            }catch(InvalidUserChoice e){
                 System.out.println(e.getMessage());
             }
         }
@@ -535,9 +541,11 @@ public class ShopTemp implements Cloneable {
         listAllVendors(); //in case customer forgets vendor's ID //will only display 1 time
         while(true){
             try{
-                System.out.print("Enter Vendor ID (or 0 to go back): ");
-                int vId = sc.nextInt();
-                sc.nextLine();
+                System.out.print("\n\nEnter Vendor ID (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int vId = Integer.parseInt(userInput);
 
                 if(vId == 0) return; //user type 0 -> return
 
@@ -554,9 +562,11 @@ public class ShopTemp implements Cloneable {
                 currVendor.printInventory();
                 System.out.println("==============================");
 
-                System.out.print("Enter the product ID you'd like to quote (or 0 to go back): "); //customer will see the price of the product with discount if there is any
-                int vendorProductId = sc.nextInt();
-                sc.nextLine();
+                System.out.print("\n\nEnter the product ID you'd like to quote (or 0 to go back): "); //customer will see the price of the product with discount if there is any
+                String userInput1 = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput1);
+
+                int vendorProductId = Integer.parseInt(userInput1);
                 
                 if(vendorProductId == 0) return; 
 
@@ -580,11 +590,13 @@ public class ShopTemp implements Cloneable {
                 if(answer.equals("y")){
 
                     currCus.rentProduct(p, quotedAt);
-                    System.out.println("Your remaining balance: " + currCus.getBalance() );
+                    System.out.println("\nYour remaining balance: " + currCus.getBalance() );
                     return;
                 }
                 else if(answer.equals("n")) return; //handle in the main case to show the customer menu again***
 
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch (ProductNotFound e){
                 System.out.println(e.getMessage());
             }catch (VendorNotFound e){
@@ -593,6 +605,8 @@ public class ShopTemp implements Cloneable {
                 sc.nextLine();
                 System.out.println("Vendor ID and product ID must be integers");
             }catch (IllegalStateException e){
+                System.out.println(e.getMessage());
+            }catch (InvalidUserChoice e) {
                 System.out.println(e.getMessage());
             }
         
@@ -614,9 +628,11 @@ public class ShopTemp implements Cloneable {
 
             try{
                 //same logic asking user input for vendor Id and product id
-                 System.out.print("Enter Vendor ID (or 0 to go back): ");
-                int vId = sc.nextInt();
-                sc.nextLine();
+                System.out.print("\n\nEnter Vendor ID (or 0 to go back): ");
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
+
+                int vId = Integer.parseInt(userInput);
 
                 if(vId == 0) return; //user type 0 -> return
 
@@ -630,9 +646,11 @@ public class ShopTemp implements Cloneable {
 
                 if (currVendor == null) throw new VendorNotFound("Vendor with this ID does not exist");
 
-                System.out.print("Enter the product ID you'd like to return (or 0 to go back): "); //customer will see the price of the product with discount if there is any
-                int vendorProductId = sc.nextInt();
-                sc.nextLine();
+                System.out.print("\n\nEnter the product ID you'd like to return (or 0 to go back): "); //customer will see the price of the product with discount if there is any
+                String userInput1 = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput1);
+
+                int vendorProductId = Integer.parseInt(userInput1);
                 
                 if(vendorProductId == 0) return; 
                 
@@ -651,13 +669,16 @@ public class ShopTemp implements Cloneable {
                 currCus.returnRental(p, Instant.now());
                 return; //return after success 
 
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch (IllegalStateException e){
                 System.out.println(e.getMessage());
             }catch (VendorNotFound e){
                 System.out.println(e.getMessage());
             }catch (InputMismatchException e){
-                sc.nextLine();
                 System.out.println("Vendor ID and product ID must be integers");
+            }catch (InvalidUserChoice e) {
+                System.out.println(e.getMessage());
             }
         }
     }//end of helperCustomerCase5()
@@ -667,17 +688,23 @@ public class ShopTemp implements Cloneable {
         while(true){
             try{
                 System.out.println("\n\nEnter the amount of money to add (or 0 to go back): ");
-                double amount = sc.nextDouble();
-                sc.nextLine();
+                String userInput = sc.nextLine().trim();
+                helperCatchUserTypedExit(sc, userInput);
 
+                double amount = Double.parseDouble(userInput);
+                
                 if(amount == 0) return; //user type 0 -> exit
 
                 currCus.addFunds(amount);
                 return;
+
+            }catch(NumberFormatException e){
+                System.out.println("Either type valid number or \"exit\"");
             }catch(InputMismatchException e){
-                sc.nextLine();
                 System.out.println("Amount must be > 0");
             }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }catch (InvalidUserChoice e) {
                 System.out.println(e.getMessage());
             }
 
