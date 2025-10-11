@@ -174,6 +174,7 @@ public class DigiCamTemp extends Product implements RentableTemp {
                 "id=" + getVendorProductId() + //because I changed the name in Product //I am using the concept that Products exist inside Vendors, each vendor will take care of the ids of their products
                 ", type=" + getType() + //added this
                 ", model='" + model + "\'" + //extra ' in your toString, is that for 'model'? pls check and change up to your style
+                ", stock=" + getStock() +
                 ", batteryLife=" + batteryLife +
                 ", price=" + getPrice() +
                 ", isOn=" + isOn +
