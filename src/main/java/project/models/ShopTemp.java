@@ -7,7 +7,7 @@
  * 
  * every step of the program can be shut down by typing in "exit"
  * 
- * typing in "0" will go back to 1 level above
+ * typing in "0" when prompted "type 0 to go back" will go 1 level above
  */
 
 package project.models;
@@ -199,6 +199,8 @@ public class ShopTemp implements Cloneable {
                     throw new InvalidUserChoice("\n\nYour choice must be between 0 and 8 (inclusive)!\n");
                 }
                 return choice;
+            }catch (NumberFormatException e){
+                System.out.println("\n\nInvalid input: Enter an integer or type exit\n");
             }catch (InputMismatchException e){ 
                 System.out.println("\n\nInvalid input: you must enter an integer\n");
 
@@ -226,7 +228,7 @@ public class ShopTemp implements Cloneable {
                 }
                 return choice;
             }catch (NumberFormatException e){
-                System.out.println("\n\nInvalid input: you must enter an integer\n");
+                System.out.println("\n\nInvalid input: Enter an integer or type exit\n");
             }catch(InvalidUserChoice e){
                 System.out.println(e.getMessage());
             }
