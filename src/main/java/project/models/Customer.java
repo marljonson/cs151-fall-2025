@@ -75,13 +75,13 @@ public class Customer {
 	
 	//needs to be updated after creating other class
 	public void makePurchase(Product product, int quantity, Vendor vendor) {
-		if (product == null) {
+		/*if (product == null) {
 			throw new IllegalArgumentException("Such product does not exist at our vendor");
 		}
 		if (quantity <= 0) {
 	        throw new IllegalArgumentException("Quantity must be positive");
 	    }
-		
+		*/
 		//Check if the vendor has the product you want to buy
 		if (!vendor.getProductList().containsKey(product.getId())) {
 			System.out.println(product.getType() + " is not available at the vendor " + vendor.getName());
@@ -105,8 +105,9 @@ public class Customer {
 	            System.out.println("Insufficient balance! Please add more cash.");
 	            return;
 			}
+			
 			buyable.buy(quantity);
-			System.out.println(this.getFullName() + " bought " + quantity + " " + product.getType());
+			System.out.println(this.getFullName() + " bought " + quantity + " × " + product.displayInfo());
 			product.usageInstruction();
 			customerCheckOut(cost);
 			boughtProducts.put(product.getId(), boughtProducts.getOrDefault(product.getId(), 0) + quantity);
@@ -119,7 +120,8 @@ public class Customer {
 	            return;
 			}
 			rentable.rent(quantity);
-			System.out.println(this.getFullName() + " rented " + quantity + " " + product.getType());
+			System.out.println(this.getFullName() + " rented " + quantity + " × " + product.displayInfo());
+
 			product.usageInstruction();
 			customerCheckOut(cost);
 			rentedProducts.put(product.getId(), rentedProducts.getOrDefault(product.getId(), 0) + quantity);
@@ -133,9 +135,9 @@ public class Customer {
 	
 	public void customerCheckOut(double cost) {
         this.balance -= cost;
-        System.out.println(this.getFullName() + " reamining balance is $ " + balance);
+        System.out.println(this.getFullName() + "'s reamining balance is $ " + balance);
         this.amountSpent += cost;
-        System.out.println(this.getFullName() + " total spent so far is $" + amountSpent);
+        System.out.println(this.getFullName() + "'s total spent so far is $" + amountSpent);
 	}
 	
 	public double applyMembershipBenefit(double cost) {
@@ -155,7 +157,7 @@ public class Customer {
 	}
 	
 	public void updateMembershipType(String type) {
-		if (type.equals("Diamond")) {
+		if (type.equalsIgnoreCase("Diamond")) {
 			this.membershipType = "Diamond";
 			System.out.print("We charge you $100 upon purchasing membership. You will have 20% discount on every purcahse ");
 			System.out.println("and you will be able to reserve the products you want to rent or buy");
@@ -163,7 +165,7 @@ public class Customer {
 			this.amountSpent += 100;
 			System.out.println("Your remaining balance is " + balance);
 		}
-		else if (type.equals("Platinum")) {
+		else if (type.equalsIgnoreCase("Platinum")) {
 			this.membershipType = "Platinum";
 			System.out.print("We charge you $80 upon purchasing membership. You will have 10% discount on every purcahse ");
 			System.out.println("and you will be able to reserve the products you want to rent or buy");
@@ -171,7 +173,7 @@ public class Customer {
 			this.amountSpent += 80;
 			System.out.println("Your remaining balance is " + balance);
 		}
-		else if (type.equals("Gold")) {
+		else if (type.equalsIgnoreCase("Gold")) {
 			this.membershipType = "Gold";
 			System.out.println("We charge you $50 upon purchasing membership. You will have 50% discount on every purcahse ");
 			balance -= 50;
@@ -211,7 +213,7 @@ public class Customer {
 	        int currentVendorStock = vendor.getVendorStock().getOrDefault(productId, 0);
 	        vendor.getVendorStock().put(productId, currentVendorStock + quantity);
 	        
-	        System.out.println(getFullName() + " returned " + quantity + " rented " + product.getType());
+	        System.out.println(getFullName() + " returned " + quantity + " of " + product.displayInfo());
 	        rentedProducts.put(productId, productCustomerRented - quantity);
 	    } 
 	    else {
@@ -234,7 +236,7 @@ public class Customer {
 	            int qty = entry.getValue();
 	            Product product = productCatalog.get(productId); 
 	            if (product != null && qty > 0) {
-	                System.out.println("ID : " + product.getId() + " | " + product.getType() + " (x" + qty + ")");
+	                System.out.println(product.getInfo() + " (x" + qty + ")");
 	            }
 	        }
 	    }
@@ -246,34 +248,31 @@ public class Customer {
 	            int qty = entry.getValue();
 	            Product product = productCatalog.get(productId);
 	            if (product != null && qty > 0) {
-	                System.out.println(product.getType() + " (x" + qty + ")");
+	                System.out.println(product.getInfo() + " (x" + qty + ")");
 	            }
 	        }
 	    }
 	}
 	
-	public void reserveProduct(Product product, int quantity, Vendor vendor) {
-		if (quantity <= 0) {
-	        throw new IllegalArgumentException("Quantity must be positive");
-	    }
+	public void reserveProduct(Product product, int quantity, Vendor vendor) throws IllegalArgumentException {
 		
 		//Check if the vendor has the product you want to buy
 		if (!vendor.getProductList().containsKey(product.getId())) {
-			System.out.println(product.getType() + " is not available at the vendor " + vendor.getName());
+			System.out.println(product.displayInfo() + " is not available at the vendor " + vendor.getName());
 			return;
 		}
 		
 		//Check if vendor has enough stock
 		int availableStock = vendor.getVendorStock().getOrDefault(product.getId(), 0);
 		if (quantity > availableStock) {
-			System.out.println(vendor.getName() + " has only " + availableStock + " left for " + product.getType());
+			System.out.println(vendor.getName() + " has only " + availableStock + " left for " + product.displayInfo());
 			return;
 		}
 		
 		if (product instanceof Rentable rentable) {
 			if (membershipType.equals("Gold") || membershipType.equals("Diamond")) {
 				rentable.reserve(quantity);
-				System.out.println(this.getFullName() + " reserved " + quantity + " " + product.getType());
+				System.out.println(this.getFullName() + " reserved " + quantity + " x " + product.displayInfo());
 			}
 			else {
 				System.out.println("You need to be diamond or gold member to be able to reserve");
@@ -303,5 +302,30 @@ public class Customer {
 	    System.out.println("Total Spent : $" + amountSpent);
 	    System.out.println("Membership  : " + membershipType);
 	    System.out.println();
+	}
+	
+		
+	public boolean hasRented(int productId) {
+	    return rentedProducts.containsKey(productId);
+	}
+
+	public int getRentedQuantity(int productId) {
+	    return rentedProducts.getOrDefault(productId, 0);
+	}
+	
+	public String getFirstName() {
+		return this.firstName;
+	}
+	
+	public String getLastName() {
+		return this.lastName;
+	}
+	
+	public void setTotalSpending(double amount) {
+	    this.amountSpent = amount;
+	}
+
+	public void setMembershipType(String type) {
+	    this.membershipType = type;
 	}
 }
