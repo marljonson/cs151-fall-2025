@@ -1,10 +1,11 @@
-package interfaces;
+package project.interfaces;
 
 import java.time.Instant;
 
 public interface Rentable {
-    boolean isRentable();
 
+    boolean isRentable(); //is there stock >= 1 ? check (don't need the parameter if user can only rent 1 item at a time)
+    
     double quoteRental(Instant now); 
     /* pure review
      * MUST use Product's getEffectiveUnitPrice at now

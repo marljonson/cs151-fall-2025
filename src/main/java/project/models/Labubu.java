@@ -1,12 +1,12 @@
 package project.models;
 
-import project.models.VendorTemp;
+import project.models.Vendor;
 import project.abstractclasses.Product;
-import project.interfaces.RentableTemp;
+import project.interfaces.Rentable;
 
 import java.time.Instant;
 
-public class Labubu extends Product implements RentableTemp {
+public class Labubu extends Product implements Rentable {
 
     //constant type for all Labubu
     public static final String TYPE = "Labubu";
@@ -25,7 +25,7 @@ public class Labubu extends Product implements RentableTemp {
     }
 
     //Constructor: Serialized Labubus Constructor (each labubu has a unique ID)
-    public Labubu(int vendorProductId, double price, VendorTemp owner, String color, boolean isRare){
+    public Labubu(int vendorProductId, double price, Vendor owner, String color, boolean isRare){
         super(vendorProductId, TYPE, price, owner); //call Product's constructor first
 
         if(color == null || color.isBlank()) throw new IllegalArgumentException("color can't be null or blank.");

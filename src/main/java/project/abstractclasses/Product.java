@@ -3,7 +3,7 @@ package project.abstractclasses;
 
 import java.time.Instant;
 
-import project.models.VendorTemp;
+import project.models.Vendor;
 import project.models.PromoWindow;
 
 public abstract class Product {
@@ -11,7 +11,7 @@ public abstract class Product {
     private String type;
     private double price; //will need to change it later to BigDecimal
     private int stock;
-    private VendorTemp owner; 
+    private Vendor owner; 
 
     //constructors
     //no argument constructor (just so the subclasses that could potentially use no-argumuent constructor don't crash, I don't see a case where we need to use this)
@@ -25,7 +25,7 @@ public abstract class Product {
 
     //product with id, type, price, stock (Matcha Vendor needs to use this if we don't want to give an ID to every matchas that the Matcha Vendor sells)
     //(BULK PRODUCTS)
-    protected Product(int vendorProductId, String type, double price, int stock, VendorTemp owner){
+    protected Product(int vendorProductId, String type, double price, int stock, Vendor owner){
 
         if(vendorProductId <= 0) throw new IllegalArgumentException("vendorProductId must be > 0!");
         if(type == null || type.isBlank()) throw new IllegalArgumentException("type must be non-empty!");
@@ -42,7 +42,7 @@ public abstract class Product {
 
     //creating a new product with stock of 1 (Labubu and DigiCam needs to use this to have specific id for each item) 
     //SERIALIZED PRODUCTS 
-    protected Product(int vendorProductId, String type, double price, VendorTemp owner){
+    protected Product(int vendorProductId, String type, double price, Vendor owner){
 
         if(vendorProductId <= 0) throw new IllegalArgumentException("vendorProductId must be > 0!");
         if(type == null || type.isBlank()) throw new IllegalArgumentException("type must be non-empty!");
@@ -165,12 +165,12 @@ public abstract class Product {
     public int getStock() {return this.stock; }
 
     //for owner
-    protected void setOwner(VendorTemp owner) { 
+    protected void setOwner(Vendor owner) { 
         if(owner == null) throw new IllegalArgumentException("owner can't be null!");
         this.owner = owner; 
     }
 
-    public VendorTemp getOwner() { return this.owner; }
+    public Vendor getOwner() { return this.owner; }
     
     @Override
     public boolean equals(Object obj) {
