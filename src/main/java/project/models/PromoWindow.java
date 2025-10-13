@@ -47,6 +47,7 @@ public class PromoWindow {
         sb.append("PromoWindow{discountFraction=").append(discountFraction)
           .append(", startTime=").append(startTime)
           .append(", endTime=").append(endTime).append("}");
+        return sb.toString();
     }
 
     @Override
@@ -60,8 +61,8 @@ public class PromoWindow {
     }
 
     @Override
-    public int hashCode() {
-        int result = int.hashCode(discountFraction);
+    public double hashCode() {
+        int result = Double.hashCode(discountFraction);
         result = 31 * result + startTime.hashCode();
         result = 31 * result + endTime.hashCode();
         return result;
