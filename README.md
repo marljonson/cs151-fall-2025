@@ -52,6 +52,6 @@ Run the program and follow the console prompts (type a number between 1–11) to
 
 ## Contributions
 * Dee Aein - Shop, interface files
-* Marl Jonson - Product, UML diagram, README.md
-* Miyuki Tokuhara - Interface files, UML diagram
+* Marl Jonson - Product, @Override methods, UML diagram, README.md
+* Miyuki Tokuhara - Interface files, @Override methods, UML diagram
 * Myo Thant Zin - Vendor, Customer (especially early prototypes), now-deprecated Main
