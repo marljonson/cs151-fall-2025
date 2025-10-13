@@ -29,7 +29,7 @@ Option 1 - Running on Eclipse
 <ol>
   <li>Clone the repo</li>
   Type this in your terminal - git clone https://github.com/<your-username>/pps-CS151-Fall-2025.git
-  <li>Then open the eclipse and you will see the project folder(pps-CS151-Fall-2025) in your project explorer</li>
+  <li>Then open Eclipse and you will see the project folder(pps-CS151-Fall-2025) in your project explorer</li>
   <li>If you click on the folder, you will find the src and then src/main/java/project/models/ShopTemp.java</li>
   <li>Right click on shopTemp.java and run as Java application</li>
 </ol>
