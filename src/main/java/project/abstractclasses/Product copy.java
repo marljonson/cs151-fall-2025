@@ -6,7 +6,7 @@ import java.time.Instant;
 import project.models.VendorTemp;
 import project.models.PromoWindow;
 
-public abstract class Product {
+public abstract class Product implements Cloneable {
     private int vendorProductId; //vendorProductId....each vendor will control the ids of its products  (vendor-scoped IDs)
     private String type;
     private double price; //will need to change it later to BigDecimal
@@ -200,5 +200,14 @@ public abstract class Product {
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
         // returns the final hash value for this Product
         return result;
+    }
+
+    @Override
+    public Product clone() {
+        try {
+            return (Product) super.clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError("Cloning not supported", e);
+        }
     }
 }

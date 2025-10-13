@@ -251,7 +251,7 @@ public class CustomerTemp implements Cloneable {
             cloned.rentedProducts = new HashMap<>(this.rentedProducts); // mutable field, so deep copy
             return cloned;
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError(); // should never happen
+            throw new AssertionError("Cloning not supported", e); // should never happen
         }
     }
 }
