@@ -4,6 +4,8 @@ import java.time.Instant;
 
 import javax.swing.ProgressMonitor;
 
+import project.abstractclasses.Product;
+
 public class PromoWindow {
 
     private final double discountFraction;
@@ -59,9 +61,18 @@ public class PromoWindow {
 
     @Override
     public int hashCode() {
-        int result = Integer.hashCode(discountFraction);
+        int result = int.hashCode(discountFraction);
         result = 31 * result + startTime.hashCode();
         result = 31 * result + endTime.hashCode();
         return result;
+    }
+
+    @Override
+    public PromoWindow clone() {
+        try {
+            return (PromoWindow) super.clone; // all fields are immutable; shallow clone is valid
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError("Cloning not supported", e);
+        }
     }
 }
