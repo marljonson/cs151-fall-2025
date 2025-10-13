@@ -2,7 +2,6 @@ package project.models;
 
 import project.abstractclasses.Product;
 import project.interfaces.RentableTemp;
-import project.models.VendorTemp;
 
 import java.util.HashMap;
 import java.util.Map; 
@@ -10,7 +9,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList; 
 
-public class CustomerTemp implements Cloneable {
+public class CustomerTemp {
     private String firstName;
     private String lastName;
     private String email;
@@ -22,11 +21,8 @@ public class CustomerTemp implements Cloneable {
     private List<Product> rentalHistory = new ArrayList<>(); //can add a PurchaseRecord class if I have time and use that as a type
     //private Map<Integer, Product> rentedProduct = new HashMap<>(); //running into problem where ids from different vendors collide
     private Map<String, Product> rentedProducts = new HashMap<>(); //key = "vendorId:vendorProductId" , value = Product
-    public static String makeKey(Product p){ //making a String using vendor Id and product Id to use this String as a key for the HashMap
+    private static String makeKey(Product p){ //making a String using vendor Id and product Id to use this String as a key for the HashMap
         return p.getOwner().getVendorId() + ":" + p.getVendorProductId();
-    }
-    public static String makeKey(int vendorId, int vendorProductId){ //Overloaded the method here (I am so proud of the idea that popped up on my mind)
-        return vendorId + ":" + vendorProductId;
     }
     
     //no-arg constructor
@@ -102,7 +98,7 @@ public class CustomerTemp implements Cloneable {
         //add it to the customer's rentedProducts
         rentedProducts.put(makeKey(product), product); //should actually check if the key already exists first
 
-        System.out.println("You have successfully rented the product with ID: " + product.getVendorProductId() + " Type: " + product.getType() + " for $ " + (Math.round(charged * 100.0) / 100.0));
+        System.out.println("You have successfully rented the product with ID: " + product.getVendorProductId() + " Type: " + product.getType() + " for $ " + charged);
     }
 
     //list all the products the customer has rented
@@ -113,12 +109,10 @@ public class CustomerTemp implements Cloneable {
             return;
         }
 
-        System.out.println("\n\nYou have rented the following:\n");
+        System.out.println("You have rented the following:\n");
         for(Product p : rentedProducts.values()){
-            System.out.println("item " + p.getType() + " with ID " + p.getVendorProductId() + " from vendor " + p.getOwner().getName() + " with Vendor ID: " + p.getOwner().getVendorId());
+            System.out.println("item " + p.getType() + " with ID " + p.getVendorProductId() + " from vendor " + p.getOwner().getName());
         }
-
-        System.out.println("\n");
     }
 
     public void returnRental(Product product, Instant returnedAt){ //might not need returntedAt Instant if I don't have time to implement late fee concept
@@ -187,27 +181,15 @@ public class CustomerTemp implements Cloneable {
     public int getCustomerId() { return this.customerId; }
 
     //for balance
-
-    public void addFunds(double amount){
+    public void credit(double amount){
         if(amount < 0) throw new IllegalArgumentException("amount cannot be negative");
+
         this.balance = Math.round((this.balance + amount) * 100.0) / 100.0;
-        System.out.println("Your updated balance: "+ this.balance);
-    
     }
-    public void deduct(double amount){
-        if(amount < 0) throw new IllegalArgumentException("amount cannot be negative");
-        if(amount > this.balance) throw new IllegalStateException("You don't have enough funds");
-
-        this.balance = Math.round((this.balance -  amount) * 100.0) / 100.0;
-    }
-    public double getBalance(){ return (Math.round(this.balance * 100.0)/100.0); }
+    public double getBalance(){ return this.balance; }
 
     //for amountSpent
     public double getAmountSpent() { return this.amountSpent; }
-
-    public Map<String, Product> getRentedProducts(){
-        return this.rentedProducts;
-    }
 
     @Override
     public String toString() {
@@ -225,7 +207,7 @@ public class CustomerTemp implements Cloneable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public String equals() {
         if (this == obj) return true; // same exact object
         if (obj == null || getClass() != obj.getClass()) return false; // check null; check class type
 
@@ -241,17 +223,5 @@ public class CustomerTemp implements Cloneable {
         int result = Integer.hashCode(customerId);
         result = 31 * result + email.toLowerCase().hashCode();
         return result;
-    }
-
-    @Override
-    public CustomerTemp clone() {
-        try {
-            CustomerTemp cloned = (CustomerTemp) super.clone();
-            cloned.rentalHistory = new ArrayList<>(this.rentalHistory); // mutable field, so deep copy
-            cloned.rentedProducts = new HashMap<>(this.rentedProducts); // mutable field, so deep copy
-            return cloned;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError("Cloning not supported", e); // should never happen
-        }
     }
 }

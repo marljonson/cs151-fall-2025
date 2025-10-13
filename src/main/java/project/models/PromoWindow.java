@@ -2,6 +2,10 @@ package project.models;
 
 import java.time.Instant;
 
+import javax.swing.ProgressMonitor;
+
+import project.abstractclasses.Product;
+
 public class PromoWindow {
 
     private final double discountFraction;
@@ -36,13 +40,40 @@ public class PromoWindow {
     public Instant getStartTime() { return this.startTime; }
     public Instant getEndTime() { return this.endTime; }
 
-    @Override 
-    public String toString(){
+    // overridden Object methods
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("PromoWindow{discountFraction=").append(discountFraction)
+          .append(", startTime=").append(startTime)
+          .append(", endTime=").append(endTime).append("}");
+        return sb.toString();
+    }
 
-        return "PromoWindow{"+
-                "discount fraction= " + getDiscountFraction() +
-                "}";
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null || this.getClass() != obj.getClass()) return false;
+        PromoWindow other = (PromoWindow) obj;
+        return  this.discountFraction == other.discountFraction &&
+                this.startTime.equals(other.startTime) &&
+                this.endTime.equals(other.endTime);
+    }
+
+    @Override
+    public double hashCode() {
+        double result = Double.hashCode(discountFraction);
+        result = 31 * result + startTime.hashCode();
+        result = 31 * result + endTime.hashCode();
+        return result;
+    }
+
+    @Override
+    public PromoWindow clone() {
+        try {
+            return (PromoWindow) super.clone; // all fields are immutable; shallow clone is valid
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError("Cloning not supported", e);
         }
-        
+    }
 }
-
