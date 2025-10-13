@@ -62,7 +62,7 @@ public class PromoWindow {
 
     @Override
     public double hashCode() {
-        int result = Double.hashCode(discountFraction);
+        double result = Double.hashCode(discountFraction);
         result = 31 * result + startTime.hashCode();
         result = 31 * result + endTime.hashCode();
         return result;
