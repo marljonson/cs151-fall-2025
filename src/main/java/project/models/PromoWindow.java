@@ -71,7 +71,7 @@ public class PromoWindow {
     @Override
     public PromoWindow clone() {
         try {
-            return (PromoWindow) super.clone; // all fields are immutable; shallow clone is valid
+            return (PromoWindow) super.clone(); // all fields are immutable; shallow clone is valid
         } catch (CloneNotSupportedException e) {
             throw new AssertionError("Cloning not supported", e);
         }

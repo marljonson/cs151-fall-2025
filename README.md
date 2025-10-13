@@ -38,6 +38,12 @@ Option 2 - Running on Visual Studio Code
   <li>Open the main file src/main/java/project/models/ShopTemp.java</li>
   <li>Click the run button or press Ctrl + F5 on Windows/Linux, or press Cmd + F5 on Mac</li>
 </ol>
+Option 3 - Running from the Command Line (no IDE)
+<ol>
+  <li>Open a terminal and navigate to the directory containing ShopTemp.java</li>
+  <li>Compile the code: `javac ShopTemp.java`</li>
+  <li>Run the program: `java ShopTemp`</li>
+</ol>
 
 ## Usage
 Run the program and follow the console prompts (type a number between 1–11) to browse products, read their descriptions, and more. Build your curated collection of performative goods and explore what each vendor has to offer.
@@ -52,6 +58,6 @@ Run the program and follow the console prompts (type a number between 1–11) to
 
 ## Contributions
 * Dee Aein - Shop, interface files
-* Marl Jonson - Product, @Override methods, UML diagram, README.md
+* Marl Jonson - @Override methods, UML diagram, README.md
 * Miyuki Tokuhara - Interface files, @Override methods, UML diagram
 * Myo Thant Zin - Vendor, CustomerTemp (especially early prototypes), now-deprecated Main
