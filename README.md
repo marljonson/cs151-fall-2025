@@ -9,15 +9,15 @@ This is your temple. The walls are plastered with ironic posters of 2000s cartoo
 
 ## Design
 <ul>
-  <li>Shop.java - main driver class with modes for main menu, customer, and management</li>
-  <li>Vendor.java - vendor details and product management</li>
-  <li>Product.java - base product class
+  <li>ShopTemp - main driver class with modes for main menu, customer, and management</li>
+  <li>VendorTemp - vendor details and product management</li>
+  <li>Product - base product class
     <ul>
-      <li>Digicam.java - subclass for camera products</li>
-      <li>Labubu.java - subclass for Labubu products</li>
+      <li>DigicamTemp - subclass for camera products</li>
+      <li>Labubu - subclass for Labubu products</li>
     </ul>
   </li>
-  <li>Customer.java - customer profile, purchase history, membership and balance</li>
+  <li>CustomerTemp - customer profile, purchase history, membership and balance</li>
 </ul>
 
 ## Installation Instructions
@@ -54,4 +54,4 @@ Run the program and follow the console prompts (type a number between 1–11) to
 * Dee Aein - Shop, interface files
 * Marl Jonson - Product, @Override methods, UML diagram, README.md
 * Miyuki Tokuhara - Interface files, @Override methods, UML diagram
-* Myo Thant Zin - Vendor, Customer (especially early prototypes), now-deprecated Main
+* Myo Thant Zin - Vendor, CustomerTemp (especially early prototypes), now-deprecated Main
