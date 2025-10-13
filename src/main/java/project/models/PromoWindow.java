@@ -38,6 +38,7 @@ public class PromoWindow {
     public Instant getStartTime() { return this.startTime; }
     public Instant getEndTime() { return this.endTime; }
 
+    // overridden Object methods
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

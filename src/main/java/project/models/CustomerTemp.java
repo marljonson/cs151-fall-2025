@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList; 
 
-public class CustomerTemp {
+public class CustomerTemp implements Cloneable {
     private String firstName;
     private String lastName;
     private String email;
@@ -241,5 +241,17 @@ public class CustomerTemp {
         int result = Integer.hashCode(customerId);
         result = 31 * result + email.toLowerCase().hashCode();
         return result;
+    }
+
+    @Override
+    public CustomerTemp clone() {
+        try {
+            CustomerTemp cloned = (CustomerTemp) super.clone();
+            cloned.rentalHistory = new ArrayList<>(this.rentalHistory); // mutable field, so deep copy
+            cloned.rentedProducts = new HashMap<>(this.rentedProducts); // mutable field, so deep copy
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // should never happen
+        }
     }
 }
