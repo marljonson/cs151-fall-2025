@@ -2,7 +2,7 @@ package project.models;
 
 import project.models.VendorTemp;
 import project.abstractclasses.Product;
-import project.interfaces.RentableTemp; //TODO: Confirm RentableTemp
+import project.interfaces.RentableTemp;
 
 import java.time.Instant;
 
