@@ -57,7 +57,7 @@ Run the program and follow the console prompts (type a number between 1–11) to
 </ul>
 
 ## Contributions
-* Dee Aein - Shop, interface files
+* Dee Aein - ShopTemp, Product, Labubu, All exceptions, RentableTemp, CustomerTemp, VendorTemp, PromoWindow
 * Marl Jonson - @Override methods, UML diagram, README.md
-* Miyuki Tokuhara - Interface files, @Override methods, UML diagram
-* Myo Thant Zin - Vendor, CustomerTemp (especially early prototypes), now-deprecated Main
+* Miyuki Tokuhara - Digicam, Interface files, @Override methods, UML diagram
+* Myo Thant Zin - Vendor, Customer (especially early prototypes), now-deprecated Main
