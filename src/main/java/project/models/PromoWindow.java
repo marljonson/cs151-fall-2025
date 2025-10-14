@@ -61,8 +61,8 @@ public class PromoWindow {
     }
 
     @Override
-    public double hashCode() {
-        double result = Double.hashCode(discountFraction);
+    public int hashCode() {
+        int result = Double.hashCode(discountFraction);
         result = 31 * result + startTime.hashCode();
         result = 31 * result + endTime.hashCode();
         return result;
@@ -71,7 +71,7 @@ public class PromoWindow {
     @Override
     public PromoWindow clone() {
         try {
-            return (PromoWindow) super.clone; // all fields are immutable; shallow clone is valid
+            return (PromoWindow) super.clone(); // all fields are immutable; shallow clone is valid
         } catch (CloneNotSupportedException e) {
             throw new AssertionError("Cloning not supported", e);
         }
