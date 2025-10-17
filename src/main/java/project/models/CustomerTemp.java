@@ -22,6 +22,7 @@ public class CustomerTemp implements Cloneable {
     private List<Product> rentalHistory = new ArrayList<>(); //can add a PurchaseRecord class if I have time and use that as a type
     //private Map<Integer, Product> rentedProduct = new HashMap<>(); //running into problem where ids from different vendors collide
     private Map<String, Product> rentedProducts = new HashMap<>(); //key = "vendorId:vendorProductId" , value = Product
+    private static int loyaltyPoints;
     public static String makeKey(Product p){ //making a String using vendor Id and product Id to use this String as a key for the HashMap
         return p.getOwner().getVendorId() + ":" + p.getVendorProductId();
     }
@@ -38,6 +39,7 @@ public class CustomerTemp implements Cloneable {
         this.customerId = nextCustomerId++;
         this.balance = 0;
         this.amountSpent = 0;
+        this.loyaltyPoints = 0;
 
     }
 
@@ -94,6 +96,7 @@ public class CustomerTemp implements Cloneable {
         //subtract the charged price from the customer
         this.balance -= charged;
         this.amountSpent += charged;
+        this.loyaltyPoints += (int) charged; 
 
          //credit the owner
         VendorTemp owner = product.getOwner();
@@ -207,6 +210,30 @@ public class CustomerTemp implements Cloneable {
 
     public Map<String, Product> getRentedProducts(){
         return this.rentedProducts;
+    }
+
+    public void redeemLoyaltyPoints(int points){
+        if(points < 0) throw new IllegalArgumentException("points cannot be negative");
+        if(points > this.loyaltyPoints) throw new IllegalStateException("You don't have enough loyalty points");
+
+        this.loyaltyPoints -= points;
+        double discount = points * 0.01; //1 cent per point
+        this.balance += discount; //add the discount to balance
+        System.out.println("You have redeemed " + points + " points for a discount of $" + String.format("%.2f", discount) + ". Your new balance is $" + String.format("%.2f", this.balance));
+    }
+
+    public int getLoyaltyPoints(){
+        return this.loyaltyPoints;
+    }
+
+    public void setLoyaltyPoints(int points){
+        if(points < 0) throw new IllegalArgumentException("points cannot be negative");
+        this.loyaltyPoints = points;
+    }
+
+    public void birthdayBonus(){
+        this.loyaltyPoints += 100; //100 points on birthday
+        System.out.println("Happy Birthday! You have received 100 loyalty points as a birthday bonus.");
     }
 
     @Override

@@ -3,6 +3,7 @@ package project.models;
 import project.models.VendorTemp;
 import project.abstractclasses.Product;
 import project.interfaces.RentableTemp;
+import java.math.*;
 
 import java.time.Instant;
 
@@ -12,6 +13,31 @@ public class Labubu extends Product implements RentableTemp {
     public static final String TYPE = "Labubu";
     private String color;
     private boolean isRare;
+    private String size;
+
+    private void generateLabubu(){
+        String colors = "Red, Blue, Green, Yellow, Pink, Black, White, Purple, Orange, Cyan, Magenta";
+        String[] colorArray = colors.split(", ");
+        int randomIndex = (int)(Math.random() * colorArray.length);
+        String size = "";
+        if (size == ""){
+            int randomSize = (int)(Math.random() * 3);
+            if (randomSize == 0){
+                size = "Small";
+            } else if (randomSize == 1){
+                size = "Medium";
+            } else {
+                size = "Large";
+            }
+        }
+        color = colorArray[randomIndex];
+        if (color.equals("Black") || color.equals("White")){
+            isRare = true;
+        } else {
+            isRare = false;
+        }
+
+    }   
 
     //private boolean isRented; //don't need to use this because if stock <= 0, the labubu is rented
 
@@ -22,6 +48,7 @@ public class Labubu extends Product implements RentableTemp {
         super();
         this.color = "";
         this.isRare = false;
+        this.size = "";
     }
 
     //Constructor: Serialized Labubus Constructor (each labubu has a unique ID)
