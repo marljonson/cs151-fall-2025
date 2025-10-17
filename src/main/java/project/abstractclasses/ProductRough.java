@@ -1,4 +1,4 @@
-
+/*
 package project.abstractclasses;
 
 import java.time.Instant;
@@ -6,7 +6,7 @@ import java.time.Instant;
 import project.models.VendorTemp;
 import project.models.PromoWindow;
 
-public abstract class Product implements Cloneable {
+public abstract class Product {
     private int vendorProductId; //vendorProductId....each vendor will control the ids of its products  (vendor-scoped IDs)
     private String type;
     private double price; //will need to change it later to BigDecimal
@@ -56,7 +56,7 @@ public abstract class Product implements Cloneable {
         this.owner= owner;
     }
 
-    //methods every class that extends Product must implement //***can return String for flexibility, will discuss on monday */
+    //methods every class that extends Product must implement // can return String for flexibility, will discuss on monday 
     public abstract void describe();
     public abstract void usageInstruction();
 
@@ -102,16 +102,16 @@ public abstract class Product implements Cloneable {
     //overridden toString method for Product
     @Override 
     public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("Product: {")
-          .append("vendorProductId=").append(vendorProductId);
-          .append(", type='").append(type).append("\'")
-          .append(", price=$").append(String.format("%.2f", price))
-          .append(", stock=").append(stock)
-          //****vendor owner must have getName() */
-          .append(", owner='").append(this.owner == null ? "null" : this.owner.getName()).append("\"")
-          .append("}");
-        return sb.toString();
+
+        //to make sure that we don't print no more than 2 decimals
+        String formattedPrice = String.format("%.2f", price);
+
+        return "Product{" +
+                "vendorProductId= " + this.vendorProductId + ", " + 
+                "type=" + this.type + ", " + 
+                "price=" + formattedPrice + ", " +
+                "stock=" + this.stock + ", " +
+                "owner=" + (this.owner == null ? "null" : this.owner.getName()) + "}"; //****vendor owner must have getName() 
     }
 
     //always use this as a UnitPrice for every product whether rentable or buyable
@@ -171,7 +171,7 @@ public abstract class Product implements Cloneable {
     }
 
     public VendorTemp getOwner() { return this.owner; }
-
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true; // same exact object
@@ -201,13 +201,5 @@ public abstract class Product implements Cloneable {
         // returns the final hash value for this Product
         return result;
     }
-
-    @Override
-    public Product clone() {
-        try {
-            return (Product) super.clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError("Cloning not supported", e);
-        }
-    }
 }
+*/

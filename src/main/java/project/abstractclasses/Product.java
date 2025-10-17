@@ -2,11 +2,10 @@
 package project.abstractclasses;
 
 import java.time.Instant;
-
-import project.models.VendorTemp;
 import project.models.PromoWindow;
+import project.models.VendorTemp;
 
-public abstract class Product {
+public abstract class Product implements Cloneable {
     private int vendorProductId; //vendorProductId....each vendor will control the ids of its products  (vendor-scoped IDs)
     private String type;
     private double price; //will need to change it later to BigDecimal
@@ -102,16 +101,16 @@ public abstract class Product {
     //overridden toString method for Product
     @Override 
     public String toString(){
-
-        //to make sure that we don't print no more than 2 decimals
-        String formattedPrice = String.format("%.2f", price);
-
-        return "Product{" +
-                "vendorProductId= " + this.vendorProductId + ", " + 
-                "type=" + this.type + ", " + 
-                "price=" + formattedPrice + ", " +
-                "stock=" + this.stock + ", " +
-                "owner=" + (this.owner == null ? "null" : this.owner.getName()) + "}"; //****vendor owner must have getName() */
+        StringBuilder sb = new StringBuilder();
+        sb.append("Product: {")
+          .append("vendorProductId=").append(vendorProductId)
+          .append(", type='").append(type).append("\'")
+          .append(", price=$").append(String.format("%.2f", price))
+          .append(", stock=").append(stock)
+          //****vendor owner must have getName() */
+          .append(", owner='").append(this.owner == null ? "null" : this.owner.getName()).append("\"")
+          .append("}");
+        return sb.toString();
     }
 
     //always use this as a UnitPrice for every product whether rentable or buyable
@@ -171,7 +170,7 @@ public abstract class Product {
     }
 
     public VendorTemp getOwner() { return this.owner; }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true; // same exact object
@@ -200,5 +199,14 @@ public abstract class Product {
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
         // returns the final hash value for this Product
         return result;
+    }
+
+    @Override
+    public Product clone() {
+        try {
+            return (Product) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError("Cloning not supported", e);
+        }
     }
 }

@@ -1,7 +1,8 @@
 /*
  * Vendors will have to verify their email address before they can update their inventory (I only added email address verification (not the password) to shorten the validate the process of validateVendorAndReturnVendor)
- * labubu vendor's email = rentlabubu11@gmail.com
- * digicam vendor's email = rentdigitalcam22@gmail.com
+ * labubu vendor's email = rentlabubu11@gmail.com,           password = password123
+ * digicam vendor's email = rentdigitalcam22@gmail.com,      password = password456
+ * customer email = firstCustomer@default.com,               password = abcdef
  * 
  * Note: I am not using any database, all the options work in correspondence when a user chooses option "[8] Log out" 
  * 
@@ -12,25 +13,23 @@
 
 package project.models;
 
-import java.util.Scanner;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.InputMismatchException; //for scanner, throw if wrong type
 import java.util.List;
 import java.util.Random;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
+import java.util.Scanner;
+import project.abstractclasses.Product;
 import project.exceptions.InvalidUserChoice;
 import project.exceptions.OverHundredObjects;
 import project.exceptions.ProductNotFound;
 import project.exceptions.VendorNotFound;
-import project.abstractclasses.Product;
 import project.interfaces.RentableTemp;
 
 public class ShopTemp implements Cloneable {
 
     private List<VendorTemp> vendorsList = new ArrayList<>();
+    private List<CustomerTemp> customersList = new ArrayList<>(); 
     private CustomerTemp currCus;
 
     //for 100 maximum instances requirement
@@ -53,12 +52,12 @@ public class ShopTemp implements Cloneable {
         while(true){ //if more than 100 instances are made, system will display an error without crashing the program (but this is preset, this won't crash or throw)
             try{
                 //create Vendors
-                VendorTemp labubuVendor = new VendorTemp("Labubu Rental Shop", "rentlabubu11@gmail.com");
+                VendorTemp labubuVendor = new VendorTemp("Labubu Rental Shop", "rentlabubu11@gmail.com", "password123");
                 instancesVendorTemp++;
 
                 if(instancesVendorTemp > MAXIMUM_INSTANCES) throw new OverHundredObjects("Vendor instances must be less than 100");
             
-                VendorTemp digiCamVendor = new VendorTemp("Digicam Rental Shop", "rentdigitalcam22@gmail.com"); 
+                VendorTemp digiCamVendor = new VendorTemp("Digicam Rental Shop", "rentdigitalcam22@gmail.com", "password456"); 
                 instancesVendorTemp++;
 
                 if(instancesVendorTemp > MAXIMUM_INSTANCES) throw new OverHundredObjects("Vendor instances must be less than 100");
@@ -103,10 +102,12 @@ public class ShopTemp implements Cloneable {
             }
         }
     }//end for createVendors()
-
+// HERE 
     private void createCustomer(){
         try{
-            this.currCus = new CustomerTemp("guest", "01", "firstCustomer@default.com", 200);
+            this.currCus = new CustomerTemp("guest", "01", "firstCustomer@default.com", "abcdef", 200);
+            instancesCustomerTemp++; 
+            customersList.add(this.currCus); // Add the customer to the customers list. 
             if(instancesCustomerTemp > MAXIMUM_INSTANCES) throw new OverHundredObjects("CustomerTemp instances must be less than 100");
         }catch(OverHundredObjects e){
             System.out.println(e.getMessage());
@@ -249,6 +250,8 @@ public class ShopTemp implements Cloneable {
                 handleVendorChoice(sc, currVendor);
             }
             case 2 -> {
+                CustomerTemp currCustomer = validateCustomerAndReturnCustomer(sc); // Have the user sign in as a customer. 
+                if(currCustomer == null) return; 
                 handleCustomerChoice(sc);
             }
             default -> {
@@ -276,11 +279,50 @@ public class ShopTemp implements Cloneable {
 
             for(VendorTemp vendor : vendorsList){
                 if(vendor.getEmail().equals(userEmail)){
-                    return vendor;//found the valid vendor, return vendor 
+                    System.out.print(" \n\nEnter your password: ");
+                    String userPassword = sc.nextLine(); // Prompt for password. 
+
+                    if (vendor.getPassword().equals(userPassword))
+                    {
+                        return vendor;//found the valid vendor, return vendor
+                    }
+                     
                 }
             }
             
-            System.out.println("\n\nNo vendor found with that email, Please try again or type 0 to go back.");
+            System.out.println("\n\nNo vendor found with that email and password, Please try again or type 0 to go back.");
+        }
+    }
+
+    public CustomerTemp validateCustomerAndReturnCustomer(Scanner sc) // Logic to verify customer login. 
+    {
+        while(true){
+            System.out.print(" \n\nEnter your email address (or type 0 to go back): ");
+            String userEmail = sc.nextLine().trim();
+
+            if(userEmail.equalsIgnoreCase("exit")){
+                helperExit(sc);
+            }
+
+            if(userEmail.equals("0")){
+                return null; //user type 0 -> exit
+            }
+            System.out.println();
+
+            for(CustomerTemp customer : customersList){
+                if(customer.getEmail().equals(userEmail)){
+                    System.out.print(" \n\nEnter your password: ");
+                    String userPassword = sc.nextLine(); // Prompt for password. 
+
+                    if (customer.getPassword().equals(userPassword))
+                    {
+                        return customer;//found the valid vendor, return vendor
+                    }
+                     
+                }
+            }
+            
+            System.out.println("\n\nNo vendor found with that email and password, Please try again or type 0 to go back.");
         }
     }
 

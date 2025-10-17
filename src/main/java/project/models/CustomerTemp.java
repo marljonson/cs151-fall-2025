@@ -1,19 +1,18 @@
 package project.models;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map; 
 import project.abstractclasses.Product;
 import project.interfaces.RentableTemp;
-import project.models.VendorTemp;
-
-import java.util.HashMap;
-import java.util.Map; 
-import java.time.Instant;
-import java.util.List;
-import java.util.ArrayList; 
 
 public class CustomerTemp implements Cloneable {
     private String firstName;
     private String lastName;
     private String email;
+    private String password; // Added password field for customer authentication. 
     private final int customerId; //immutable, set this using nextCustomerId
     //private String membershipType; //Silver, Gold, Platinum, Diamond
     private double balance;
@@ -35,22 +34,25 @@ public class CustomerTemp implements Cloneable {
         this.firstName = "";
         this.lastName = "";
         this.email = "";
+        this.password = ""; 
         this.customerId = nextCustomerId++;
         this.balance = 0;
         this.amountSpent = 0;
 
     }
 
-    public CustomerTemp(String firstName, String lastName, String email, double cash){
+    public CustomerTemp(String firstName, String lastName, String email, String password, double cash){
 
         if(firstName == null || firstName.isBlank()) throw new IllegalArgumentException("firstName cannot be null or blank");
         if(lastName == null || lastName.isBlank()) throw new IllegalArgumentException("lastName cannot be null or blank");
         if(email == null || email.isBlank()) throw new IllegalArgumentException("email cannot be null or blank");
+        if(password == null || password.isBlank()) throw new IllegalArgumentException("password cannot be null or blank"); 
         if(cash < 0) throw new IllegalArgumentException("cash cannot be negative");
 
         this.firstName = firstName.trim();
         this.lastName = lastName.trim();
         this.email = email.trim();
+        this.password = password; 
         this.balance = Math.round(cash * 100.0) / 100.0;
         this.amountSpent = 0.0;
         this.customerId = nextCustomerId++;
@@ -182,6 +184,8 @@ public class CustomerTemp implements Cloneable {
         this.email = email.trim();
     }
     public String getEmail() { return this.email; }
+
+    public String getPassword() { return this.password; } // Added getter for the password. 
 
     //for customerId
     public int getCustomerId() { return this.customerId; }
