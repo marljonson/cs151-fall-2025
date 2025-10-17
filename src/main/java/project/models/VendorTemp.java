@@ -1,11 +1,10 @@
 package project.models;
 
-import java.util.HashMap;
-import java.util.TreeMap; //for sorting by vendorProductId
+import java.time.Instant;
+import java.util.HashMap; //for sorting by vendorProductId
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.time.Instant;
-
+import java.util.TreeMap;
 import project.abstractclasses.Product;
 import project.exceptions.ProductNotFound;
 import project.interfaces.BuyableTemp;
@@ -16,6 +15,7 @@ public class VendorTemp {
     private String name;
     private final int vendorId; //immutable, set this using nextVendorId in the constructor
     private String email;
+    private String password; 
     private double balance; //changed it to balance, so that vendor can withdraw money
     private static int nextVendorId = 1; //Vendor level counter, for assigning vendorId
     private int nextVendorProductId = 1; //Vendor will control the ids of their products
@@ -28,16 +28,19 @@ public class VendorTemp {
         this.vendorId = nextVendorId++; //unique per vendor, start at 1 and postfix
         this.email = "";
         this.balance = 0.0;
+        this.password = ""; 
     }
 
-    public VendorTemp(String name, String email){
+    public VendorTemp(String name, String email, String password){
         
         if(name == null || name.isBlank()) throw new IllegalArgumentException("name cannot be null or blank");
         if(email == null || email.isBlank()) throw new IllegalArgumentException("email cannot be null or blank");
+        if (password == null || password.isBlank()) throw new IllegalArgumentException("password cannot be null or blank");
 
         this.name = name.trim();
         this.vendorId = nextVendorId++;
         this.email = email.trim();
+        this.password = password; 
         this.balance = 0.0;
     }
 
@@ -172,6 +175,8 @@ public class VendorTemp {
         this.email = email.trim();
     }
     public String getEmail() { return this.email; }
+
+    public String getPassword() { return this.password; }// Added getter for the vendor password. 
 
     //for balance
     protected void credit(double amount){
